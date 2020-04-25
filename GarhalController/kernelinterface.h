@@ -17,30 +17,34 @@ public:
 	}
 
 	template <typename type>
-	type ReadVirtualMemory(ULONG ProcessId, ULONG ReadAddress,
-		SIZE_T Size)
+	type ReadVirtualMemory(ULONG ProcessId, ULONG ReadAddress, SIZE_T Size)
 	{
-		if (hDriver == INVALID_HANDLE_VALUE)
-			return (type)false;
+		// allocate a buffer with specified type to allow our driver to write our wanted data inside this buffer
+		type Buffer;
 
 		DWORD Return, Bytes;
 		KERNEL_READ_REQUEST ReadRequest;
 
+
 		ReadRequest.ProcessId = ProcessId;
 		ReadRequest.Address = ReadAddress;
+
+		//send the 'address' of the buffer so our driver can know where to write the data
+		ReadRequest.pBuff = &Buffer;
+
 		ReadRequest.Size = Size;
 
 		// send code to our driver with the arguments
-		if (DeviceIoControl(hDriver, IO_READ_REQUEST, &ReadRequest,
-			sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), &Bytes, 0)) 
-		{
-			return (type)ReadRequest.Response;
+		if (DeviceIoControl(hDriver, IO_READ_REQUEST, &ReadRequest, sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), 0, 0)) {
+			//return our buffer
+			return Buffer;
 		}
-		return (type)false;
+		else
+			return Buffer;
 	}
 
-	bool WriteVirtualMemory(ULONG ProcessId, ULONG WriteAddress,
-		ULONG WriteValue, SIZE_T WriteSize)
+	template <typename type>
+	bool WriteVirtualMemory(ULONG ProcessId, ULONG WriteAddress, type WriteValue, SIZE_T WriteSize)
 	{
 		if (hDriver == INVALID_HANDLE_VALUE)
 			return false;
@@ -49,15 +53,16 @@ public:
 		KERNEL_WRITE_REQUEST  WriteRequest;
 		WriteRequest.ProcessId = ProcessId;
 		WriteRequest.Address = WriteAddress;
-		WriteRequest.Value = WriteValue;
+
+		//send driver the 'address' of our specified type WriteValue so our driver can copy the data we want to write from this address to WriteAddress
+		WriteRequest.pBuff = &WriteValue;
+
 		WriteRequest.Size = WriteSize;
 
-		if (DeviceIoControl(hDriver, IO_WRITE_REQUEST, &WriteRequest, sizeof(WriteRequest),
-			0, 0, &Bytes, NULL)) 
-		{
+		if (DeviceIoControl(hDriver, IO_WRITE_REQUEST, &WriteRequest, sizeof(WriteRequest), 0, 0, &Bytes, NULL))
 			return true;
-		}
-		return false;
+		else
+			return false;
 	}
 
 	DWORD GetTargetPid()

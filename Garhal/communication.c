@@ -23,11 +23,14 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PKERNEL_READ_REQUEST ReadOutput = (PKERNEL_READ_REQUEST)Irp->AssociatedIrp.SystemBuffer;
 
 		PEPROCESS Process;
-		// Get our process
-		if (NT_SUCCESS(PsLookupProcessByProcessId(ReadInput->ProcessId, &Process)))
-			KeReadVirtualMemory(Process, ReadInput->Address,
-				&ReadInput->Response, ReadInput->Size);
 
+		// Get our process
+		if (NT_SUCCESS(PsLookupProcessByProcessId(ReadInput->ProcessId, &Process))) {
+
+			//read from ReadInput->Address and write it to pBuff so we can use the data in our controller
+			KeReadVirtualMemory(Process, ReadInput->Address, ReadInput->pBuff, ReadInput->Size);
+		}
+			
 		//DbgPrintEx(0, 0, "Read Params:  %lu, %#010x \n", ReadInput->ProcessId, ReadInput->Address);
 		//DbgPrintEx(0, 0, "Value: %lu \n", ReadOutput->Response);
 
@@ -41,10 +44,11 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 
 		PEPROCESS Process;
 		// Get our process
-		if (NT_SUCCESS(PsLookupProcessByProcessId(WriteInput->ProcessId, &Process)))
-			KeWriteVirtualMemory(Process, &WriteInput->Value,
-				WriteInput->Address, WriteInput->Size);
-
+		if (NT_SUCCESS(PsLookupProcessByProcessId(WriteInput->ProcessId, &Process))) {
+			// copy the value of pBuff to WriteInput->Address
+			KeWriteVirtualMemory(Process, WriteInput->pBuff, WriteInput->Address, WriteInput->Size);
+		}
+			
 		//DbgPrintEx(0, 0, "Write Params:  %lu, %#010x \n", WriteInput->Value, WriteInput->Address);
 
 		Status = STATUS_SUCCESS;
