@@ -1,6 +1,6 @@
 # GarHal_CSGO
 A project that demostrates how to screw with CSGO from Kernel Space. All cleaned up, and with updated offsets. 
-Garhal is a fish. If you don't know what It is fuck off.
+Garhal is a fish. If you don't know what It is fuck off. (lol)
 
 I know this been done by some people already, I'm just also working omy own version.
 
