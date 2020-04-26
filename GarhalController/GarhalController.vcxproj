@@ -152,7 +152,7 @@
   <ItemGroup>
     <ClInclude Include="communications.h" />
     <ClInclude Include="kernelinterface.h" />
-    <ClInclude Include="offsets.h" />
+    <ClInclude Include="offsets.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

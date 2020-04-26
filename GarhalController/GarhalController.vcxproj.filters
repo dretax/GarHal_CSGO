@@ -23,10 +23,10 @@
     <ClInclude Include="communications.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="offsets.h">
+    <ClInclude Include="kernelinterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="kernelinterface.h">
+    <ClInclude Include="offsets.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
