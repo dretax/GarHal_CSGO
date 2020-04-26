@@ -1,7 +1,7 @@
 #pragma comment(lib,"ntdll.lib")
 
 #include "kernelinterface.h"
-#include "offsets.h"
+#include "offsets.hpp"
 
 #include <iostream>
 #include <map>
@@ -9,12 +9,62 @@
 #include <TlHelp32.h>
 #include <algorithm>
 
+//glow struct -- maybe move to a more organized .h ?
+struct GlowStruct
+{
+	BYTE base[4];
+	float red;
+	float green;
+	float blue;
+	float alpha;
+	BYTE buffer[16];
+	bool renderWhenOccluded;
+	bool renderWhenUnOccluded;
+	bool fullBloom;
+	BYTE buffer1[5];
+	int glowStyle;
+};
+
 using namespace std;
+
+// hazedumper namespace
+using namespace hazedumper::netvars;
+using namespace hazedumper::signatures;
+
+
+KeInterface Driver("\\\\.\\garhalop");
+
+DWORD ProcessId, ClientAddress;
+int GlowObject;
+
+void SetEnemyGlow(int glowIndex)
+{
+	GlowStruct EGlow;
+	EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (glowIndex * 0x38), sizeof(GlowStruct));
+	EGlow.red = 255.0f;
+	EGlow.green = 0.0f;
+	EGlow.blue = 0.0f;
+	EGlow.alpha = 0.5f;
+	EGlow.renderWhenOccluded = true;
+	EGlow.renderWhenUnOccluded = false;
+	Driver.WriteVirtualMemory(ProcessId, GlowObject + (glowIndex * 0x38), EGlow, sizeof(EGlow));
+}
+
+void SetTeamGlow(int glowIndex)
+{
+	GlowStruct TGlow;
+	TGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (glowIndex * 0x38), sizeof(GlowStruct));
+	TGlow.red = 0.0f;
+	TGlow.green = 0.0f;
+	TGlow.blue = 255.0f;
+	TGlow.alpha = 0.5f;
+	TGlow.renderWhenOccluded = true;
+	TGlow.renderWhenUnOccluded = false;
+	Driver.WriteVirtualMemory(ProcessId, GlowObject + (glowIndex * 0x38), TGlow, sizeof(TGlow));
+}
 
 int main()
 {
-
-	KeInterface Driver("\\\\.\\garhalop");
 
 	SetConsoleTitle(L"GarHal is the best fish ever");
 	
@@ -31,11 +81,7 @@ int main()
 	// Get address of localplayer
 	DWORD LocalPlayer = 0;
 
-	float zero = 0.f;
-	float one = 1.0f;
-	ULONG ulongzero = *((unsigned long*)&zero); // Represents color off.
-	ULONG ulongone = *((unsigned long*)&one); // Represents color on.
-
+	GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
 
 	while (true)
 	{
@@ -45,67 +91,39 @@ int main()
 		}
 
 
-		LocalPlayer = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + LocalPlayer_Offset, sizeof(ULONG));
-		int myteam = Driver.ReadVirtualMemory<int>(ProcessId, LocalPlayer + TeamNumber_Offset, sizeof(int));
+		LocalPlayer = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(ULONG));
 
 		// No Flash
 
-		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + FlashMaxAlpha_Offset, ulongzero, 8);
+		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + m_flFlashMaxAlpha, 0.0f, 8);
 
-		DWORD glowObjectManager = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwGlowObjectManager_Offset, sizeof(ULONG));
-		int glowObjectCount = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager_Offset + 0x4, sizeof(int));
+		//
 
+		int OurTeam = Driver.ReadVirtualMemory<int>(ProcessId, LocalPlayer + m_iTeamNum, sizeof(int));
 
-		if (glowObjectCount > 0)
+		for (short int i = 0; i < 64; i++)
 		{
+			int Entity = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
 
-			for (int i = 0; i < glowObjectCount; i++)
-			{
-				int currentPlayer = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList_Offset + (i * 0x10), sizeof(int));
-				if (currentPlayer > 0)
-				{
-					int life = Driver.ReadVirtualMemory<int>(ProcessId, currentPlayer + LifeState_Offset, sizeof(int));
-					if (life != 0)
-					{
-						//Sleep(5);
-						continue;
-					}
+			if (Entity != NULL) {
 
-					int GlowIndex = Driver.ReadVirtualMemory<int>(ProcessId, currentPlayer + GlowIndex_Offset, sizeof(int));
-					int team = Driver.ReadVirtualMemory<int>(ProcessId, currentPlayer + TeamNumber_Offset, sizeof(int));
+				int ReadTeam = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iTeamNum, sizeof(int));
+				int GlowIndex = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iGlowIndex, sizeof(int));
 
-					if (team == 0)
-					{
-						//Sleep(5);
-						continue;
-					}
+				int isDormant = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_bDormant, sizeof(int));
 
-					int GlowAddress = glowObjectManager + (GlowIndex * 56);
+				if (!isDormant) {
 
-					// If our team doesn't match show red
-					if (myteam != team)
-					{
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x4, ulongone, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x8, ulongzero, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0xC, ulongzero, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x10, ulongone, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x24, true, sizeof(BOOL));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x25, false, sizeof(BOOL));
-					}
+					if (OurTeam != ReadTeam)
+						SetEnemyGlow(GlowIndex);
 					else
-					{
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x4, ulongzero, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x8, ulongone, sizeof(ULONG));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0xC, ulongzero, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x10, ulongone, sizeof(float));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x24, true, sizeof(BOOL));
-						Driver.WriteVirtualMemory(ProcessId, GlowAddress + 0x25, false, sizeof(BOOL));
-					}
+						SetTeamGlow(GlowIndex);
 				}
-			}
-		}
 
-		Sleep(10);
+			}
+
+		}
+		Sleep(3);
 	}
 	return 0;
 }
