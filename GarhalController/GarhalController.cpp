@@ -32,40 +32,13 @@ using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
 
 
-KeInterface Driver("\\\\.\\garhalop");
-
 DWORD ProcessId, ClientAddress;
 int GlowObject;
 
-void SetEnemyGlow(int glowIndex)
-{
-	GlowStruct EGlow;
-	EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (glowIndex * 0x38), sizeof(GlowStruct));
-	EGlow.red = 255.0f;
-	EGlow.green = 0.0f;
-	EGlow.blue = 0.0f;
-	EGlow.alpha = 0.5f;
-	EGlow.renderWhenOccluded = true;
-	EGlow.renderWhenUnOccluded = false;
-	Driver.WriteVirtualMemory(ProcessId, GlowObject + (glowIndex * 0x38), EGlow, sizeof(EGlow));
-}
-
-void SetTeamGlow(int glowIndex)
-{
-	GlowStruct TGlow;
-	TGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (glowIndex * 0x38), sizeof(GlowStruct));
-	TGlow.red = 0.0f;
-	TGlow.green = 0.0f;
-	TGlow.blue = 255.0f;
-	TGlow.alpha = 0.5f;
-	TGlow.renderWhenOccluded = true;
-	TGlow.renderWhenUnOccluded = false;
-	Driver.WriteVirtualMemory(ProcessId, GlowObject + (glowIndex * 0x38), TGlow, sizeof(TGlow));
-}
 
 int main()
 {
-
+	KeInterface Driver("\\\\.\\garhalop");
 	SetConsoleTitle(L"GarHal is the best fish ever");
 	
 	// Get address of client.dll & pid of csgo from our driver
@@ -114,10 +87,30 @@ int main()
 
 				if (!isDormant) {
 
-					if (OurTeam != ReadTeam)
-						SetEnemyGlow(GlowIndex);
+					if (OurTeam != ReadTeam) {
+						GlowStruct EGlow;
+						EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
+						EGlow.red = 255.0f;
+						EGlow.green = 0.0f;
+						EGlow.blue = 0.0f;
+						EGlow.alpha = 0.5f;
+						EGlow.renderWhenOccluded = true;
+						EGlow.renderWhenUnOccluded = false;
+						Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), EGlow, sizeof(EGlow));
+					}
 					else
-						SetTeamGlow(GlowIndex);
+					{
+						GlowStruct TGlow;
+						TGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
+						TGlow.red = 0.0f;
+						TGlow.green = 0.0f;
+						TGlow.blue = 255.0f;
+						TGlow.alpha = 0.5f;
+						TGlow.renderWhenOccluded = true;
+						TGlow.renderWhenUnOccluded = false;
+						Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), TGlow, sizeof(TGlow));
+					}
+
 				}
 
 			}
