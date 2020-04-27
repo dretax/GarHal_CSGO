@@ -156,6 +156,7 @@
     <ClCompile Include="communication.c" />
     <ClCompile Include="events.c" />
     <ClCompile Include="garhal.c" />
+    <ClCompile Include="hide.c" />
     <ClCompile Include="memory.c" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="data.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="garhal.h" />
+    <ClInclude Include="hide.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="ntos.h" />
   </ItemGroup>

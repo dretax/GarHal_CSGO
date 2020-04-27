@@ -2,6 +2,7 @@
 
 #include "events.h"
 #include "data.h"
+#include "hide.h"
 
 
 // Find our required PE image.
@@ -27,7 +28,8 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDLE processId, PPS_CREATE_NOTIFY_INFO notifyInfo)
 {
 	// if we dont use this statement, we will get a bsod if notifyInfo is empty
-	if (notifyInfo) {
+	if (notifyInfo) 
+	{
 
 		//processId
 		//DbgPrintEx(0, 0, "PID = %d\r\n", processId);
@@ -35,16 +37,16 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 		//full file path
 		//DbgPrintEx(0, 0, "Process Full Path: %ls \n", notifyInfo->ImageFileName->Buffer);
 
-		/*if (wcsstr(notifyInfo->ImageFileName->Buffer, L"\\x64\\Release\\GarhalController.exe"))
+		if (wcsstr(notifyInfo->ImageFileName->Buffer, L"\\x64\\Release\\GarhalController.exe"))
 		{
 			DbgPrintEx(0, 0, "Bomb has been planted!\n");
-			uintptr_t i = (uintptr_t)processId;
-			//DbgPrintEx(0, 0, "PID = %d\r\n", i);
-
+			uintptr_t i = (uintptr_t)processId; // Unsure if this is needed.
 			UINT32 intmadafaka = (UINT32)i;
-			DbgPrintEx(0, 0, "PIDASSASA = %d\r\n", intmadafaka);
-			modifyTaskList(intmadafaka);
-		}*/
+
+			
+			DbgPrintEx(0, 0, "Hidden APP = %d\r\n", intmadafaka);
+			HideProcess(intmadafaka);
+		}
 
 	}
 

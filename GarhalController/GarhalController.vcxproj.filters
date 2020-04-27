@@ -20,13 +20,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="communications.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="kernelinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="offsets.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kernelinterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="communications.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

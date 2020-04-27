@@ -4,9 +4,11 @@
 
 // 2020-04-17 07:35:56.115034 UTC
 
-namespace hazedumper {
+namespace hazedumper
+{
 	constexpr ::std::int64_t timestamp = 1587108956;
-	namespace netvars {
+	namespace netvars
+	{
 		constexpr ::std::ptrdiff_t cs_gamerules_data = 0x0;
 		constexpr ::std::ptrdiff_t m_ArmorValue = 0xB368;
 		constexpr ::std::ptrdiff_t m_Collision = 0x320;
@@ -93,7 +95,8 @@ namespace hazedumper {
 		constexpr ::std::ptrdiff_t m_vecViewOffset = 0x108;
 		constexpr ::std::ptrdiff_t m_viewPunchAngle = 0x3020;
 	} // namespace netvars
-	namespace signatures {
+	namespace signatures
+	{
 		constexpr ::std::ptrdiff_t anim_overlays = 0x2980;
 		constexpr ::std::ptrdiff_t clientstate_choked_commands = 0x4D28;
 		constexpr ::std::ptrdiff_t clientstate_delta_ticks = 0x174;

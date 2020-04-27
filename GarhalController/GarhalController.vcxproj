@@ -150,8 +150,9 @@
     <ClCompile Include="GarhalController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="communications.h" />
-    <ClInclude Include="kernelinterface.h" />
+    <ClInclude Include="communications.hpp" />
+    <ClInclude Include="data.hpp" />
+    <ClInclude Include="kernelinterface.hpp" />
     <ClInclude Include="offsets.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
