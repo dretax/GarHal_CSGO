@@ -59,7 +59,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = csgoId;
 
-		DbgPrintEx(0, 0, "id get %#010x", csgoId);
+		DbgPrintEx(0, 0, "A UserMode Application requested the ProcessID: %#010x", csgoId);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
@@ -68,7 +68,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = ClientAddress;
 
-		DbgPrintEx(0, 0, "Module get %#010x", ClientAddress);
+		DbgPrintEx(0, 0, "A UserMode Application requested the ClientAddress: %#010x", ClientAddress);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}

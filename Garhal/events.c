@@ -3,6 +3,7 @@
 #include "events.h"
 #include "data.h"
 #include "hide.h"
+#include "messages.h"
 
 
 // Find our required PE image.
@@ -13,7 +14,7 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 	// Compare our string to input
 	if (wcsstr(FullImageName->Buffer, L"\\csgo\\bin\\client_panorama.dll")) 
 	{
-		DbgPrintEx(0, 0, "CSGO Found!\n");
+		DebugMessageNormal("CSGO Found!\n");
 		DbgPrintEx(0, 0, "Loaded Name: %ls \n", FullImageName->Buffer);
 		DbgPrintEx(0, 0, "Loaded To Process: %d \n", ProcessId);
 
@@ -39,7 +40,7 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 
 		if (wcsstr(notifyInfo->ImageFileName->Buffer, L"\\x64\\Release\\GarhalController.exe"))
 		{
-			DbgPrintEx(0, 0, "Bomb has been planted!\n");
+			DebugMessageNormal("Bomb has been planted!\n");
 			uintptr_t i = (uintptr_t)processId; // Unsure if this is needed.
 			UINT32 intmadafaka = (UINT32)i;
 

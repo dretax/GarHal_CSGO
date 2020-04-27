@@ -1,4 +1,4 @@
-#pragma warning( disable : 4100 4047 4024 4022 4201 4311 4057 4213 4189 4081 4189 4706 4214 4459 4273)
+#pragma warning( disable : 4100 4047 4024 4022 4201 4311 4057 4213 4189 4081 4189 4706 4214 4459 4273 4127)
 
 /*
  * GarHal CSGO Specific Kernel Driver by DreTaX.
@@ -12,14 +12,15 @@
 #include "ntos.h"
 #include "data.h"
 #include "events.h"
+#include "messages.h"
 
 
 NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 {
-	DbgPrintEx(0, 0, "======================================\n");
-	DbgPrintEx(0, 0, "Garhal CSGO External hack By DreTaX\n");
-	DbgPrintEx(0, 0, "Lectures by Life45\n");
-	DbgPrintEx(0, 0, "Shutting down...\n");
+	DebugMessageNormal("======================================\n");
+	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
+	DebugMessageNormal("Lectures by Life45\n");
+	DebugMessageNormal("Shutting down...\n");
 	PsRemoveLoadImageNotifyRoutine(ImageLoadCallback);
 	IoDeleteSymbolicLink(&dos);
 	IoDeleteDevice(pDriverObject->DeviceObject);
@@ -55,10 +56,10 @@ NTSTATUS CloseCall(PDEVICE_OBJECT DeviceObject, PIRP irp)
 NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject,
 	PUNICODE_STRING pRegistryPath)
 {
-	DbgPrintEx(0, 0, "======================================\n");
-	DbgPrintEx(0, 0, "Garhal CSGO External hack By DreTaX\n");
-	DbgPrintEx(0, 0, "Lectures by Life45\n");
-	DbgPrintEx(0, 0, "Starting...\n");
+	DebugMessageNormal("======================================\n");
+	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
+	DebugMessageNormal("Lectures by Life45\n");
+	DebugMessageNormal("Starting...\n");
 
 	PsSetLoadImageNotifyRoutine(ImageLoadCallback);
 
@@ -80,9 +81,13 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject,
 	// Set up the CreateProcess routine. Change in data.h to enable.
 	if (EnableProcessNotifyCallbackEx == 1) 
 	{
-		DbgPrintEx(0, 0, "Process hiding feature is enabled.\n");
-		DbgPrintEx(0, 0, "You may get BSOD if you have the Windows PatchGuard running. (Very frequently.)\n");
+		DebugMessageNormal("Process hiding feature is enabled.\n");
+		DebugMessageNormal("You may get BSOD if you have the Windows PatchGuard running. (Very frequently.)\n");
 		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, FALSE);
+	}
+	else
+	{
+		DebugMessageNormal("Process hiding feature is disabled.\n");
 	}
 
 	// Change in data.h to enable.
@@ -98,8 +103,12 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject,
 		CurDriverEntry->InLoadOrderLinks.Flink = (PLIST_ENTRY)CurDriverEntry;
 		CurDriverEntry->InLoadOrderLinks.Blink = (PLIST_ENTRY)CurDriverEntry;
 
-		DbgPrintEx(0, 0, "Driver hiding feature is enabled.\n");
-		DbgPrintEx(0, 0, "You may get BSOD if you have the Windows PatchGuard running. (10-30mins)\n");
+		DebugMessageNormal("Driver hiding feature is enabled.\n");
+		DebugMessageNormal("You may get BSOD if you have the Windows PatchGuard running. (10-30mins)\n");
+	}
+	else
+	{
+		DebugMessageNormal("Driver hiding feature is disabled.\n");
 	}
 
 	return STATUS_SUCCESS;
