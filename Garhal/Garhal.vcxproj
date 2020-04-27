@@ -158,6 +158,7 @@
     <ClCompile Include="garhal.c" />
     <ClCompile Include="hide.c" />
     <ClCompile Include="memory.c" />
+    <ClCompile Include="messages.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="communication.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="garhal.h" />
     <ClInclude Include="hide.h" />
     <ClInclude Include="memory.h" />
+    <ClInclude Include="messages.h" />
     <ClInclude Include="ntos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
