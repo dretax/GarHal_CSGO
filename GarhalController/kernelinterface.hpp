@@ -1,6 +1,6 @@
 #pragma once
 
-#include "communications.h"
+#include "communications.hpp"
 
 // The interface handler for IOCTL. Thanks Zeromem.
 class KeInterface
@@ -35,12 +35,12 @@ public:
 		ReadRequest.Size = Size;
 
 		// send code to our driver with the arguments
-		if (DeviceIoControl(hDriver, IO_READ_REQUEST, &ReadRequest, sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), 0, 0)) {
+		if (DeviceIoControl(hDriver, IO_READ_REQUEST, &ReadRequest, sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), 0, 0)) 
+		{
 			//return our buffer
 			return Buffer;
 		}
-		else
-			return Buffer;
+		return Buffer;
 	}
 
 	template <typename type>
@@ -59,10 +59,11 @@ public:
 
 		WriteRequest.Size = WriteSize;
 
-		if (DeviceIoControl(hDriver, IO_WRITE_REQUEST, &WriteRequest, sizeof(WriteRequest), 0, 0, &Bytes, NULL))
+		if (DeviceIoControl(hDriver, IO_WRITE_REQUEST, &WriteRequest, sizeof(WriteRequest), 0, 0, &Bytes, NULL)) 
+		{
 			return true;
-		else
-			return false;
+		}
+		return false;
 	}
 
 	DWORD GetTargetPid()

@@ -42,6 +42,9 @@
     <ClInclude Include="data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hide.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="garhal.c">
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="events.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hide.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

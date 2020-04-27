@@ -1,29 +1,10 @@
 #pragma comment(lib,"ntdll.lib")
 
-#include "kernelinterface.h"
+#include "kernelinterface.hpp"
 #include "offsets.hpp"
-
+#include "data.hpp"
 #include <iostream>
-#include <map>
-#include <vector>
 #include <TlHelp32.h>
-#include <algorithm>
-
-//glow struct -- maybe move to a more organized .h ?
-struct GlowStruct
-{
-	BYTE base[4];
-	float red;
-	float green;
-	float blue;
-	float alpha;
-	BYTE buffer[16];
-	bool renderWhenOccluded;
-	bool renderWhenUnOccluded;
-	bool fullBloom;
-	BYTE buffer1[5];
-	int glowStyle;
-};
 
 using namespace std;
 
@@ -67,10 +48,7 @@ int main()
 		LocalPlayer = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(ULONG));
 
 		// No Flash
-
 		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + m_flFlashMaxAlpha, 0.0f, 8);
-
-		//
 
 		int OurTeam = Driver.ReadVirtualMemory<int>(ProcessId, LocalPlayer + m_iTeamNum, sizeof(int));
 
@@ -78,16 +56,19 @@ int main()
 		{
 			int Entity = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
 
-			if (Entity != NULL) {
+			if (Entity != NULL) 
+			{
 
 				int ReadTeam = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iTeamNum, sizeof(int));
 				int GlowIndex = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iGlowIndex, sizeof(int));
 
 				int isDormant = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_bDormant, sizeof(int));
 
-				if (!isDormant) {
+				if (!isDormant) 
+				{
 
-					if (OurTeam != ReadTeam) {
+					if (OurTeam != ReadTeam) 
+					{
 						GlowStruct EGlow;
 						EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
 						EGlow.red = 255.0f;
@@ -110,11 +91,9 @@ int main()
 						TGlow.renderWhenUnOccluded = false;
 						Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), TGlow, sizeof(TGlow));
 					}
-
 				}
 
 			}
-
 		}
 		Sleep(3);
 	}
