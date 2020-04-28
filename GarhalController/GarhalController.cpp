@@ -58,7 +58,6 @@ int main()
 
 			if (Entity != NULL) 
 			{
-
 				int ReadTeam = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iTeamNum, sizeof(int));
 				int GlowIndex = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iGlowIndex, sizeof(int));
 
@@ -66,31 +65,38 @@ int main()
 
 				if (!isDormant) 
 				{
-
+					bool Defusing = Driver.ReadVirtualMemory<bool>(ProcessId, Entity + m_bIsDefusing, sizeof(int));
+					
+					GlowStruct EGlow;
+					EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
+					EGlow.alpha = 0.5f;
+					EGlow.renderWhenOccluded = true;
+					EGlow.renderWhenUnOccluded = false;
+					
 					if (OurTeam != ReadTeam) 
 					{
-						GlowStruct EGlow;
-						EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
 						EGlow.red = 255.0f;
 						EGlow.green = 0.0f;
 						EGlow.blue = 0.0f;
-						EGlow.alpha = 0.5f;
-						EGlow.renderWhenOccluded = true;
-						EGlow.renderWhenUnOccluded = false;
-						Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), EGlow, sizeof(EGlow));
+
+						if (Defusing)
+						{
+							EGlow.green = 60.0f;
+						}
 					}
 					else
 					{
-						GlowStruct TGlow;
-						TGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
-						TGlow.red = 0.0f;
-						TGlow.green = 0.0f;
-						TGlow.blue = 255.0f;
-						TGlow.alpha = 0.5f;
-						TGlow.renderWhenOccluded = true;
-						TGlow.renderWhenUnOccluded = false;
-						Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), TGlow, sizeof(TGlow));
+						EGlow.red = 0.0f;
+						EGlow.green = 0.0f;
+						EGlow.blue = 255.0f;
+
+						if (Defusing)
+						{
+							EGlow.green = 60.0f;
+						}
 					}
+
+					Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), EGlow, sizeof(EGlow));
 				}
 
 			}
