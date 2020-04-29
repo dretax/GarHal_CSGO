@@ -26,7 +26,7 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 	IoDeleteDevice(pDriverObject->DeviceObject);
 
 	// Delete the processnotify routine
-	if (EnableProcessNotifyCallbackEx) 
+	if (EnableProcessNotifyCallbackEx == 1) 
 	{
 		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, TRUE);
 	}
