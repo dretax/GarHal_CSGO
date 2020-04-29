@@ -26,35 +26,15 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 	IoDeleteDevice(pDriverObject->DeviceObject);
 
 	// Delete the processnotify routine
-	if (EnableProcessNotifyCallbackEx) 
+	if (EnableProcessNotifyCallbackEx == 1) 
 	{
 		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, TRUE);
 	}
 	return STATUS_SUCCESS;
 }
 
-NTSTATUS CreateCall(PDEVICE_OBJECT DeviceObject, PIRP irp)
-{
-	irp->IoStatus.Status = STATUS_SUCCESS;
-	irp->IoStatus.Information = 0;
-
-	IoCompleteRequest(irp, IO_NO_INCREMENT);
-	return STATUS_SUCCESS;
-}
-
-NTSTATUS CloseCall(PDEVICE_OBJECT DeviceObject, PIRP irp)
-{
-	irp->IoStatus.Status = STATUS_SUCCESS;
-	irp->IoStatus.Information = 0;
-
-	IoCompleteRequest(irp, IO_NO_INCREMENT);
-	return STATUS_SUCCESS;
-}
-
-
 // Driver Entrypoint
-NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject,
-	PUNICODE_STRING pRegistryPath)
+NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
 {
 	DebugMessageNormal("======================================\n");
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");

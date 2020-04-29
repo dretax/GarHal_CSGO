@@ -18,6 +18,10 @@
 // Declare the IoControl function.
 NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp);
 
+NTSTATUS CloseCall(PDEVICE_OBJECT DeviceObject, PIRP irp);
+
+NTSTATUS CreateCall(PDEVICE_OBJECT DeviceObject, PIRP irp);
+
 
 // datatype for read request
 typedef struct _KERNEL_READ_REQUEST
