@@ -5,6 +5,8 @@
 #include "data.hpp"
 #include <iostream>
 #include <TlHelp32.h>
+#include "Engine.hpp"
+#include "Entity.hpp"
 
 using namespace std;
 
@@ -13,23 +15,67 @@ using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
 
 
-DWORD ProcessId, ClientAddress;
+//DWORD ProcessId, ClientAddress, EngineAddress;
 int GlowObject;
+
+Entity CreateEntity(int Address)
+{
+	//int ent = Driver.ReadVirtualMemory<int>(ProcessId, Address, sizeof(int));
+	if (Address > 0)
+	{
+		Entity entity(Address);
+		entity.InValid = false;
+		return entity;
+	}
+	
+	Entity dummy;
+	dummy.InValid = true;
+	return dummy;
+}
 
 
 int main()
 {
-	KeInterface Driver("\\\\.\\garhalop");
-	SetConsoleTitle(L"GarHal is the best fish ever");
+	Driver = KeInterface("\\\\.\\garhalop");
+	SetConsoleTitle(L"GarHal is the best fish ever, by DreTaX");
 	
-	// Get address of client.dll & pid of csgo from our driver
-	DWORD ProcessId = Driver.GetTargetPid();
-	DWORD ClientAddress = Driver.GetClientModule();
+	// Get address of client.dll, engine.dll, and PID.
+
+	ProcessId = Driver.GetTargetPid();
+	ClientAddress = Driver.GetClientModule();
+	EngineAddress = Driver.GetEngineModule();
+
+	int UseAimAssist = 0;
+	int UseBhop = 0;
+
+	if (ProcessId == 0)
+	{
+		std::cout << "ProcessID is 0. Start driver & restart. " << ProcessId << std::endl;
+		cin >> UseBhop;
+		return 0;
+	}
+
+	Engine engine;
+	
+	/*std::cout << "Use AimAssist? (Y: 1, N: Anything)" << std::endl;
+	cin >> UseAimAssist;
+	if (UseAimAssist != 1)
+	{
+		UseAimAssist = 0;
+	}
+
+	std::cout << "Use UseBhop? (Y: 1, N: Anything)" << std::endl;
+	cin >> UseBhop;
+	if (UseBhop != 1)
+	{
+		UseBhop = 0;
+	}*/
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
 	std::cout << "ProcessID: " << ProcessId << std::endl;
 	std::cout << "ClientAddress: " << ClientAddress << std::endl;
+	std::cout << "EngineAddress: " << EngineAddress << std::endl;
 
 
 	// Get address of localplayer
@@ -37,15 +83,38 @@ int main()
 
 	GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
 
+	std::cout << "GlowObject: " << GlowObject << std::endl;
+
 	while (true)
 	{
-		if (ProcessId == 0)
+		/*if (!engine.IsInGame())
 		{
+			Sleep(500);
 			continue;
-		}
+		}*/
 
+		/*LocalPlayer = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(ULONG));
+		int OurTeam = Driver.ReadVirtualMemory<int>(ProcessId, LocalPlayer + m_iTeamNum, sizeof(int));
+		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + m_flFlashMaxAlpha, 0.0f, 8);
 
-		LocalPlayer = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(ULONG));
+		for (short int i = 0; i < 64; i++)
+		{
+			int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
+
+			if (EntityAddr == NULL)
+			{
+				continue;
+			}
+
+			Entity Entity = CreateEntity(EntityAddr);
+			if (!Entity.InValid)
+			{
+				if (!Entity.IsDormant()) 
+				{
+					Entity.SetCorrectGlowStruct(OurTeam, GlowObject);
+				}
+			}
+		}*/
 
 		// No Flash
 		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + m_flFlashMaxAlpha, 0.0f, 8);

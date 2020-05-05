@@ -65,8 +65,5 @@
     <ClCompile Include="hide.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="messages.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

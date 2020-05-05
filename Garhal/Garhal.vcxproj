@@ -164,7 +164,6 @@
     <ClCompile Include="garhal.c" />
     <ClCompile Include="hide.c" />
     <ClCompile Include="memory.c" />
-    <ClCompile Include="messages.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="communication.h" />

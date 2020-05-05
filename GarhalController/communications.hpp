@@ -16,6 +16,9 @@
 // Request to retrieve the base address of client.dll in csgo.exe from kernel space
 #define IO_GET_MODULE_REQUEST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0669 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
+// Request to retrieve the base address of engine.dll in csgo.exe from kernel space
+#define IO_GET_ENGINE_MODULE_REQUEST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0670 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+
 
 typedef struct _KERNEL_READ_REQUEST
 {
