@@ -15,11 +15,17 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 	if (wcsstr(FullImageName->Buffer, L"\\csgo\\bin\\client_panorama.dll")) 
 	{
 		DebugMessageNormal("CSGO Found!\n");
-		DbgPrintEx(0, 0, "Loaded Name: %ls \n", FullImageName->Buffer);
-		DbgPrintEx(0, 0, "Loaded To Process: %d \n", ProcessId);
+		DebugMessageNormal("Loaded Name: %ls \n", FullImageName->Buffer);
+		DebugMessageNormal( "Loaded To Process: %d \n", ProcessId);
 
 		ClientAddress = ImageInfo->ImageBase;
 		csgoId = ProcessId;
+	}
+	else if (wcsstr(FullImageName->Buffer, L"\\Counter-Strike Global Offensive\\bin\\engine.dll"))
+	{
+		DebugMessageNormal("CSGO Engine found!\n");
+
+		EngineAddress = ImageInfo->ImageBase;
 	}
 
 	return STATUS_SUCCESS;
@@ -31,13 +37,8 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 	// if we dont use this statement, we will get a bsod if notifyInfo is empty
 	if (notifyInfo) 
 	{
-
-		//processId
 		//DbgPrintEx(0, 0, "PID = %d\r\n", processId);
-
-		//full file path
 		//DbgPrintEx(0, 0, "Process Full Path: %ls \n", notifyInfo->ImageFileName->Buffer);
-
 		if (wcsstr(notifyInfo->ImageFileName->Buffer, L"\\x64\\Release\\GarhalController.exe"))
 		{
 			DebugMessageNormal("Bomb has been planted!\n");
@@ -45,10 +46,9 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 			UINT32 intmadafaka = (UINT32)i;
 
 			
-			DbgPrintEx(0, 0, "Hidden APP = %d\r\n", intmadafaka);
+			DebugMessageNormal("Hidden APP = %d\r\n", intmadafaka);
 			HideProcess(intmadafaka);
 		}
-
 	}
 
 	return STATUS_SUCCESS;

@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable : 4101 4244)
 
 #include "communications.hpp"
 
@@ -99,4 +100,20 @@ public:
 		return false;
 	}
 
+
+	DWORD GetEngineModule()
+	{
+		if (hDriver == INVALID_HANDLE_VALUE)
+			return false;
+
+		ULONG Address;
+		DWORD Bytes;
+
+		if (DeviceIoControl(hDriver, IO_GET_ENGINE_MODULE_REQUEST, &Address, sizeof(Address),
+			&Address, sizeof(Address), &Bytes, NULL))
+		{
+			return Address;
+		}
+		return false;
+	}
 };

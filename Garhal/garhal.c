@@ -1,4 +1,4 @@
-#pragma warning( disable : 4100 4047 4024 4022 4201 4311 4057 4213 4189 4081 4189 4706 4214 4459 4273 4127)
+#pragma warning( disable : 4100 4047 4024 4022 4201 4311 4057 4213 4189 4081 4189 4706 4214 4459 4273 4127 26451 4133 4244)
 
 /*
  * GarHal CSGO Specific Kernel Driver by DreTaX.
@@ -6,8 +6,12 @@
  */
 
 #include "garhal.h"
+
+#include <locale.h>
 #include <ntddk.h>
 #include <ntdef.h>
+#include <stdio.h>
+
 #include "communication.h"
 #include "ntos.h"
 #include "data.h"
