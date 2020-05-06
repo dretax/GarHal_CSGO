@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="BSP">
+      <UniqueIdentifier>{f752107a-2764-49b0-93eb-bfb5ca68dc23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GarhalController.cpp">
@@ -23,6 +26,18 @@
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Aimbot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BSPFile.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="BSPParser.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="TraceRay.cpp">
+      <Filter>BSP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +61,24 @@
     </ClInclude>
     <ClInclude Include="Engine.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Aimbot.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BSPFile.hpp">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="BSPFlags.hpp">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="BSPParser.hpp">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="BSPStructure.hpp">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="TraceRay.hpp">
+      <Filter>BSP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
