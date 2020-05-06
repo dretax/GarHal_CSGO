@@ -5,6 +5,9 @@
 #include "data.hpp"
 #include <iostream>
 #include <TlHelp32.h>
+
+#include "Aimbot.hpp"
+#include "BSPParser.hpp"
 #include "Engine.hpp"
 #include "Entity.hpp"
 
@@ -20,16 +23,13 @@ int GlowObject;
 
 Entity CreateEntity(int Address)
 {
-	//int ent = Driver.ReadVirtualMemory<int>(ProcessId, Address, sizeof(int));
 	if (Address > 0)
 	{
 		Entity entity(Address);
-		entity.InValid = false;
 		return entity;
 	}
 	
-	Entity dummy;
-	dummy.InValid = true;
+	Entity dummy(0);
 	return dummy;
 }
 
@@ -56,6 +56,7 @@ int main()
 	}
 
 	Engine engine;
+	hazedumper::BSPParser bspParser;
 	
 	/*std::cout << "Use AimAssist? (Y: 1, N: Anything)" << std::endl;
 	cin >> UseAimAssist;
@@ -79,24 +80,47 @@ int main()
 
 
 	// Get address of localplayer
-	DWORD LocalPlayer = 0;
+	int LocalPlayer = 0;
 
 	GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
 
 	std::cout << "GlowObject: " << GlowObject << std::endl;
 
+	Aimbot aim;
+	const float FOV_RANGE = 10.f;
+
 	while (true)
 	{
-		/*if (!engine.IsInGame())
+		if (!engine.IsInGame())
 		{
 			Sleep(500);
 			continue;
+		}
+
+		LocalPlayer = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(int));
+		Entity LocalPlayerEnt = Entity(LocalPlayer);
+		
+		int OurTeam = LocalPlayerEnt.getTeam();
+		LocalPlayerEnt.SetFlashAlpha(0.0f);
+
+		/*if (GetAsyncKeyState(VK_SPACE) & KEY_DOWN) 
+		{
+			if (LocalPlayerEnt.getHealth() > 0)
+			{
+				if (!LocalPlayerEnt.isInAir())
+				{
+					LocalPlayerEnt.SetForceJump(5);
+				}
+				else
+				{
+					LocalPlayerEnt.SetForceJump(4);
+					LocalPlayerEnt.SetForceJump(5);
+					LocalPlayerEnt.SetForceJump(4);
+				}
+			}
 		}*/
 
-		/*LocalPlayer = Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(ULONG));
-		int OurTeam = Driver.ReadVirtualMemory<int>(ProcessId, LocalPlayer + m_iTeamNum, sizeof(int));
-		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + m_flFlashMaxAlpha, 0.0f, 8);
-
+		
 		for (short int i = 0; i < 64; i++)
 		{
 			int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
@@ -106,70 +130,16 @@ int main()
 				continue;
 			}
 
-			Entity Entity = CreateEntity(EntityAddr);
-			if (!Entity.InValid)
+			Entity ent = CreateEntity(EntityAddr);
+			if (!ent.InValid)
 			{
-				if (!Entity.IsDormant()) 
+				if (!ent.IsDormant())
 				{
-					Entity.SetCorrectGlowStruct(OurTeam, GlowObject);
+					ent.SetCorrectGlowStruct(OurTeam, GlowObject);
 				}
-			}
-		}*/
-
-		// No Flash
-		Driver.WriteVirtualMemory(ProcessId, LocalPlayer + m_flFlashMaxAlpha, 0.0f, 8);
-
-		int OurTeam = Driver.ReadVirtualMemory<int>(ProcessId, LocalPlayer + m_iTeamNum, sizeof(int));
-
-		for (short int i = 0; i < 64; i++)
-		{
-			int Entity = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
-
-			if (Entity != NULL) 
-			{
-				int ReadTeam = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iTeamNum, sizeof(int));
-				int GlowIndex = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_iGlowIndex, sizeof(int));
-
-				int isDormant = Driver.ReadVirtualMemory<int>(ProcessId, Entity + m_bDormant, sizeof(int));
-
-				if (!isDormant) 
-				{
-					bool Defusing = Driver.ReadVirtualMemory<bool>(ProcessId, Entity + m_bIsDefusing, sizeof(int));
-					
-					GlowStruct EGlow;
-					EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (GlowIndex * 0x38), sizeof(GlowStruct));
-					EGlow.alpha = 0.5f;
-					EGlow.renderWhenOccluded = true;
-					EGlow.renderWhenUnOccluded = false;
-					
-					if (OurTeam != ReadTeam) 
-					{
-						EGlow.red = 255.0f;
-						EGlow.green = 0.0f;
-						EGlow.blue = 0.0f;
-
-						if (Defusing)
-						{
-							EGlow.green = 60.0f;
-						}
-					}
-					else
-					{
-						EGlow.red = 0.0f;
-						EGlow.green = 0.0f;
-						EGlow.blue = 255.0f;
-
-						if (Defusing)
-						{
-							EGlow.green = 60.0f;
-						}
-					}
-
-					Driver.WriteVirtualMemory(ProcessId, GlowObject + (GlowIndex * 0x38), EGlow, sizeof(EGlow));
-				}
-
 			}
 		}
+
 		Sleep(3);
 	}
 	return 0;

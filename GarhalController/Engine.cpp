@@ -39,8 +39,8 @@ bool Engine::worldToScreen(const Vector3& from, Vector3& to)
 
 bool Engine::IsInGame()
 {
-    int ClientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + dwClientState, sizeof(int));
-    int Second = Driver.ReadVirtualMemory<int>(ProcessId, ClientState + dwClientState_State, sizeof(int));
+    uint32_t ClientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
+    uint32_t Second = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientState + dwClientState_State, sizeof(uint32_t));
     return Second == 6;
 }
 

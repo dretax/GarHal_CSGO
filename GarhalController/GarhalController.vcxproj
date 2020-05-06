@@ -148,11 +148,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Aimbot.cpp" />
+    <ClCompile Include="BSPFile.cpp" />
+    <ClCompile Include="BSPParser.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GarhalController.cpp" />
+    <ClCompile Include="TraceRay.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Aimbot.hpp" />
+    <ClInclude Include="BSPFile.hpp" />
+    <ClInclude Include="BSPFlags.hpp" />
+    <ClInclude Include="BSPParser.hpp" />
+    <ClInclude Include="BSPStructure.hpp" />
     <ClInclude Include="communications.hpp" />
     <ClInclude Include="data.hpp" />
     <ClInclude Include="Engine.hpp" />
@@ -160,6 +169,7 @@
     <ClInclude Include="kernelinterface.hpp" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="offsets.hpp" />
+    <ClInclude Include="TraceRay.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
