@@ -1,7 +1,4 @@
 #include "Engine.hpp"
-
-#include <iostream>
-
 #include "offsets.hpp"
 
 // hazedumper namespace
@@ -53,7 +50,7 @@ Vector3 Engine::getViewAngles()
 void Engine::setViewAngles(Vector3& viewAngles)
 {
     int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + dwClientState, sizeof(int));
-    Driver.WriteVirtualMemory<Vector3>(ProcessId, clientState + dwClientState_ViewAngles, viewAngles, sizeof(Vector3));
+    Driver.WriteVirtualMemory<Vector3>(ProcessId, clientState + dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
 }
 
 

@@ -139,6 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +152,7 @@
     <ClCompile Include="Aimbot.cpp" />
     <ClCompile Include="BSPFile.cpp" />
     <ClCompile Include="BSPParser.cpp" />
+    <ClCompile Include="config.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GarhalController.cpp" />
@@ -163,6 +165,7 @@
     <ClInclude Include="BSPParser.hpp" />
     <ClInclude Include="BSPStructure.hpp" />
     <ClInclude Include="communications.hpp" />
+    <ClInclude Include="config.hpp" />
     <ClInclude Include="data.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="Entity.hpp" />

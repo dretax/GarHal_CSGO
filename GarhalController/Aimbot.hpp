@@ -6,7 +6,6 @@
 class Aimbot
 {
 private:
-    Entity localPlayer;
     hazedumper::BSPParser* bspParser;
     float defaultSensitivity;
     Entity findClosestEnemyToFOV(float fov, uint32_t boneId);
@@ -22,12 +21,13 @@ private:
     const char* getMapDirectory();
     const char* getGameDirectory();
 public:
+    Entity localPlayer;
     bool aimAssist(float fov, int boneId);  // legit aimbot - if low then aim chest
     void aimBot(float fov, int boneId);     // blatant aimbot
     void inCrossTriggerBot();
     void walkBot();                         // can be used with aimAssist to make a deathmatch bot
     void resetSensitivity();
-    Aimbot(hazedumper::BSPParser* bspParser, Entity localplayer);
+    Aimbot(hazedumper::BSPParser* bspParser);
     Aimbot();
     ~Aimbot();
 };

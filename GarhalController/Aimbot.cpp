@@ -3,6 +3,8 @@
 
 #include <chrono>
 #include <cstddef>
+#include <iostream>
+
 
 #include "data.hpp"
 #include "offsets.hpp"
@@ -10,13 +12,14 @@
 
 Vector3 Aimbot::aimAnglesTo(Vector3& target)
 {
-    Vector3 localPosition = localPlayer.getAbsolutePosition();
-
+    //Vector3 localPosition = localPlayer.getAbsolutePosition();
+    Vector3 localPosition = localPlayer.getHeadPosition();
+	
     Vector3 punchAngles = localPlayer.getAimPunch();
 
     Vector3 dPosition = localPosition - target;
 
-    double hypotenuse = sqrt(dPosition(0) * dPosition(0) + dPosition(1) * dPosition(1));
+    float hypotenuse = sqrt(dPosition(0) * dPosition(0) + dPosition(1) * dPosition(1));
 
     Vector3 a((float)(atan2f(dPosition(2), hypotenuse) * 57.295779513082f), (float)(atanf(dPosition(1) / dPosition(0)) * 57.295779513082f), 0);
 
@@ -40,7 +43,7 @@ Vector3 Aimbot::aimAnglesTo(Vector3& target)
 Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity, uint32_t boneId)
 {
     Vector3 viewAngles = getViewAngles();
-    Vector3 pos = entity.getBonePosition(boneId);
+    Vector3 pos = entity.getHeadPosition();//entity.getBonePosition(boneId);
 
     Vector3 aimAngles = aimAnglesTo(pos);
 
@@ -94,8 +97,11 @@ Entity Aimbot::findClosestEnemyToFOV(float fov, uint32_t boneId)
         if (screenDifferenceToEntity >= closest)
             continue;
 
-        if (screenDifferenceToEntity >= fov)
+        if (screenDifferenceToEntity >= fov) 
+        {
+            //std::cout << fov << " " << screenDifferenceToEntity << std::endl;
             continue;
+        }
 
         closest = screenDifferenceToEntity;
         closestPlayer = entity;
@@ -107,13 +113,13 @@ Entity Aimbot::findClosestEnemyToFOV(float fov, uint32_t boneId)
 Vector3 Aimbot::getViewAngles()
 {
     int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
-	return Driver.ReadVirtualMemory<Vector3>(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, sizeof(int));
+	return Driver.ReadVirtualMemory<Vector3>(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, sizeof(Vector3));
 }
 
 void Aimbot::setViewAngles(Vector3& viewAngles)
 {
     int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
-    Driver.WriteVirtualMemory(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, viewAngles, sizeof(Vector3));
+    Driver.WriteVirtualMemory(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
 }
 
 void Aimbot::setSensitivity(float sens)
@@ -121,7 +127,7 @@ void Aimbot::setSensitivity(float sens)
     uint32_t sensitivityPtr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivityPtr, sizeof(uint32_t));
     uint32_t sensitivity = *reinterpret_cast<uint32_t*>(&sens) ^ sensitivityPtr;
 
-    Driver.WriteVirtualMemory(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivity, sensitivity, sizeof(uint32_t));
+    Driver.WriteVirtualMemory(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivity, sensitivity, sizeof(sensitivity));
 }
 
 float Aimbot::getSensitivity()
@@ -151,7 +157,7 @@ const char* Aimbot::getMapDirectory()
 const char* Aimbot::getGameDirectory()
 {
     int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
-    static std::array<char, 0x120> gameDirectory = Driver.ReadVirtualMemory<std::array<char, 0x120>>(ProcessId, EngineAddress + hazedumper::signatures::dwGameDir, sizeof(std::array<char, 0x120>));
+    static std::array<char, 0x120> gameDirectory = Driver.ReadVirtualMemory<std::array<char, 0x120>>(ProcessId, clientState + hazedumper::signatures::dwGameDir, sizeof(std::array<char, 0x120>));
     return gameDirectory.data();
 }
 
@@ -181,9 +187,9 @@ bool Aimbot::aimAssist(float fov, int boneId)
 
         // body aim if low
         if (target.getHealth() < 50)
-            *lastPosition = target.getBonePosition(CHEST_BONE_ID);
+            *lastPosition = target.getHeadPosition();//target.getBonePosition(CHEST_BONE_ID);
         else
-            *lastPosition = target.getBonePosition(boneId);
+            *lastPosition = target.getHeadPosition();//target.getBonePosition(boneId);
     }
 
     auto now = std::chrono::high_resolution_clock::now();
@@ -256,12 +262,14 @@ void Aimbot::aimBot(float fov, int boneId)
     if (!target.isValidPlayer())
         return;
 
-    Vector3 pos = target.getBonePosition(boneId);
+    Vector3 pos = target.getHeadPosition();//target.getBonePosition(boneId); TODO changed
 
     Vector3 aimAngles = aimAnglesTo(pos);
     if (aimAngles(0) != aimAngles(0) || aimAngles(1) != aimAngles(1) || aimAngles(2) != aimAngles(2))
         return;
 
+    //std::cout << aimAngles(0) << "-" << aimAngles(1) << "-" << aimAngles(2) << std::endl;
+    //aimAngles(0) += 5;
     setViewAngles(aimAngles);
     //localPlayer.shoot();
 }
@@ -349,10 +357,9 @@ void Aimbot::clampAngles(Vector3& angles)
         angles(1) = -180.0;
 }
 
-Aimbot::Aimbot(hazedumper::BSPParser* bspParser, Entity localplayer)
+Aimbot::Aimbot(hazedumper::BSPParser* bspParser)
 {
     this->bspParser = bspParser;
-    this->localPlayer = localplayer;
     this->defaultSensitivity = getSensitivity();
 }
 

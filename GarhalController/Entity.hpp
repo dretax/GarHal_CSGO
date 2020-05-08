@@ -1,6 +1,5 @@
 #pragma once
 #include "data.hpp"
-#include "kernelinterface.hpp"
 
 class Entity
 {
@@ -16,6 +15,7 @@ public:
     Vector3 getFeetPosition();
     Vector3 getAimPunch();
     Vector3 getVelocity();
+    Vector3 getHeadPosition();
 
     int getForceAttack();
     void setForceAttack(int value);

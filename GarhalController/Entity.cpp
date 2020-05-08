@@ -1,7 +1,4 @@
 #include "Entity.hpp"
-
-#include <iostream>
-
 #include "offsets.hpp"
 
 // hazedumper namespace
@@ -61,25 +58,25 @@ bool Entity::isValidPlayer()
 Vector3 Entity::getAbsolutePosition()
 {
 	Vector3 position = getFeetPosition();
-	position(2) += Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + 0x10c, sizeof(Vector3));
+	//position(2) += Driver.ReadVirtualMemory<float>(ProcessId, EntityAddress + 0x10c, sizeof(float));
 	return position;
 }
 
 Vector3 Entity::getFeetPosition()
 {
-	Vector3 position = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_vecOrigin, sizeof(Vector3));
+	Vector3 position = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecOrigin, sizeof(Vector3));
 	return position;
 }
 
 Vector3 Entity::getAimPunch()
 {
-	Vector3 aimPunch = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_aimPunchAngle, sizeof(Vector3));
+	Vector3 aimPunch = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_aimPunchAngle, sizeof(Vector3));
 	return aimPunch;
 }
 
 Vector3 Entity::getVelocity()
 {
-	Vector3 vel = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_vecVelocity, sizeof(Vector3));
+	Vector3 vel = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecVelocity, sizeof(Vector3));
 	return vel;
 }
 
@@ -95,6 +92,15 @@ Vector3 Entity::getBonePosition(uint32_t boneId)
 	return bonePosition;
 }
 
+Vector3 Entity::getHeadPosition()
+{
+	Vector3 Origin = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecOrigin, sizeof(Vector3));
+	Vector3 ViewOffset = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecViewOffset, sizeof(Vector3));
+	Vector3 LocalEyeOrigin = Origin + ViewOffset;
+
+	return LocalEyeOrigin;
+}
+
 int Entity::getCrosshairId()
 {
 	return Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_iCrosshairId, sizeof(int));
@@ -107,12 +113,12 @@ int Entity::getForceAttack()
 
 void Entity::setForceAttack(int value)
 {
-	Driver.WriteVirtualMemory(ProcessId, EntityAddress + dwForceAttack, value, sizeof(int));
+	Driver.WriteVirtualMemory(ProcessId, EntityAddress + dwForceAttack, value, sizeof(value));
 }
 
 void Entity::setForceAttack2(int value)
 {
-	Driver.WriteVirtualMemory(ProcessId, EntityAddress + dwForceAttack2, value, sizeof(int));
+	Driver.WriteVirtualMemory(ProcessId, EntityAddress + dwForceAttack2, value, sizeof(value));
 }
 
 void Entity::shoot()

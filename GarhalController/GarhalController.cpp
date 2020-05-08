@@ -8,6 +8,7 @@
 
 #include "Aimbot.hpp"
 #include "BSPParser.hpp"
+#include "config.hpp"
 #include "Engine.hpp"
 #include "Entity.hpp"
 
@@ -34,7 +35,7 @@ Entity CreateEntity(int Address)
 }
 
 
-int main()
+int main(int argc, char* argv[], char* envp[])
 {
 	Driver = KeInterface("\\\\.\\garhalop");
 	SetConsoleTitle(L"GarHal is the best fish ever, by DreTaX");
@@ -45,18 +46,24 @@ int main()
 	ClientAddress = Driver.GetClientModule();
 	EngineAddress = Driver.GetEngineModule();
 
-	int UseAimAssist = 0;
-	int UseBhop = 0;
+	int AimbotS = 0;
+	int AimbotKey = 0;
+	int AimbotTarget = 0;
 
 	if (ProcessId == 0)
 	{
 		std::cout << "ProcessID is 0. Start driver & restart. " << ProcessId << std::endl;
-		cin >> UseBhop;
 		return 0;
 	}
 
 	Engine engine;
 	hazedumper::BSPParser bspParser;
+
+	Config config("garhal.cfg", envp);
+	AimbotS = config.pInt("AimbotS");
+	AimbotKey = config.pInt("AimbotKey");
+	AimbotTarget = config.pInt("AimbotTarget");
+	
 	
 	/*std::cout << "Use AimAssist? (Y: 1, N: Anything)" << std::endl;
 	cin >> UseAimAssist;
@@ -86,8 +93,18 @@ int main()
 
 	std::cout << "GlowObject: " << GlowObject << std::endl;
 
-	Aimbot aim;
-	const float FOV_RANGE = 10.f;
+	std::cout << "AimbotS: " << AimbotS << std::endl;
+	std::cout << "AimbotKey: " << AimbotKey << std::endl;
+	std::cout << "AimbotTarget: " << AimbotTarget << std::endl;
+
+	Aimbot aim = Aimbot(&bspParser);
+	const float FOV_RANGE = 15.0f;
+
+	DWORD part = CHEST_BONE_ID;
+	if (AimbotTarget == 1)
+	{
+		part = HEAD_BONE_ID;
+	}
 
 	while (true)
 	{
@@ -97,15 +114,19 @@ int main()
 			continue;
 		}
 
+
 		LocalPlayer = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(int));
 		Entity LocalPlayerEnt = Entity(LocalPlayer);
+
+		aim.localPlayer = LocalPlayerEnt;
 		
 		int OurTeam = LocalPlayerEnt.getTeam();
 		LocalPlayerEnt.SetFlashAlpha(0.0f);
 
-		/*if (GetAsyncKeyState(VK_SPACE) & KEY_DOWN) 
+
+		if (GetAsyncKeyState(VK_SPACE) & KEY_DOWN) 
 		{
-			if (LocalPlayerEnt.getHealth() > 0)
+			if (LocalPlayerEnt.isValidPlayer())
 			{
 				if (!LocalPlayerEnt.isInAir())
 				{
@@ -118,7 +139,27 @@ int main()
 					LocalPlayerEnt.SetForceJump(4);
 				}
 			}
-		}*/
+		}
+
+		
+		if (AimbotS == 1) 
+		{
+			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
+			{
+				aim.aimAssist(FOV_RANGE, part);
+			}
+			else
+			{
+				aim.resetSensitivity();
+			}
+		}
+		else if (AimbotS == 2)
+		{
+			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
+			{
+				aim.aimBot(FOV_RANGE, part);
+			}
+		}
 
 		
 		for (short int i = 0; i < 64; i++)
