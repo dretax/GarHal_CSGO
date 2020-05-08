@@ -39,6 +39,9 @@
     <ClCompile Include="TraceRay.cpp">
       <Filter>BSP</Filter>
     </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="offsets.hpp">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="TraceRay.hpp">
       <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="config.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
