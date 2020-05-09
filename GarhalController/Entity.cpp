@@ -44,7 +44,7 @@ uint32_t Entity::getHealth()
 
 void Entity::SetForceJump(int value)
 {
-	Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceJump, value, sizeof(int));
+	Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceJump, value, sizeof(value));
 }
 
 bool Entity::isValidPlayer()

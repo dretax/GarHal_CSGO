@@ -175,3 +175,10 @@ int Config::pInt(string name) {
 
 	return atoi(val.c_str());
 }
+
+int Config::pHex(string name)
+{
+	string val = pString(name);
+
+	return stoi(val, 0, 16);
+}

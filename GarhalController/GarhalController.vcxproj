@@ -174,6 +174,9 @@
     <ClInclude Include="offsets.hpp" />
     <ClInclude Include="TraceRay.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="garhal.cfg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
