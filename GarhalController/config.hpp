@@ -55,6 +55,8 @@ public:
 	// get int config entry; value is parsed using atoi()
 	int pInt(string name);
 
+	int pHex(string name);
+
 	// get the symbol map (e.g. for iterating over all symbols)
 	inline map<string, string>& getSymbols() {
 		return symbols;

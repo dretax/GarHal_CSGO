@@ -41,50 +41,37 @@ int main(int argc, char* argv[], char* envp[])
 	SetConsoleTitle(L"GarHal is the best fish ever, by DreTaX");
 	
 	// Get address of client.dll, engine.dll, and PID.
-
 	ProcessId = Driver.GetTargetPid();
 	ClientAddress = Driver.GetClientModule();
 	EngineAddress = Driver.GetEngineModule();
 
+	// Store the config values here.
 	int AimbotS = 0;
 	int AimbotKey = 0;
 	int AimbotTarget = 0;
+	int Bhop = 0;
 
-	if (ProcessId == 0)
+	if (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
 	{
-		std::cout << "ProcessID is 0. Start driver & restart. " << ProcessId << std::endl;
+		std::cout << "Addresses are 0. Start driver & Start CSGO & restart. " << ProcessId << std::endl;
 		return 0;
 	}
 
 	Engine engine;
 	hazedumper::BSPParser bspParser;
 
+	// Read config values.
 	Config config("garhal.cfg", envp);
 	AimbotS = config.pInt("AimbotS");
-	AimbotKey = config.pInt("AimbotKey");
+	AimbotKey = config.pHex("AimbotKey");
 	AimbotTarget = config.pInt("AimbotTarget");
-	
-	
-	/*std::cout << "Use AimAssist? (Y: 1, N: Anything)" << std::endl;
-	cin >> UseAimAssist;
-	if (UseAimAssist != 1)
-	{
-		UseAimAssist = 0;
-	}
-
-	std::cout << "Use UseBhop? (Y: 1, N: Anything)" << std::endl;
-	cin >> UseBhop;
-	if (UseBhop != 1)
-	{
-		UseBhop = 0;
-	}*/
+	Bhop = config.pInt("Bhop");
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
 	std::cout << "ProcessID: " << ProcessId << std::endl;
 	std::cout << "ClientAddress: " << ClientAddress << std::endl;
 	std::cout << "EngineAddress: " << EngineAddress << std::endl;
-
 
 	// Get address of localplayer
 	int LocalPlayer = 0;
@@ -123,20 +110,42 @@ int main(int argc, char* argv[], char* envp[])
 		int OurTeam = LocalPlayerEnt.getTeam();
 		LocalPlayerEnt.SetFlashAlpha(0.0f);
 
-
-		if (GetAsyncKeyState(VK_SPACE) & KEY_DOWN) 
+		for (short int i = 0; i < 64; i++)
 		{
-			if (LocalPlayerEnt.isValidPlayer())
+			int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
+
+			if (EntityAddr == NULL)
 			{
-				if (!LocalPlayerEnt.isInAir())
+				continue;
+			}
+
+			Entity ent = CreateEntity(EntityAddr);
+			if (ent.isValidPlayer())
+			{
+				if (!ent.IsDormant())
 				{
-					LocalPlayerEnt.SetForceJump(5);
+					ent.SetCorrectGlowStruct(OurTeam, GlowObject);
 				}
-				else
+			}
+		}
+
+
+		if (Bhop == 1) 
+		{
+			if (GetAsyncKeyState(VK_SPACE) & KEY_DOWN)
+			{
+				if (LocalPlayerEnt.isValidPlayer())
 				{
-					LocalPlayerEnt.SetForceJump(4);
-					LocalPlayerEnt.SetForceJump(5);
-					LocalPlayerEnt.SetForceJump(4);
+					if (!LocalPlayerEnt.isInAir())
+					{
+						LocalPlayerEnt.SetForceJump(5);
+					}
+					else
+					{
+						LocalPlayerEnt.SetForceJump(4);
+						LocalPlayerEnt.SetForceJump(5);
+						LocalPlayerEnt.SetForceJump(4);
+					}
 				}
 			}
 		}
@@ -158,26 +167,6 @@ int main(int argc, char* argv[], char* envp[])
 			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
 			{
 				aim.aimBot(FOV_RANGE, part);
-			}
-		}
-
-		
-		for (short int i = 0; i < 64; i++)
-		{
-			int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
-
-			if (EntityAddr == NULL)
-			{
-				continue;
-			}
-
-			Entity ent = CreateEntity(EntityAddr);
-			if (!ent.InValid)
-			{
-				if (!ent.IsDormant())
-				{
-					ent.SetCorrectGlowStruct(OurTeam, GlowObject);
-				}
 			}
 		}
 
