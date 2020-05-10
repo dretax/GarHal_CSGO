@@ -3,6 +3,8 @@ A project that demonstrates how to screw with CSGO from Kernel Space.
 Project comes with updated offsets, my aim was to create a project with more features achieved using a driver.
 I tend to hook DirectX, and implement Kernel-level drawing into this project.
 
+Side note: No, this project has nothing to do with csgo's released source code or whatever.
+
 ## Features
 * Driver Hiding (Kill Patchguard before use) @JKornev
 * Process Hiding (Kill Patchguard before use) @landhb
