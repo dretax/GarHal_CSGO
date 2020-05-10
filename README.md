@@ -20,6 +20,15 @@ Doing so will give you sort of full "invisibility", but It's unnecessary (imo).
 ## Compilation
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit.
 
+## Usage
+1. Start the Driver.
+2. Start CSGO.
+3. Place the default config where GarhalController.exe is.
+4. Modify config to your needs.
+5. Start GarhalController.exe.
+6. Play the game.
+7. Beware of Overwatch.
+
 ## Starting Driver
 ```Bash
   # Enable testmode and reboot.
