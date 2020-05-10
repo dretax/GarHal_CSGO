@@ -10,14 +10,14 @@ private:
     float defaultSensitivity;
     Entity findClosestEnemyToFOV(float fov, uint32_t boneId);
     Vector3 angleDifferenceToEntity(Entity& localPlayer, Entity& entity, uint32_t boneId);
+    Vector3 getViewAngles();
     Vector3 aimAnglesTo(Vector3& entity);
     void normalizeAngles(Vector3& angles);
     void clampAngles(Vector3& angles);
-    bool enemyIsInCrossHair();
-    Vector3 getViewAngles();
     void setViewAngles(Vector3& viewAngles);
     void setSensitivity(float sens);
     float getSensitivity();
+    bool enemyIsInCrossHair();
     const char* getMapDirectory();
     const char* getGameDirectory();
 public:

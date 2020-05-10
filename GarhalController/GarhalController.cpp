@@ -5,7 +5,6 @@
 #include "data.hpp"
 #include <iostream>
 #include <TlHelp32.h>
-
 #include "Aimbot.hpp"
 #include "BSPParser.hpp"
 #include "config.hpp"
@@ -17,10 +16,6 @@ using namespace std;
 // hazedumper namespace
 using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
-
-
-//DWORD ProcessId, ClientAddress, EngineAddress;
-int GlowObject;
 
 Entity CreateEntity(int Address)
 {
@@ -69,6 +64,7 @@ int main(int argc, char* argv[], char* envp[])
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
+	std::cout << "==== Memory Addresses ====" << ProcessId << std::endl;
 	std::cout << "ProcessID: " << ProcessId << std::endl;
 	std::cout << "ClientAddress: " << ClientAddress << std::endl;
 	std::cout << "EngineAddress: " << EngineAddress << std::endl;
@@ -76,13 +72,15 @@ int main(int argc, char* argv[], char* envp[])
 	// Get address of localplayer
 	int LocalPlayer = 0;
 
-	GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
+	int GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
 
 	std::cout << "GlowObject: " << GlowObject << std::endl;
 
+	std::cout << "==== Config Values ====" << ProcessId << std::endl;
 	std::cout << "AimbotS: " << AimbotS << std::endl;
 	std::cout << "AimbotKey: " << AimbotKey << std::endl;
 	std::cout << "AimbotTarget: " << AimbotTarget << std::endl;
+	std::cout << "Bhop: " << Bhop << std::endl;
 
 	Aimbot aim = Aimbot(&bspParser);
 	const float FOV_RANGE = 15.0f;
@@ -138,13 +136,13 @@ int main(int argc, char* argv[], char* envp[])
 				{
 					if (!LocalPlayerEnt.isInAir())
 					{
-						LocalPlayerEnt.SetForceJump(5);
+						LocalPlayerEnt.SetForceJump(6);
 					}
 					else
 					{
-						LocalPlayerEnt.SetForceJump(4);
-						LocalPlayerEnt.SetForceJump(5);
-						LocalPlayerEnt.SetForceJump(4);
+						//LocalPlayerEnt.SetForceJump(4);
+						//LocalPlayerEnt.SetForceJump(5);
+						//LocalPlayerEnt.SetForceJump(4);
 					}
 				}
 			}
