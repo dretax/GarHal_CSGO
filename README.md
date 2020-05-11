@@ -41,6 +41,9 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
   sc start garhal
 ```
 
+## Preview
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ADj12ykKq-o/0.jpg)](https://www.youtube.com/watch?v=ADj12ykKq-o)
+
 ## Credits
-@Life45 for explaining me the basic work, pushing me to do this.
-@ZeroMemory for providing videos for basic stuff.
+* @Life45 for explaining me the basic work, pushing me to do this.
+* @ZeroMemory for providing videos for basic stuff.
