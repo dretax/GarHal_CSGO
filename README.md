@@ -50,4 +50,4 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
 * @hrt for a (not so much working) aimbot structure.
 
 ## Note
-The project is for research purposes only and is not suitable for production environments, or commercial use.
+The project is for research purposes only and is not suitable for production environments, misusage, or commercial use.
