@@ -32,6 +32,7 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
 7. Beware of Overwatch.
 
 ## Starting Driver
+Open up CMD as admin mode:
 ```Bash
   # Enable testmode and reboot.
   bcdedit /set testsigning on
