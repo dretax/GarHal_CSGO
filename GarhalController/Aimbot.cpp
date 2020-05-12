@@ -1,3 +1,5 @@
+#pragma warning (disable : 26451)
+
 #include "Aimbot.hpp"
 #include <chrono>
 #include <cstddef>
@@ -70,7 +72,7 @@ bool Aimbot::enemyIsInCrossHair()
 
     crossHairId -= 1;
 
-    int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + 0x10 * crossHairId, sizeof(int));
+    uint32_t EntityAddr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + 0x10 * crossHairId, sizeof(uint32_t));
 
     Entity target = Entity(EntityAddr);
 
@@ -97,7 +99,7 @@ Entity Aimbot::findClosestEnemyToFOV(uint32_t boneId)
     float closest = 999999999.f;
     for (int i = 0; i < 64; i++)
     {
-        int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + i * 0x10, sizeof(int));
+        uint32_t EntityAddr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + i * 0x10, sizeof(uint32_t));
 
         if (EntityAddr == NULL)
         {
@@ -404,7 +406,7 @@ Aimbot::Aimbot(hazedumper::BSPParser* bspParser)
 
 Aimbot::Aimbot()
 {
-    
+    this->defaultSensitivity = getSensitivity();
 }
 
 Aimbot::~Aimbot()

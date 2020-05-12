@@ -230,7 +230,7 @@ namespace hazedumper { namespace BSP {
             *this = other;
         }
 
-        VPlane( VPlane&& other )
+        VPlane( VPlane&& other ) noexcept
         {
             *this = other;
         }
@@ -241,7 +241,7 @@ namespace hazedumper { namespace BSP {
             return *this;
         }
 
-        VPlane& operator = ( VPlane&& other )
+        VPlane& operator = ( VPlane&& other ) noexcept
         {
             init( other.m_Origin, other.m_Distance );
             return *this;

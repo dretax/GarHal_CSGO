@@ -6,6 +6,7 @@
  *             https://www.unknowncheats.me/forum/members/264622.html
  */
 #pragma once
+#pragma warning(disable : 26495)
 #include "BSPStructure.hpp"
 #include <fstream>
 #include <vector>
