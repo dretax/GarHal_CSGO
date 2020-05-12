@@ -1,11 +1,7 @@
 #include "Aimbot.hpp"
-
-
 #include <chrono>
 #include <cstddef>
 #include <iostream>
-
-
 #include "data.hpp"
 #include "offsets.hpp"
 
@@ -59,7 +55,36 @@ Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity, uin
     return dAngle;
 }
 
-Entity Aimbot::findClosestEnemyToFOV(float fov, uint32_t boneId)
+bool Aimbot::enemyIsInCrossHair()
+{
+    if (!localPlayer.isValidPlayer())
+    {
+        return false;
+    }
+
+    uint32_t crossHairId = localPlayer.getCrosshairId();
+    if (crossHairId <= 0 || crossHairId > 65)
+    {
+        return false;
+    }
+
+    crossHairId -= 1;
+
+    int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + 0x10 * crossHairId, sizeof(int));
+
+    Entity target = Entity(EntityAddr);
+
+    if (!target.isValidPlayer())
+    {
+        return false;
+    }
+
+    bool isEnemy = target.getTeam() != localPlayer.getTeam();
+
+    return isEnemy;
+}
+
+Entity Aimbot::findClosestEnemyToFOV(uint32_t boneId)
 {
     uint32_t localPlayerTeam = localPlayer.getTeam();
     Entity closestPlayer;
@@ -81,23 +106,31 @@ Entity Aimbot::findClosestEnemyToFOV(float fov, uint32_t boneId)
 
         Entity entity = Entity(EntityAddr);
 
-        if (!entity.isValidPlayer())
+        if (!entity.isValidPlayer()) 
+        {
             continue;
+        }
 
-        if (entity.getTeam() == localPlayerTeam)
+        if (entity.getTeam() == localPlayerTeam) 
+        {
             continue;
+        }
 
         Vector3 entityPosition = entity.getBonePosition(boneId);
 
-        if (!bspParser->is_visible(localPosition, entityPosition))
+        if (!bspParser->is_visible(localPosition, entityPosition)) 
+        {
             continue;
+        }
 
         Vector3 dAngle = angleDifferenceToEntity(localPlayer, entity, boneId);
         float screenDifferenceToEntity = sqrt(dAngle(0) * dAngle(0) + dAngle(1) * dAngle(1));
-        if (screenDifferenceToEntity >= closest)
+        if (screenDifferenceToEntity >= closest) 
+        {
             continue;
+        }
 
-        if (screenDifferenceToEntity >= fov) 
+        if (screenDifferenceToEntity >= FovRange)
         {
             //std::cout << fov << " " << screenDifferenceToEntity << std::endl;
             continue;
@@ -116,19 +149,6 @@ Vector3 Aimbot::getViewAngles()
 	return Driver.ReadVirtualMemory<Vector3>(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, sizeof(Vector3));
 }
 
-void Aimbot::setViewAngles(Vector3& viewAngles)
-{
-    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
-    Driver.WriteVirtualMemory(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
-}
-
-void Aimbot::setSensitivity(float sens)
-{
-    uint32_t sensitivityPtr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivityPtr, sizeof(uint32_t));
-    uint32_t sensitivity = *reinterpret_cast<uint32_t*>(&sens) ^ sensitivityPtr;
-
-    Driver.WriteVirtualMemory(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivity, sensitivity, sizeof(sensitivity));
-}
 
 float Aimbot::getSensitivity()
 {
@@ -140,11 +160,6 @@ float Aimbot::getSensitivity()
     float sens = *reinterpret_cast<float*>(&sensitivity);
 
     return sens;
-}
-
-void Aimbot::resetSensitivity()
-{
-    setSensitivity(defaultSensitivity);
 }
 
 const char* Aimbot::getMapDirectory()
@@ -161,35 +176,62 @@ const char* Aimbot::getGameDirectory()
     return gameDirectory.data();
 }
 
+void Aimbot::setViewAngles(Vector3& viewAngles)
+{
+    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
+    Driver.WriteVirtualMemory(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
+}
 
-bool Aimbot::aimAssist(float fov, int boneId)
+void Aimbot::setSensitivity(float sens)
+{
+    uint32_t sensitivityPtr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivityPtr, sizeof(uint32_t));
+    uint32_t sensitivity = *reinterpret_cast<uint32_t*>(&sens) ^ sensitivityPtr;
+
+    Driver.WriteVirtualMemory(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivity, sensitivity, sizeof(sensitivity));
+}
+
+void Aimbot::resetSensitivity()
+{
+    setSensitivity(defaultSensitivity);
+}
+
+bool Aimbot::aimAssist(int boneId)
 {
     const char* gameDirectory = getGameDirectory();
     const char* mapDirectory = getMapDirectory();
     bspParser->parse_map(gameDirectory, mapDirectory);
 
-    if (!localPlayer.isValidPlayer())
+    if (!localPlayer.isValidPlayer()) 
+    {
         return false;
+    }
 
 
-    if (localPlayer.getShotsFired() < 3)  // aimbot begins at 3rd bullet
+    // aimbot begins at 3rd bullet
+    if (localPlayer.getShotsFired() < 3) 
+    {
         return false;
+    }
 
-    static Entity target = findClosestEnemyToFOV(fov, boneId);
+    static Entity target = findClosestEnemyToFOV(boneId);
     static auto killTime = std::chrono::high_resolution_clock::now();
     static Vector3* lastPosition = NULL;
 
-    Entity newTarget = findClosestEnemyToFOV(fov, boneId);
+    Entity newTarget = findClosestEnemyToFOV(boneId);
     if (target.isValidPlayer() && !target.isInAir() && newTarget.isValidPlayer() && target.getBase() == newTarget.getBase())
     {
         killTime = std::chrono::high_resolution_clock::now();
         lastPosition = new Vector3();
 
         // body aim if low
-        if (target.getHealth() < 50)
+        if (target.getHealth() < 50) 
+        {
             *lastPosition = target.getHeadPosition();//target.getBonePosition(CHEST_BONE_ID);
-        else
+        }
+        else 
+        {
             *lastPosition = target.getHeadPosition();//target.getBonePosition(boneId);
+        }
     }
 
     auto now = std::chrono::high_resolution_clock::now();
@@ -211,24 +253,35 @@ bool Aimbot::aimAssist(float fov, int boneId)
         setSensitivity(0.f);
 
         Vector3 targetAngle = aimAnglesTo(*lastPosition);
-        if (targetAngle(0) != targetAngle(0) || targetAngle(1) != targetAngle(1) || targetAngle(2) != targetAngle(2))
+        if (targetAngle(0) != targetAngle(0) || targetAngle(1) != targetAngle(1) || targetAngle(2) != targetAngle(2)) 
+        {
             return false;
+        }
 
         Vector3 viewAngles = getViewAngles();
 
 
         float dYawTowardsRight = viewAngles(1) - targetAngle(1);
-        while (dYawTowardsRight < 0)
+        while (dYawTowardsRight < 0) 
+        {
             dYawTowardsRight += 360.f;
-        while (dYawTowardsRight > 360.f)
+        }
+        while (dYawTowardsRight > 360.f) 
+        {
             dYawTowardsRight -= 360.f;
+        }
+    	
         float dYawTowardsLeft = dYawTowardsRight - 360.f;
 
         Vector3 dAngles = targetAngle - viewAngles;
-        if (abs(dYawTowardsRight) < abs(dYawTowardsLeft))
+        if (abs(dYawTowardsRight) < abs(dYawTowardsLeft)) 
+        {
             dAngles(1) = -dYawTowardsRight;
-        else
+        }
+        else 
+        {
             dAngles(1) = -dYawTowardsLeft;
+        }
 
         Vector3 smoothTargetAngles = viewAngles + dAngles / 5;
 
@@ -240,75 +293,60 @@ bool Aimbot::aimAssist(float fov, int boneId)
 
         return true;
     }
-    else
-    {
-        // find new target
-        target = newTarget;
-        killTime = std::chrono::high_resolution_clock::now();
-        lastPosition = NULL;
-        resetSensitivity();
+	
+    // find new target
+    target = newTarget;
+    killTime = std::chrono::high_resolution_clock::now();
+    lastPosition = NULL;
+    resetSensitivity();
 
-        return false;
-    }
+    return false;
 }
 
-void Aimbot::aimBot(float fov, int boneId)
+void Aimbot::aimBot(int boneId)
 {
-    if (!localPlayer.isValidPlayer())
+    if (!localPlayer.isValidPlayer()) 
+    {
         return;
+    }
 
-    Entity target = findClosestEnemyToFOV(fov, boneId);
+    Entity target = findClosestEnemyToFOV(boneId);
 
-    if (!target.isValidPlayer())
+    if (!target.isValidPlayer()) 
+    {
         return;
+    }
 
     Vector3 pos = target.getHeadPosition();//target.getBonePosition(boneId); TODO changed
 
     Vector3 aimAngles = aimAnglesTo(pos);
-    if (aimAngles(0) != aimAngles(0) || aimAngles(1) != aimAngles(1) || aimAngles(2) != aimAngles(2))
+    if (aimAngles(0) != aimAngles(0) || aimAngles(1) != aimAngles(1) || aimAngles(2) != aimAngles(2)) 
+    {
         return;
+    }
 
     //std::cout << aimAngles(0) << "-" << aimAngles(1) << "-" << aimAngles(2) << std::endl;
-    //aimAngles(0) += 5;
     setViewAngles(aimAngles);
-    //localPlayer.shoot();
-}
-
-bool Aimbot::enemyIsInCrossHair()
-{
-    if (!localPlayer.isValidPlayer())
-        return false;
-    uint32_t crossHairId = localPlayer.getCrosshairId();
-    if (crossHairId <= 0 || crossHairId > 65)
-        return false;
-
-    crossHairId -= 1;
-
-    int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + 0x10 * crossHairId, sizeof(int));
-
-    Entity target = Entity(EntityAddr);
-
-    if (!target.isValidPlayer())
-        return false;
-
-    bool isEnemy = target.getTeam() != localPlayer.getTeam();
-
-    return isEnemy;
 }
 
 void Aimbot::inCrossTriggerBot()
 {
-    if (enemyIsInCrossHair())
+    if (enemyIsInCrossHair()) 
+    {
         localPlayer.shoot();
-    else
+    }
+    else 
+    {
         localPlayer.setForceAttack(4);
+    }
 }
 
 void Aimbot::walkBot()
 {
-
     if (!localPlayer.isValidPlayer())
+    {
         return;
+    }
 
     Vector3 viewAngles = getViewAngles();
     Vector3 velocity = localPlayer.getVelocity();

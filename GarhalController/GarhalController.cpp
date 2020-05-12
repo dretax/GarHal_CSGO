@@ -5,7 +5,6 @@
 #include "data.hpp"
 #include <iostream>
 #include <TlHelp32.h>
-
 #include "Aimbot.hpp"
 #include "BSPParser.hpp"
 #include "config.hpp"
@@ -17,10 +16,6 @@ using namespace std;
 // hazedumper namespace
 using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
-
-
-//DWORD ProcessId, ClientAddress, EngineAddress;
-int GlowObject;
 
 Entity CreateEntity(int Address)
 {
@@ -46,14 +41,15 @@ int main(int argc, char* argv[], char* envp[])
 	EngineAddress = Driver.GetEngineModule();
 
 	// Store the config values here.
-	int AimbotS = 0;
-	int AimbotKey = 0;
-	int AimbotTarget = 0;
-	int Bhop = 0;
+	uint32_t AimbotS = 0;
+	uint32_t AimbotKey = 0;
+	uint32_t AimbotTarget = 0;
+	bool Bhop = 0;
 
 	if (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
 	{
 		std::cout << "Addresses are 0. Start driver & Start CSGO & restart. " << ProcessId << std::endl;
+		system("pause");
 		return 0;
 	}
 
@@ -65,10 +61,11 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotS = config.pInt("AimbotS");
 	AimbotKey = config.pHex("AimbotKey");
 	AimbotTarget = config.pInt("AimbotTarget");
-	Bhop = config.pInt("Bhop");
+	Bhop = config.pBool("Bhop");
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
+	std::cout << "==== Memory Addresses ====" << std::endl;
 	std::cout << "ProcessID: " << ProcessId << std::endl;
 	std::cout << "ClientAddress: " << ClientAddress << std::endl;
 	std::cout << "EngineAddress: " << EngineAddress << std::endl;
@@ -76,16 +73,17 @@ int main(int argc, char* argv[], char* envp[])
 	// Get address of localplayer
 	int LocalPlayer = 0;
 
-	GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
+	int GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
 
 	std::cout << "GlowObject: " << GlowObject << std::endl;
 
+	std::cout << "==== Config Values ====" << std::endl;
 	std::cout << "AimbotS: " << AimbotS << std::endl;
 	std::cout << "AimbotKey: " << AimbotKey << std::endl;
 	std::cout << "AimbotTarget: " << AimbotTarget << std::endl;
+	std::cout << "Bhop: " << Bhop << std::endl;
 
 	Aimbot aim = Aimbot(&bspParser);
-	const float FOV_RANGE = 15.0f;
 
 	DWORD part = CHEST_BONE_ID;
 	if (AimbotTarget == 1)
@@ -130,7 +128,7 @@ int main(int argc, char* argv[], char* envp[])
 		}
 
 
-		if (Bhop == 1) 
+		if (Bhop) 
 		{
 			if (GetAsyncKeyState(VK_SPACE) & KEY_DOWN)
 			{
@@ -138,13 +136,13 @@ int main(int argc, char* argv[], char* envp[])
 				{
 					if (!LocalPlayerEnt.isInAir())
 					{
-						LocalPlayerEnt.SetForceJump(5);
+						LocalPlayerEnt.SetForceJump(6);
 					}
 					else
 					{
-						LocalPlayerEnt.SetForceJump(4);
-						LocalPlayerEnt.SetForceJump(5);
-						LocalPlayerEnt.SetForceJump(4);
+						//LocalPlayerEnt.SetForceJump(4);
+						//LocalPlayerEnt.SetForceJump(5);
+						//LocalPlayerEnt.SetForceJump(4);
 					}
 				}
 			}
@@ -155,7 +153,7 @@ int main(int argc, char* argv[], char* envp[])
 		{
 			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
 			{
-				aim.aimAssist(FOV_RANGE, part);
+				aim.aimAssist(part);
 			}
 			else
 			{
@@ -166,7 +164,7 @@ int main(int argc, char* argv[], char* envp[])
 		{
 			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
 			{
-				aim.aimBot(FOV_RANGE, part);
+				aim.aimBot(part);
 			}
 		}
 

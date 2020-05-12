@@ -33,5 +33,6 @@ struct GlowStruct
 #define HEAD_BONE_ID ((DWORD) 8)
 #define CHEST_BONE_ID ((DWORD) 37)
 
+const float FovRange = 15.0f;
 inline DWORD ProcessId, ClientAddress, EngineAddress;
 inline KeInterface Driver = NULL;
