@@ -1,4 +1,6 @@
 #include "config.hpp"
+
+#include <algorithm>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -142,7 +144,8 @@ void Config::symbolExpand(map<string, string>& symbols, string& s) {
 string Config::pString(string name) {
 	map<string, string>::iterator i = symbols.find(name);
 	if (i == symbols.end()) {
-		//logError(cout << "access of missing property '" << name << "' (" << debugInfo << ")" << endl);
+		cout << "Config option is wrong or missing! '" << name << "' (" << debugInfo << ")" << endl;
+		system("pause");
 		exit(4);
 	}
 	return i->second;
@@ -151,12 +154,10 @@ string Config::pString(string name) {
 bool Config::pBool(string name) {
 	string val = pString(name);
 
-	if ((val == "yes") ||
-		(val == "Yes") ||
-		(val == "YES") ||
-		(val == "true") ||
-		(val == "True") ||
-		(val == "TRUE"))
+	std::transform(val.begin(), val.end(), val.begin(),
+		[](unsigned char c) { return std::tolower(c); });
+
+	if (val == "true")
 	{
 		return true;
 	}

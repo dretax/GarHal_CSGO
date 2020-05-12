@@ -8,7 +8,7 @@ class Aimbot
 private:
     hazedumper::BSPParser* bspParser;
     float defaultSensitivity;
-    Entity findClosestEnemyToFOV(float fov, uint32_t boneId);
+    Entity findClosestEnemyToFOV(uint32_t boneId);
     Vector3 angleDifferenceToEntity(Entity& localPlayer, Entity& entity, uint32_t boneId);
     Vector3 getViewAngles();
     Vector3 aimAnglesTo(Vector3& entity);
@@ -22,8 +22,8 @@ private:
     const char* getGameDirectory();
 public:
     Entity localPlayer;
-    bool aimAssist(float fov, int boneId);  // legit aimbot - if low then aim chest
-    void aimBot(float fov, int boneId);     // blatant aimbot
+    bool aimAssist(int boneId);  // legit aimbot - if low then aim chest
+    void aimBot(int boneId);     // blatant aimbot
     void inCrossTriggerBot();
     void walkBot();                         // can be used with aimAssist to make a deathmatch bot
     void resetSensitivity();

@@ -84,7 +84,7 @@ bool Aimbot::enemyIsInCrossHair()
     return isEnemy;
 }
 
-Entity Aimbot::findClosestEnemyToFOV(float fov, uint32_t boneId)
+Entity Aimbot::findClosestEnemyToFOV(uint32_t boneId)
 {
     uint32_t localPlayerTeam = localPlayer.getTeam();
     Entity closestPlayer;
@@ -130,7 +130,7 @@ Entity Aimbot::findClosestEnemyToFOV(float fov, uint32_t boneId)
             continue;
         }
 
-        if (screenDifferenceToEntity >= fov) 
+        if (screenDifferenceToEntity >= FovRange)
         {
             //std::cout << fov << " " << screenDifferenceToEntity << std::endl;
             continue;
@@ -195,7 +195,7 @@ void Aimbot::resetSensitivity()
     setSensitivity(defaultSensitivity);
 }
 
-bool Aimbot::aimAssist(float fov, int boneId)
+bool Aimbot::aimAssist(int boneId)
 {
     const char* gameDirectory = getGameDirectory();
     const char* mapDirectory = getMapDirectory();
@@ -213,11 +213,11 @@ bool Aimbot::aimAssist(float fov, int boneId)
         return false;
     }
 
-    static Entity target = findClosestEnemyToFOV(fov, boneId);
+    static Entity target = findClosestEnemyToFOV(boneId);
     static auto killTime = std::chrono::high_resolution_clock::now();
     static Vector3* lastPosition = NULL;
 
-    Entity newTarget = findClosestEnemyToFOV(fov, boneId);
+    Entity newTarget = findClosestEnemyToFOV(boneId);
     if (target.isValidPlayer() && !target.isInAir() && newTarget.isValidPlayer() && target.getBase() == newTarget.getBase())
     {
         killTime = std::chrono::high_resolution_clock::now();
@@ -303,14 +303,14 @@ bool Aimbot::aimAssist(float fov, int boneId)
     return false;
 }
 
-void Aimbot::aimBot(float fov, int boneId)
+void Aimbot::aimBot(int boneId)
 {
     if (!localPlayer.isValidPlayer()) 
     {
         return;
     }
 
-    Entity target = findClosestEnemyToFOV(fov, boneId);
+    Entity target = findClosestEnemyToFOV(boneId);
 
     if (!target.isValidPlayer()) 
     {
