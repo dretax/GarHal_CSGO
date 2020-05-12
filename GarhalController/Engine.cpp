@@ -43,13 +43,13 @@ bool Engine::IsInGame()
 
 Vector3 Engine::getViewAngles()
 {
-    int ClientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + dwClientState, sizeof(int));
+    uint32_t ClientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
     return Driver.ReadVirtualMemory<Vector3>(ProcessId, ClientState + dwClientState_ViewAngles, sizeof(Vector3));
 }
 
 void Engine::setViewAngles(Vector3& viewAngles)
 {
-    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + dwClientState, sizeof(int));
+    uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
     Driver.WriteVirtualMemory<Vector3>(ProcessId, clientState + dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
 }
 

@@ -5,15 +5,15 @@
 using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
 
-int Entity::IsDormant()
+bool Entity::IsDormant()
 {
-	bool isDormant = Driver.ReadVirtualMemory<bool>(ProcessId, EntityAddress + m_bDormant, sizeof(int));
+	bool isDormant = Driver.ReadVirtualMemory<bool>(ProcessId, EntityAddress + m_bDormant, sizeof(uint8_t));
     return isDormant;
 }
 
 bool Entity::IsDefusing()
 {
-    bool Defusing = Driver.ReadVirtualMemory<bool>(ProcessId, EntityAddress + m_bIsDefusing, sizeof(int));
+    bool Defusing = Driver.ReadVirtualMemory<bool>(ProcessId, EntityAddress + m_bIsDefusing, sizeof(uint8_t));
     return Defusing;
 }
 
@@ -23,26 +23,26 @@ void Entity::SetFlashAlpha(float num)
     Driver.WriteVirtualMemory(ProcessId, EntityAddress + m_flFlashMaxAlpha, num, 8);
 }
 
-int Entity::getTeam()
+uint8_t Entity::getTeam()
 {
-    int OurTeam = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_iTeamNum, sizeof(int));
+	uint8_t OurTeam = Driver.ReadVirtualMemory<uint8_t>(ProcessId, EntityAddress + m_iTeamNum, sizeof(uint8_t));
     return OurTeam;
 }
 
 bool Entity::isInAir()
 {
-	int flags = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_fFlags, sizeof(int));
+	uint32_t flags = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EntityAddress + m_fFlags, sizeof(uint32_t));
 	return flags == 256 || flags == 258 || flags == 260 || flags == 262;
 }
 
-uint32_t Entity::getHealth()
+uint8_t Entity::getHealth()
 {
-	int health = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_iHealth, sizeof(int));
+	uint8_t health = Driver.ReadVirtualMemory<uint8_t>(ProcessId, EntityAddress + m_iHealth, sizeof(uint8_t));
 	return health;
 }
 
 
-void Entity::SetForceJump(int value)
+void Entity::SetForceJump(uint8_t value)
 {
 	Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceJump, value, sizeof(value));
 }
@@ -101,52 +101,56 @@ Vector3 Entity::getHeadPosition()
 	return LocalEyeOrigin;
 }
 
-int Entity::getCrosshairId()
+uint16_t Entity::getCrosshairId()
 {
-	return Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_iCrosshairId, sizeof(int));
+	return Driver.ReadVirtualMemory<uint16_t>(ProcessId, EntityAddress + m_iCrosshairId, sizeof(uint16_t));
 }
 
-int Entity::getForceAttack()
+uint8_t Entity::getForceAttack()
 {
-	return Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + dwForceAttack, sizeof(int));
+	return Driver.ReadVirtualMemory<uint8_t>(ProcessId, EntityAddress + dwForceAttack, sizeof(uint8_t));
 }
 
-void Entity::setForceAttack(int value)
+void Entity::setForceAttack(uint8_t value)
 {
 	Driver.WriteVirtualMemory(ProcessId, EntityAddress + dwForceAttack, value, sizeof(value));
 }
 
-void Entity::setForceAttack2(int value)
+void Entity::setForceAttack2(uint8_t value)
 {
 	Driver.WriteVirtualMemory(ProcessId, EntityAddress + dwForceAttack2, value, sizeof(value));
 }
 
 void Entity::shoot()
 {
-	uint32_t forceAttack = getForceAttack();
-	if (forceAttack == 4)
+	uint8_t forceAttack = getForceAttack();
+	if (forceAttack == 4) 
+	{
 		setForceAttack(5);
-	else
+	}
+	else 
+	{
 		setForceAttack(4);
+	}
 }
 
-int Entity::getShotsFired()
+uint16_t Entity::getShotsFired()
 {
-	return Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_iShotsFired, sizeof(int));
+	return Driver.ReadVirtualMemory<uint16_t>(ProcessId, EntityAddress + m_iShotsFired, sizeof(uint16_t));
 }
 
-int Entity::getBase()
+uint32_t Entity::getBase()
 {
 	return EntityAddress;
 }
 
-int Entity::GetGlowIndex()
+uint32_t Entity::GetGlowIndex()
 {
-    int GlowIndex = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_iGlowIndex, sizeof(int));
+	uint32_t GlowIndex = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EntityAddress + m_iGlowIndex, sizeof(uint32_t));
     return GlowIndex;
 }
 
-void Entity::SetCorrectGlowStruct(int OurTeam, int GlowObject)
+void Entity::SetCorrectGlowStruct(uint8_t OurTeam, uint32_t GlowObject)
 {
 	int ReadTeam = this->getTeam();
 	bool Defusing = this->IsDefusing();
@@ -184,7 +188,7 @@ void Entity::SetCorrectGlowStruct(int OurTeam, int GlowObject)
 }
 
 
-Entity::Entity(int EntityAddress)
+Entity::Entity(uint32_t EntityAddress)
 {
     this->EntityAddress = EntityAddress;
 }

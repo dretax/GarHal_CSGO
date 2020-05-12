@@ -1,4 +1,5 @@
 #pragma comment(lib,"ntdll.lib")
+#pragma warning(disable : 26451) // Bug in VS according to Stackoverflow.
 
 #include "kernelinterface.hpp"
 #include "offsets.hpp"
@@ -71,9 +72,9 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "EngineAddress: " << EngineAddress << std::endl;
 
 	// Get address of localplayer
-	int LocalPlayer = 0;
+	uint32_t LocalPlayer = 0;
 
-	int GlowObject = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(int));
+	uint32_t GlowObject = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(uint32_t));
 
 	std::cout << "GlowObject: " << GlowObject << std::endl;
 
@@ -100,17 +101,17 @@ int main(int argc, char* argv[], char* envp[])
 		}
 
 
-		LocalPlayer = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(int));
+		LocalPlayer = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(uint32_t));
 		Entity LocalPlayerEnt = Entity(LocalPlayer);
 
 		aim.localPlayer = LocalPlayerEnt;
 		
-		int OurTeam = LocalPlayerEnt.getTeam();
+		uint8_t OurTeam = LocalPlayerEnt.getTeam();
 		LocalPlayerEnt.SetFlashAlpha(0.0f);
 
 		for (short int i = 0; i < 64; i++)
 		{
-			int EntityAddr = Driver.ReadVirtualMemory<int>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
+			uint32_t EntityAddr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
 
 			if (EntityAddr == NULL)
 			{

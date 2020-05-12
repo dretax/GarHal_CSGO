@@ -4,12 +4,8 @@
 class Entity
 {
 private:
-    int EntityAddress = 0;
+    uint32_t EntityAddress = 0;
 public:
-    bool InValid = false;
-
-    void SetCorrectGlowStruct(int LocalPlayerTeam, int GlowObject);
-
     Vector3 getBonePosition(uint32_t boneId);
     Vector3 getAbsolutePosition();
     Vector3 getFeetPosition();
@@ -17,26 +13,25 @@ public:
     Vector3 getVelocity();
     Vector3 getHeadPosition();
 
-    int getForceAttack();
-    void setForceAttack(int value);
-    void setForceAttack2(int value);
+    uint32_t getBase();
+    uint32_t GetGlowIndex();
+    uint16_t getCrosshairId();
+    uint16_t getShotsFired();
+    uint8_t getHealth();
+    uint8_t getForceAttack();
+    uint8_t getTeam();
+    void SetFlashAlpha(float num);
+    void SetForceJump(uint8_t value);
+    void setForceAttack(uint8_t value);
+    void setForceAttack2(uint8_t value);
     void shoot();
-    int getCrosshairId();
-
-    int getShotsFired();
-    int getBase();
+    void SetCorrectGlowStruct(uint8_t LocalPlayerTeam, uint32_t GlowObject);
 	
-    int IsDormant();
+    bool IsDormant();
     bool IsDefusing();
-    bool isOnGround();
     bool isInAir();
     bool isValidPlayer();
-    uint32_t getHealth();
-    int getTeam();
-    void SetFlashAlpha(float num);
-    void SetForceJump(int value);
-    int GetGlowIndex();
     Entity();
-    Entity(int EntityAddress);
+    Entity(uint32_t EntityAddress);
     ~Entity();
 };

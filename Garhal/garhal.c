@@ -23,7 +23,6 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 {
 	DebugMessageNormal("======================================\n");
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
-	DebugMessageNormal("Lectures by Life45\n");
 	DebugMessageNormal("Shutting down...\n");
 	PsRemoveLoadImageNotifyRoutine(ImageLoadCallback);
 	IoDeleteSymbolicLink(&dos);
@@ -42,7 +41,6 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 {
 	DebugMessageNormal("======================================\n");
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
-	DebugMessageNormal("Lectures by Life45\n");
 	DebugMessageNormal("Starting...\n");
 
 	PsSetLoadImageNotifyRoutine(ImageLoadCallback);
