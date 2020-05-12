@@ -47,3 +47,6 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
 ## Credits
 * @Life45 for explaining me the basic work, pushing me to do this.
 * @ZeroMemory for providing videos for basic stuff.
+
+## Note
+The project is for research purposes only and is not suitable for production environments, or commercial use.
