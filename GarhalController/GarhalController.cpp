@@ -30,7 +30,6 @@ Entity CreateEntity(int Address)
 	return dummy;
 }
 
-
 int main(int argc, char* argv[], char* envp[])
 {
 	Driver = KeInterface("\\\\.\\garhalop");
@@ -40,12 +39,6 @@ int main(int argc, char* argv[], char* envp[])
 	ProcessId = Driver.GetTargetPid();
 	ClientAddress = Driver.GetClientModule();
 	EngineAddress = Driver.GetEngineModule();
-
-	// Store the config values here.
-	uint32_t AimbotS = 0;
-	uint32_t AimbotKey = 0;
-	uint32_t AimbotTarget = 0;
-	bool Bhop = 0;
 
 	if (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
 	{
@@ -62,6 +55,7 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotS = config.pInt("AimbotS");
 	AimbotKey = config.pHex("AimbotKey");
 	AimbotTarget = config.pInt("AimbotTarget");
+	AimbotBullets = config.pInt("AimbotBullets");
 	Bhop = config.pBool("Bhop");
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
@@ -85,12 +79,6 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "Bhop: " << Bhop << std::endl;
 
 	Aimbot aim = Aimbot(&bspParser);
-
-	DWORD part = CHEST_BONE_ID;
-	if (AimbotTarget == 1)
-	{
-		part = HEAD_BONE_ID;
-	}
 
 	while (true)
 	{
@@ -154,7 +142,7 @@ int main(int argc, char* argv[], char* envp[])
 		{
 			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
 			{
-				aim.aimAssist(part);
+				aim.aimAssist();
 			}
 			else
 			{
@@ -165,11 +153,12 @@ int main(int argc, char* argv[], char* envp[])
 		{
 			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)
 			{
-				aim.aimBot(part);
+				aim.aimBot();
 			}
 		}
 
 		Sleep(3);
 	}
+
 	return 0;
 }

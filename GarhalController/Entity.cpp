@@ -1,9 +1,22 @@
 #include "Entity.hpp"
 #include "offsets.hpp"
+#include "sdk.hpp"
 
 // hazedumper namespace
 using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
+
+
+class BoneMatrix
+{
+public:
+	byte pad3[12];
+	float x;
+	byte pad1[12];
+	float y;
+	byte pad2[12];
+	float z;
+};
 
 bool Entity::IsDormant()
 {
@@ -33,6 +46,12 @@ bool Entity::isInAir()
 {
 	uint32_t flags = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EntityAddress + m_fFlags, sizeof(uint32_t));
 	return flags == 256 || flags == 258 || flags == 260 || flags == 262;
+}
+
+bool Entity::IsCrouching()
+{
+	uint32_t flags = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EntityAddress + m_fFlags, sizeof(uint32_t));
+	return flags & FL_DUCKING;
 }
 
 uint8_t Entity::getHealth()
@@ -92,6 +111,13 @@ Vector3 Entity::getBonePosition(uint32_t boneId)
 	return bonePosition;
 }
 
+Vector3 Entity::GetBonePosition(uint32_t targetBone)
+{
+	DWORD boneMatrixOffset = Driver.ReadVirtualMemory<DWORD>(ProcessId, EntityAddress + m_dwBoneMatrix, sizeof(DWORD));
+	BoneMatrix baoneMatrix = Driver.ReadVirtualMemory<BoneMatrix>(ProcessId, boneMatrixOffset + sizeof(BoneMatrix) * targetBone, sizeof(BoneMatrix));
+	return Vector3(baoneMatrix.x, baoneMatrix.y, baoneMatrix.z);
+}
+
 Vector3 Entity::getHeadPosition()
 {
 	Vector3 Origin = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecOrigin, sizeof(Vector3));
@@ -139,7 +165,7 @@ uint16_t Entity::getShotsFired()
 	return Driver.ReadVirtualMemory<uint16_t>(ProcessId, EntityAddress + m_iShotsFired, sizeof(uint16_t));
 }
 
-uint32_t Entity::getBase()
+uint32_t Entity::GetEntityAddress()
 {
 	return EntityAddress;
 }

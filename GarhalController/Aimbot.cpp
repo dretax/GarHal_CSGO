@@ -38,10 +38,30 @@ Vector3 Aimbot::aimAnglesTo(Vector3& target)
     return aimAngles;
 }
 
-Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity, uint32_t boneId)
+Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity)
 {
     Vector3 viewAngles = getViewAngles();
-    Vector3 pos = entity.getHeadPosition();//entity.getBonePosition(boneId);
+    Vector3 pos;
+
+    if (AimbotTarget == 3)
+    {
+        if (entity.getHealth() < 50)
+        {
+            pos = entity.GetBonePosition(CHEST_BONE_ID);//target.getBonePosition(CHEST_BONE_ID);
+        }
+        else
+        {
+            pos = entity.getHeadPosition();//target.getBonePosition(boneId);
+        }
+    }
+    else if (AimbotTarget == 2)
+    {
+        pos = entity.GetBonePosition(CHEST_BONE_ID);
+    }
+    else
+    {
+        pos = entity.getHeadPosition();
+    }
 
     Vector3 aimAngles = aimAnglesTo(pos);
 
@@ -86,7 +106,7 @@ bool Aimbot::enemyIsInCrossHair()
     return isEnemy;
 }
 
-Entity Aimbot::findClosestEnemyToFOV(uint32_t boneId)
+Entity Aimbot::findClosestEnemyToFOV()
 {
     uint32_t localPlayerTeam = localPlayer.getTeam();
     Entity closestPlayer;
@@ -118,14 +138,35 @@ Entity Aimbot::findClosestEnemyToFOV(uint32_t boneId)
             continue;
         }
 
-        Vector3 entityPosition = entity.getBonePosition(boneId);
+        Vector3 entityPosition;
 
+        if (AimbotTarget == 3)
+        {
+            if (entity.getHealth() < 50)
+            {
+                entityPosition = entity.GetBonePosition(CHEST_BONE_ID);
+            }
+            else
+            {
+                entityPosition = entity.getHeadPosition();
+            }
+        }
+        else if (AimbotTarget == 2)
+        {
+            entityPosition = entity.GetBonePosition(CHEST_BONE_ID);
+        }
+        else
+        {
+            entityPosition = entity.getHeadPosition();
+        }
+
+    	
         if (!bspParser->is_visible(localPosition, entityPosition)) 
         {
             continue;
         }
 
-        Vector3 dAngle = angleDifferenceToEntity(localPlayer, entity, boneId);
+        Vector3 dAngle = angleDifferenceToEntity(localPlayer, entity);
         float screenDifferenceToEntity = sqrt(dAngle(0) * dAngle(0) + dAngle(1) * dAngle(1));
         if (screenDifferenceToEntity >= closest) 
         {
@@ -197,7 +238,7 @@ void Aimbot::resetSensitivity()
     setSensitivity(defaultSensitivity);
 }
 
-bool Aimbot::aimAssist(int boneId)
+bool Aimbot::aimAssist()
 {
     const char* gameDirectory = getGameDirectory();
     const char* mapDirectory = getMapDirectory();
@@ -209,30 +250,41 @@ bool Aimbot::aimAssist(int boneId)
     }
 
 
-    // aimbot begins at 3rd bullet
-    if (localPlayer.getShotsFired() < 3) 
+    // Enable AimAssist after Nth bullet.
+    if (localPlayer.getShotsFired() < AimbotBullets)
     {
         return false;
     }
 
-    static Entity target = findClosestEnemyToFOV(boneId);
+    static Entity target = findClosestEnemyToFOV();
     static auto killTime = std::chrono::high_resolution_clock::now();
     static Vector3* lastPosition = NULL;
 
-    Entity newTarget = findClosestEnemyToFOV(boneId);
-    if (target.isValidPlayer() && !target.isInAir() && newTarget.isValidPlayer() && target.getBase() == newTarget.getBase())
+    Entity newTarget = findClosestEnemyToFOV();
+    if (target.isValidPlayer() && !target.isInAir() && newTarget.isValidPlayer() && target.GetEntityAddress() == newTarget.GetEntityAddress())
     {
         killTime = std::chrono::high_resolution_clock::now();
         lastPosition = new Vector3();
 
-        // body aim if low
-        if (target.getHealth() < 50) 
+
+        if (AimbotTarget == 3) 
         {
-            *lastPosition = target.getHeadPosition();//target.getBonePosition(CHEST_BONE_ID);
+            if (target.getHealth() < 50)
+            {
+                *lastPosition = target.GetBonePosition(CHEST_BONE_ID);//target.getBonePosition(CHEST_BONE_ID);
+            }
+            else
+            {
+                *lastPosition = target.getHeadPosition();//target.getBonePosition(boneId);
+            }
         }
-        else 
+        else if (AimbotTarget == 2)
         {
-            *lastPosition = target.getHeadPosition();//target.getBonePosition(boneId);
+            *lastPosition = target.GetBonePosition(CHEST_BONE_ID);
+        }
+        else
+        {
+            *lastPosition = target.getHeadPosition();
         }
     }
 
@@ -305,21 +357,41 @@ bool Aimbot::aimAssist(int boneId)
     return false;
 }
 
-void Aimbot::aimBot(int boneId)
+void Aimbot::aimBot()
 {
     if (!localPlayer.isValidPlayer()) 
     {
         return;
     }
 
-    Entity target = findClosestEnemyToFOV(boneId);
+    Entity target = findClosestEnemyToFOV();
 
     if (!target.isValidPlayer()) 
     {
         return;
     }
 
-    Vector3 pos = target.getHeadPosition();//target.getBonePosition(boneId); TODO changed
+    Vector3 pos;
+
+    if (AimbotTarget == 3)
+    {
+        if (target.getHealth() < 50)
+        {
+            pos = target.GetBonePosition(CHEST_BONE_ID);//target.getBonePosition(CHEST_BONE_ID);
+        }
+        else
+        {
+            pos = target.getHeadPosition();//target.getBonePosition(boneId);
+        }
+    }
+    else if (AimbotTarget == 2)
+    {
+        pos = target.GetBonePosition(CHEST_BONE_ID);
+    }
+    else
+    {
+        pos = target.getHeadPosition();
+    }
 
     Vector3 aimAngles = aimAnglesTo(pos);
     if (aimAngles(0) != aimAngles(0) || aimAngles(1) != aimAngles(1) || aimAngles(2) != aimAngles(2)) 
