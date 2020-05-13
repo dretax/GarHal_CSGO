@@ -4,7 +4,6 @@
 #include <ntstatus.h>
 #include <windef.h>
 #include <ntdef.h>
-
 #include "ntos.h"
 
 NTSTATUS KeReadVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID TargetAddress, SIZE_T Size)
