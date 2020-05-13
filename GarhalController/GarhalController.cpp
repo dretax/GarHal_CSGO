@@ -73,9 +73,10 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "GlowObject: " << GlowObject << std::endl;
 
 	std::cout << "==== Config Values ====" << std::endl;
-	std::cout << "AimbotS: " << AimbotS << std::endl;
-	std::cout << "AimbotKey: " << AimbotKey << std::endl;
-	std::cout << "AimbotTarget: " << AimbotTarget << std::endl;
+	std::cout << "AimbotS: " << unsigned(AimbotS) << std::endl;
+	std::cout << "AimbotKey: " << unsigned(AimbotKey) << std::endl;
+	std::cout << "AimbotTarget: " << unsigned(AimbotTarget) << std::endl;
+	std::cout << "AimbotBullets: " << unsigned(AimbotBullets) << std::endl;
 	std::cout << "Bhop: " << Bhop << std::endl;
 
 	Aimbot aim = Aimbot(&bspParser);
