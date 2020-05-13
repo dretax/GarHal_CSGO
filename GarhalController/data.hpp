@@ -32,6 +32,13 @@ struct GlowStruct
 #define HEAD_BONE_ID ((DWORD) 8)
 #define CHEST_BONE_ID ((DWORD) 37)
 
-const float FovRange = 15.0f;
+const float FovRange = 10.0f;
 inline DWORD ProcessId, ClientAddress, EngineAddress;
 inline KeInterface Driver = NULL;
+
+// Store the config values here.
+inline uint8_t AimbotS = 0;
+inline uint16_t AimbotKey = 0;
+inline uint8_t AimbotTarget = 0;
+inline uint8_t AimbotBullets = 0;
+inline bool Bhop = 0;

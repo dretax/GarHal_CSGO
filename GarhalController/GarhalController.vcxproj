@@ -172,6 +172,7 @@
     <ClInclude Include="kernelinterface.hpp" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="offsets.hpp" />
+    <ClInclude Include="sdk.hpp" />
     <ClInclude Include="TraceRay.hpp" />
   </ItemGroup>
   <ItemGroup>

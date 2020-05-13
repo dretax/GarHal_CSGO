@@ -12,8 +12,9 @@ public:
     Vector3 getAimPunch();
     Vector3 getVelocity();
     Vector3 getHeadPosition();
+    Vector3 GetBonePosition(uint32_t targetBone);
 
-    uint32_t getBase();
+    uint32_t GetEntityAddress();
     uint32_t GetGlowIndex();
     uint16_t getCrosshairId();
     uint16_t getShotsFired();
@@ -31,6 +32,7 @@ public:
     bool IsDefusing();
     bool isInAir();
     bool isValidPlayer();
+    bool IsCrouching();
     Entity();
     Entity(uint32_t EntityAddress);
     ~Entity();
