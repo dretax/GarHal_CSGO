@@ -6,12 +6,8 @@
  */
 
 #include "garhal.h"
-
-#include <locale.h>
 #include <ntddk.h>
 #include <ntdef.h>
-#include <stdio.h>
-
 #include "communication.h"
 #include "ntos.h"
 #include "data.h"
