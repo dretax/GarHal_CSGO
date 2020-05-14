@@ -6,7 +6,7 @@ class Entity
 private:
     uint32_t EntityAddress = 0;
 public:
-    Vector3 getBonePosition(uint32_t boneId);
+    //Vector3 getBonePosition(uint32_t boneId);
     Vector3 getAbsolutePosition();
     Vector3 getFeetPosition();
     Vector3 getAimPunch();
@@ -14,8 +14,13 @@ public:
     Vector3 getHeadPosition();
     Vector3 GetBonePosition(uint32_t targetBone);
 
+    DWORD GetWeaponHandle();
+    DWORD GetCurrentWeapon();
+	
     uint32_t GetEntityAddress();
     uint32_t GetGlowIndex();
+    uint16_t GetCurrentWeaponID();
+    uint16_t GetWeaponIndex();
     uint16_t getCrosshairId();
     uint16_t getShotsFired();
     uint8_t getHealth();
