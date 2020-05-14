@@ -249,12 +249,20 @@ bool Aimbot::aimAssist()
         return false;
     }
 
+    int16_t WeaponID = localPlayer.GetCurrentWeaponID();
 
-    // Enable AimAssist after Nth bullet.
-    if (localPlayer.getShotsFired() < AimbotBullets)
+	if (WeaponID == 0)
+	{
+        return false;
+	}
+
+    std::cout <<"gar " << WeaponID << std::endl;
+    // Enable AimAssist after Nth bullet except pistols.
+    if (localPlayer.getShotsFired() < AimbotBullets && !IsWeaponPistol(WeaponID))
     {
         return false;
     }
+    std::cout <<"gar2" << std::endl;
 
     static Entity target = findClosestEnemyToFOV();
     static auto killTime = std::chrono::high_resolution_clock::now();
@@ -269,7 +277,7 @@ bool Aimbot::aimAssist()
 
         if (AimbotTarget == 3) 
         {
-            if (target.getHealth() < 50)
+            if (target.getHealth() <= 50)
             {
                 *lastPosition = target.GetBonePosition(CHEST_BONE_ID);//target.getBonePosition(CHEST_BONE_ID);
             }

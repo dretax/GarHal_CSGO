@@ -1,3 +1,5 @@
+#pragma warning (disable : 26451)
+
 #include "Entity.hpp"
 #include "offsets.hpp"
 #include "sdk.hpp"
@@ -99,7 +101,7 @@ Vector3 Entity::getVelocity()
 	return vel;
 }
 
-Vector3 Entity::getBonePosition(uint32_t boneId)
+/*Vector3 Entity::getBonePosition(uint32_t boneId)
 {
 	int boneBase = Driver.ReadVirtualMemory<int>(ProcessId, EntityAddress + m_dwBoneMatrix, sizeof(int));
 
@@ -109,7 +111,7 @@ Vector3 Entity::getBonePosition(uint32_t boneId)
 	bonePosition(2) = Driver.ReadVirtualMemory<float>(ProcessId, boneBase + 0x30 * boneId + 0x2C, sizeof(float));
 
 	return bonePosition;
-}
+}*/
 
 Vector3 Entity::GetBonePosition(uint32_t targetBone)
 {
@@ -174,6 +176,26 @@ uint32_t Entity::GetGlowIndex()
 {
 	uint32_t GlowIndex = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EntityAddress + m_iGlowIndex, sizeof(uint32_t));
     return GlowIndex;
+}
+
+DWORD Entity::GetWeaponHandle()
+{
+	return Driver.ReadVirtualMemory<DWORD>(ProcessId, EntityAddress + m_hActiveWeapon, sizeof(DWORD));
+}
+
+uint16_t Entity::GetWeaponIndex()
+{
+	return GetWeaponHandle() & 0xFFF;
+}
+
+DWORD Entity::GetCurrentWeapon()
+{
+	return Driver.ReadVirtualMemory<DWORD>(ProcessId, ClientAddress + dwEntityList + (GetWeaponIndex() - 1) * 0x10, sizeof(DWORD));
+}
+
+uint16_t Entity::GetCurrentWeaponID()
+{
+	return Driver.ReadVirtualMemory<uint16_t>(ProcessId, GetCurrentWeapon() + m_iItemDefinitionIndex, sizeof(uint16_t));
 }
 
 void Entity::SetCorrectGlowStruct(uint8_t OurTeam, uint32_t GlowObject)
