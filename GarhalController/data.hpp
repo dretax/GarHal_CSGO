@@ -142,4 +142,5 @@ inline uint8_t AimbotS = 0;
 inline uint16_t AimbotKey = 0;
 inline uint8_t AimbotTarget = 0;
 inline uint8_t AimbotBullets = 0;
-inline bool Bhop = 0;
+inline bool Bhop = false;
+inline bool AntiAim = false;

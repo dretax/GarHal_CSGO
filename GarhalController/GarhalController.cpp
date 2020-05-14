@@ -57,6 +57,7 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotTarget = config.pInt("AimbotTarget");
 	AimbotBullets = config.pInt("AimbotBullets");
 	Bhop = config.pBool("Bhop");
+	AntiAim = config.pBool("AntiAim");
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
@@ -77,7 +78,11 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "AimbotKey: " << unsigned(AimbotKey) << std::endl;
 	std::cout << "AimbotTarget: " << unsigned(AimbotTarget) << std::endl;
 	std::cout << "AimbotBullets: " << unsigned(AimbotBullets) << std::endl;
+	std::cout << "AntiAim: " << AntiAim << std::endl;
 	std::cout << "Bhop: " << Bhop << std::endl;
+
+	const int8_t four = 4;
+	const int8_t three = 3;
 
 	Aimbot aim = Aimbot(&bspParser);
 
@@ -135,6 +140,53 @@ int main(int argc, char* argv[], char* envp[])
 						//LocalPlayerEnt.SetForceJump(4);
 					}
 				}
+			}
+		}
+
+		if (AntiAim)
+		{
+			// W
+			if (GetAsyncKeyState(0x57))
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceForward, four, sizeof(four));
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceBackward, three, sizeof(three));
+			}
+			else 
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceBackward, four, sizeof(four));
+			}
+
+			// S
+			if (GetAsyncKeyState(0x53))
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceBackward, four, sizeof(four));
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceForward, three, sizeof(three));
+			}
+			else
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceForward, four, sizeof(four));
+			}
+
+			// A
+			if (GetAsyncKeyState(0x41))
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceLeft, four, sizeof(four));
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceRight, three, sizeof(three));
+			}
+			else
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceRight, four, sizeof(four));
+			}
+
+			// D
+			if (GetAsyncKeyState(0x44))
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceRight, four, sizeof(four));
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceLeft, three, sizeof(three));
+			}
+			else
+			{
+				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceLeft, four, sizeof(four));
 			}
 		}
 
