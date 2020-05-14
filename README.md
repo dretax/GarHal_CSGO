@@ -12,7 +12,7 @@ Side note: No, this project has nothing to do with csgo's released source code o
 * Highlights defuser
 * Aimbot
 * Smooth aimbot
-* Anti-Aimbot
+* Anti-Aimbot (TODO)
 * Bhop
 
 ## Patchguard?
