@@ -256,13 +256,11 @@ bool Aimbot::aimAssist()
         return false;
 	}
 
-    std::cout <<"gar " << WeaponID << std::endl;
     // Enable AimAssist after Nth bullet except pistols.
     if (localPlayer.getShotsFired() < AimbotBullets && !IsWeaponPistol(WeaponID))
     {
         return false;
     }
-    std::cout <<"gar2" << std::endl;
 
     static Entity target = findClosestEnemyToFOV();
     static auto killTime = std::chrono::high_resolution_clock::now();
