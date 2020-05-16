@@ -12,7 +12,7 @@ Side note: No, this project has nothing to do with csgo's released source code o
 * Highlights defuser
 * Aimbot
 * Smooth aimbot
-* Anti-Aimbot (TODO)
+* Anti-Aimbot (TODO: Fix up ugly code, use VirtualAlloc, and OpenHandle from Kernel Sphere)
 * Bhop
 
 ## Patchguard?
@@ -50,6 +50,7 @@ Open up CMD as admin mode:
 * @Life45 for explaining me the basic work, pushing me to do this.
 * @ZeroMemory for providing videos for basic stuff.
 * @hrt for a (not so much working) aimbot structure.
+* drew79
 
 ## Note
 The project is for research purposes only and is not suitable for production environments, misusage, or commercial use.
