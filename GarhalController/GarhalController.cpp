@@ -91,14 +91,16 @@ int main(int argc, char* argv[], char* envp[])
 
 	if (AntiAimS)
 	{
+		// TODO: Something wrong happens after using these. Fix.
+		IClientMode = Driver.Scan(ProcessId, ClientAddress, ClientSize, "\x8B\x0D\x00\x00\x00\x00\x8B\x01\xFF\x50\x04\x85\xF6", "xx????xxxxxxx") + 0x2;
+		IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
+		IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
+		
 		antiaim.Enable();
 		antiaim.HookCreateMove();
 		std::cout << "~AntiAim Create Move hooked!" << std::endl;
 	}
 
-	IClientMode = Driver.Scan(ProcessId, ClientAddress, ClientSize, "\x8B\x0D\x00\x00\x00\x00\x8B\x01\xFF\x50\x04\x85\xF6", "xx????xxxxxxx") + 0x2;
-	IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
-	IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
 	//std::cout << "IClientMode: " << IClientMode << std::endl;
 
 	while (true)
