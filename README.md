@@ -7,6 +7,9 @@ Side note:
 No, this project has nothing to do with csgo's released source code or whatever.
 This project probably has mistakes. Feel free to correct me through PRs.
 
+## Note
+The project is for research purposes only and is not suitable for production environments, misusage, or commercial use.
+
 ## Features
 * Driver Hiding (Kill Patchguard before use) @JKornev
 * Process Hiding (Kill Patchguard before use) @landhb
@@ -53,6 +56,3 @@ Open up CMD as admin mode:
 * @ZeroMemory for providing videos for basic stuff.
 * @hrt for a (not so much working) aimbot structure.
 * @drew79
-
-## Note
-The project is for research purposes only and is not suitable for production environments, misusage, or commercial use.
