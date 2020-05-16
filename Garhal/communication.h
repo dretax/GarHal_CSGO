@@ -18,6 +18,13 @@
 // Request to retrieve the base address of engine.dll in csgo.exe from kernel space
 #define IO_GET_ENGINE_MODULE_REQUEST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0670 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
+// Request size of Client.dll
+#define IO_GET_MODULE_REQUEST_LENGTH CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0671 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+
+// Request size of Engine.dll
+#define IO_GET_ENGINE_MODULE_REQUEST_LENGTH CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0672 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+
+
 // Declare the IoControl function.
 NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp);
 

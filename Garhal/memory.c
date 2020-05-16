@@ -2,8 +2,10 @@
 
 #include "memory.h"
 #include <ntstatus.h>
-#include <windef.h>
 #include <ntdef.h>
+#include <stdlib.h>
+
+#include "data.h"
 #include "ntos.h"
 
 NTSTATUS KeReadVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID TargetAddress, SIZE_T Size)
@@ -25,6 +27,5 @@ NTSTATUS KeWriteVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID Targ
 	{
 		return STATUS_SUCCESS;
 	}
-	
 	return STATUS_ACCESS_DENIED;
 }

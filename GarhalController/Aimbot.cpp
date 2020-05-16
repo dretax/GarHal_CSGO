@@ -45,7 +45,7 @@ Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity)
 
     if (AimbotTarget == 3)
     {
-        if (entity.getHealth() < 50)
+        if (entity.getHealth() <= 50)
         {
             pos = entity.GetBonePosition(CHEST_BONE_ID);//target.getBonePosition(CHEST_BONE_ID);
         }
@@ -142,7 +142,7 @@ Entity Aimbot::findClosestEnemyToFOV()
 
         if (AimbotTarget == 3)
         {
-            if (entity.getHealth() < 50)
+            if (entity.getHealth() <= 50)
             {
                 entityPosition = entity.GetBonePosition(CHEST_BONE_ID);
             }
@@ -207,21 +207,21 @@ float Aimbot::getSensitivity()
 
 const char* Aimbot::getMapDirectory()
 {
-    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
+    uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(uint32_t));
     static std::array<char, 0x120> mapDirectory = Driver.ReadVirtualMemory<std::array<char, 0x120>>(ProcessId, clientState + hazedumper::signatures::dwClientState_MapDirectory, sizeof(std::array<char, 0x120>));
     return mapDirectory.data();
 }
 
 const char* Aimbot::getGameDirectory()
 {
-    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
+    uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(uint32_t));
     static std::array<char, 0x120> gameDirectory = Driver.ReadVirtualMemory<std::array<char, 0x120>>(ProcessId, clientState + hazedumper::signatures::dwGameDir, sizeof(std::array<char, 0x120>));
     return gameDirectory.data();
 }
 
 void Aimbot::setViewAngles(Vector3& viewAngles)
 {
-    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
+    uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(uint32_t));
     Driver.WriteVirtualMemory(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
 }
 
@@ -256,8 +256,8 @@ bool Aimbot::aimAssist()
         return false;
 	}
 
-    // Enable AimAssist after Nth bullet except pistols.
-    if (localPlayer.getShotsFired() < AimbotBullets && !IsWeaponPistol(WeaponID))
+    // Enable AimAssist after Nth bullet except pistols & snipers.
+    if (localPlayer.getShotsFired() < AimbotBullets && !IsWeaponPistol(WeaponID) && !IsWeaponSniper(WeaponID))
     {
         return false;
     }
@@ -381,7 +381,7 @@ void Aimbot::aimBot()
 
     if (AimbotTarget == 3)
     {
-        if (target.getHealth() < 50)
+        if (target.getHealth() <= 50)
         {
             pos = target.GetBonePosition(CHEST_BONE_ID);//target.getBonePosition(CHEST_BONE_ID);
         }

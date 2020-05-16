@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Aimbot.cpp" />
+    <ClCompile Include="AntiAim.cpp" />
     <ClCompile Include="BSPFile.cpp" />
     <ClCompile Include="BSPParser.cpp" />
     <ClCompile Include="config.cpp" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aimbot.hpp" />
+    <ClInclude Include="AntiAim.hpp" />
     <ClInclude Include="BSPFile.hpp" />
     <ClInclude Include="BSPFlags.hpp" />
     <ClInclude Include="BSPParser.hpp" />
