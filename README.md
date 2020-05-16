@@ -12,7 +12,7 @@ Side note: No, this project has nothing to do with csgo's released source code o
 * Highlights defuser
 * Aimbot
 * Smooth aimbot
-* Anti-Aimbot (TODO: Fix up ugly code, use VirtualAlloc, and OpenHandle from Kernel Sphere)
+* Anti-Aimbot (TODO: Fix up ugly code, test, use VirtualAlloc, and OpenHandle from Kernel Sphere)
 * Bhop
 
 ## Patchguard?
