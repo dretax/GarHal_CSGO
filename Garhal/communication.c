@@ -96,7 +96,25 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = EngineAddress;
 
-		DebugMessageNormal( "A UserMode Application requested the EngineAddress: %#010x", EngineAddress);
+		DebugMessageNormal("A UserMode Application requested the EngineAddress: %#010x", EngineAddress);
+		Status = STATUS_SUCCESS;
+		BytesIO = sizeof(*OutPut);
+	}
+	else if (ControlCode == IO_GET_MODULE_REQUEST_LENGTH)
+	{
+		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
+		*OutPut = ClientSize;
+
+		DebugMessageNormal("A UserMode Application requested the size of Client: %#010x", ClientSize);
+		Status = STATUS_SUCCESS;
+		BytesIO = sizeof(*OutPut);
+	}
+	else if (ControlCode == IO_GET_ENGINE_MODULE_REQUEST_LENGTH)
+	{
+		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
+		*OutPut = EngineSize;
+
+		DebugMessageNormal("A UserMode Application requested the size of Engine: %#010x", EngineSize);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}

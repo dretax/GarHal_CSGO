@@ -7,6 +7,7 @@
 #include <iostream>
 #include <TlHelp32.h>
 #include "Aimbot.hpp"
+#include "AntiAim.hpp"
 #include "BSPParser.hpp"
 #include "config.hpp"
 #include "Engine.hpp"
@@ -30,6 +31,7 @@ Entity CreateEntity(int Address)
 	return dummy;
 }
 
+
 int main(int argc, char* argv[], char* envp[])
 {
 	Driver = KeInterface("\\\\.\\garhalop");
@@ -39,6 +41,8 @@ int main(int argc, char* argv[], char* envp[])
 	ProcessId = Driver.GetTargetPid();
 	ClientAddress = Driver.GetClientModule();
 	EngineAddress = Driver.GetEngineModule();
+	ClientSize = Driver.GetClientModuleSize();
+	EngineSize = Driver.GetEngineModuleSize();
 
 	if (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
 	{
@@ -57,7 +61,7 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotTarget = config.pInt("AimbotTarget");
 	AimbotBullets = config.pInt("AimbotBullets");
 	Bhop = config.pBool("Bhop");
-	AntiAim = config.pBool("AntiAim");
+	AntiAimS = config.pBool("AntiAim");
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
@@ -65,6 +69,7 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "ProcessID: " << ProcessId << std::endl;
 	std::cout << "ClientAddress: " << ClientAddress << std::endl;
 	std::cout << "EngineAddress: " << EngineAddress << std::endl;
+	std::cout << "ClientSize: " << ClientSize << std::endl;
 
 	// Get address of localplayer
 	uint32_t LocalPlayer = 0;
@@ -78,13 +83,23 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "AimbotKey: " << unsigned(AimbotKey) << std::endl;
 	std::cout << "AimbotTarget: " << unsigned(AimbotTarget) << std::endl;
 	std::cout << "AimbotBullets: " << unsigned(AimbotBullets) << std::endl;
-	std::cout << "AntiAim: " << AntiAim << std::endl;
+	std::cout << "AntiAim: " << AntiAimS << std::endl;
 	std::cout << "Bhop: " << Bhop << std::endl;
 
-	const int8_t four = 4;
-	const int8_t three = 3;
-
 	Aimbot aim = Aimbot(&bspParser);
+	AntiAim antiaim = AntiAim();
+
+	if (AntiAimS)
+	{
+		antiaim.Enable();
+		antiaim.HookCreateMove();
+		std::cout << "~AntiAim Create Move hooked!" << std::endl;
+	}
+
+	IClientMode = Driver.Scan(ProcessId, ClientAddress, ClientSize, "\x8B\x0D\x00\x00\x00\x00\x8B\x01\xFF\x50\x04\x85\xF6", "xx????xxxxxxx") + 0x2;
+	IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
+	IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
+	//std::cout << "IClientMode: " << IClientMode << std::endl;
 
 	while (true)
 	{
@@ -92,6 +107,11 @@ int main(int argc, char* argv[], char* envp[])
 		{
 			Sleep(500);
 			continue;
+		}
+
+		if (GlowObject == 0)
+		{
+			GlowObject = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(uint32_t));
 		}
 
 
@@ -133,61 +153,13 @@ int main(int argc, char* argv[], char* envp[])
 					{
 						LocalPlayerEnt.SetForceJump(6);
 					}
-					else
-					{
-						//LocalPlayerEnt.SetForceJump(4);
-						//LocalPlayerEnt.SetForceJump(5);
-						//LocalPlayerEnt.SetForceJump(4);
-					}
 				}
 			}
 		}
 
-		if (AntiAim)
+		if (AntiAimS)
 		{
-			// W
-			if (GetAsyncKeyState(0x57))
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceForward, four, sizeof(four));
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceBackward, three, sizeof(three));
-			}
-			else 
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceBackward, four, sizeof(four));
-			}
-
-			// S
-			if (GetAsyncKeyState(0x53))
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceBackward, four, sizeof(four));
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceForward, three, sizeof(three));
-			}
-			else
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceForward, four, sizeof(four));
-			}
-
-			// A
-			if (GetAsyncKeyState(0x41))
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceLeft, four, sizeof(four));
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceRight, three, sizeof(three));
-			}
-			else
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceRight, four, sizeof(four));
-			}
-
-			// D
-			if (GetAsyncKeyState(0x44))
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceRight, four, sizeof(four));
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceLeft, three, sizeof(three));
-			}
-			else
-			{
-				Driver.WriteVirtualMemory(ProcessId, ClientAddress + dwForceLeft, four, sizeof(four));
-			}
+			antiaim.DoAntiAim();
 		}
 
 		

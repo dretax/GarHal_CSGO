@@ -1,7 +1,7 @@
 #pragma once
 #include <windows.h>
-#include "kernelinterface.hpp"
 #include "Matrix.hpp"
+#include "kernelinterface.hpp"
 
 using Vector3 = Matrix<float, 3, 1>;
 using WorldToScreenMatrix = Matrix<float, 4, 4>;
@@ -19,6 +19,14 @@ struct GlowStruct
 	bool fullBloom;
 	BYTE buffer1[5];
 	int glowStyle;
+};
+
+struct UserCMD_ShellCode
+{
+	Vector3		m_vecViewAngles;     // 0x0C
+	float		m_flForwardmove;     // 0x24
+	float		m_flSidemove;        // 0x28
+	bool		shouldSet;
 };
 
 enum CSGO_Weapon_ID
@@ -122,6 +130,12 @@ inline bool IsWeaponPistol(int iWeaponID)
 		|| iWeaponID == WEAPON_HKP2000;
 }
 
+inline bool IsWeaponSniper(int iWeaponID)
+{
+	return iWeaponID == WEAPON_AWP
+		|| iWeaponID == WEAPON_SSG08;
+}
+
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 #define	FL_ONGROUND (1<<0)
@@ -134,7 +148,7 @@ inline bool IsWeaponPistol(int iWeaponID)
 #define CHEST_BONE_ID ((DWORD) 37)
 
 inline const float FovRange = 10.0f;
-inline DWORD ProcessId, ClientAddress, EngineAddress;
+inline DWORD ProcessId, ClientAddress, ClientSize, EngineAddress, EngineSize, CMDAddress, IClientMode;
 inline KeInterface Driver = NULL;
 
 // Store the config values here.
@@ -143,4 +157,4 @@ inline uint16_t AimbotKey = 0;
 inline uint8_t AimbotTarget = 0;
 inline uint8_t AimbotBullets = 0;
 inline bool Bhop = false;
-inline bool AntiAim = false;
+inline bool AntiAimS = false;

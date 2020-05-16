@@ -67,6 +67,22 @@ public:
 		return false;
 	}
 
+	bool ReadSpecial(ULONG ProcessId, DWORD dwAddress, LPVOID lpBuffer, DWORD dwSize)
+	{
+		SIZE_T Out = NULL;
+
+		KERNEL_READ_REQUEST ReadRequest;
+
+		ReadRequest.ProcessId = ProcessId;
+		ReadRequest.Address = dwAddress;
+
+		ReadRequest.pBuff = &lpBuffer;
+
+		ReadRequest.Size = dwSize;
+
+		return (DeviceIoControl(hDriver, IO_READ_REQUEST, &ReadRequest, sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), 0, 0) == TRUE);
+	}
+
 	DWORD GetTargetPid()
 	{
 		if (hDriver == INVALID_HANDLE_VALUE)
@@ -100,6 +116,22 @@ public:
 		return false;
 	}
 
+	DWORD GetClientModuleSize()
+	{
+		if (hDriver == INVALID_HANDLE_VALUE)
+			return false;
+
+		ULONG Address;
+		DWORD Bytes;
+
+		if (DeviceIoControl(hDriver, IO_GET_MODULE_REQUEST_LENGTH, &Address, sizeof(Address),
+			&Address, sizeof(Address), &Bytes, NULL))
+		{
+			return Address;
+		}
+		return false;
+	}
+
 
 	DWORD GetEngineModule()
 	{
@@ -115,5 +147,53 @@ public:
 			return Address;
 		}
 		return false;
+	}
+
+	DWORD GetEngineModuleSize()
+	{
+		if (hDriver == INVALID_HANDLE_VALUE)
+			return false;
+
+		ULONG Address;
+		DWORD Bytes;
+
+		if (DeviceIoControl(hDriver, IO_GET_ENGINE_MODULE_REQUEST_LENGTH, &Address, sizeof(Address),
+			&Address, sizeof(Address), &Bytes, NULL))
+		{
+			return Address;
+		}
+		return false;
+	}
+
+	BOOL DataCompare(const BYTE* pData, const BYTE* pMask, const char* pszMask)
+	{
+		for (; *pszMask; ++pszMask, ++pData, ++pMask)
+		{
+			if (*pszMask == 'x' && *pData != *pMask)
+			{
+				return FALSE;
+			}
+		}
+		return (*pszMask == 0);
+	}
+
+	DWORD Scan(ULONG ProcessId, DWORD dwStart, DWORD dwSize, const char* pSignature, const char* pMask)
+	{
+		BYTE* pRemote = new BYTE[dwSize];
+		if (!ReadSpecial(ProcessId, dwStart, pRemote, dwSize))
+		{
+			delete[] pRemote;
+			return NULL;
+		}
+		for (DWORD dwIndex = 0; dwIndex < dwSize; dwIndex++)
+		{
+			if (DataCompare((const BYTE*)(pRemote + dwIndex), (const BYTE*)pSignature, pMask))
+			{
+				delete[] pRemote;
+				return (dwStart + dwIndex);
+			}
+		}
+		delete[] pRemote;
+		return NULL;
 	}
 };
