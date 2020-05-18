@@ -106,7 +106,8 @@ void AntiAim::HookCreateMove()
 		return;
 	}
 
-	Hook(IClientMode, 24, (DWORD)shellCodeAddress);
+	DWORD gar = reinterpret_cast<DWORD>(IClientMode);
+	Hook(gar, 24, (DWORD)shellCodeAddress);
 }
 
 void AntiAim::DoAntiAim()

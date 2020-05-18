@@ -9,6 +9,7 @@
 #include "Aimbot.hpp"
 #include "AntiAim.hpp"
 #include "BSPParser.hpp"
+#include "ClientMode.h"
 #include "config.hpp"
 #include "Engine.hpp"
 #include "Entity.hpp"
@@ -91,10 +92,9 @@ int main(int argc, char* argv[], char* envp[])
 
 	if (AntiAimS)
 	{
-		// TODO: Something wrong happens after using these. Fix.
-		IClientMode = Driver.Scan(ProcessId, ClientAddress, ClientSize, "\x8B\x0D\x00\x00\x00\x00\x8B\x01\xFF\x50\x04\x85\xF6", "xx????xxxxxxx") + 0x2;
-		IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
-		IClientMode = Driver.ReadVirtualMemory<DWORD>(ProcessId, IClientMode, sizeof(DWORD));
+		ClientMode* clientMode;
+		clientMode = **(ClientMode***)((*(uintptr_t**)ClientAddress)[10] + 0x5);
+		IClientMode = (DWORD**)clientMode;
 		
 		antiaim.Enable();
 		antiaim.HookCreateMove();
@@ -127,7 +127,7 @@ int main(int argc, char* argv[], char* envp[])
 
 		for (short int i = 0; i < 64; i++)
 		{
-			uint32_t EntityAddr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(int));
+			uint32_t EntityAddr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwEntityList + i * 0x10, sizeof(uint32_t));
 
 			if (EntityAddr == NULL)
 			{
