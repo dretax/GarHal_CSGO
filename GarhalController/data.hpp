@@ -148,7 +148,8 @@ inline bool IsWeaponSniper(int iWeaponID)
 #define CHEST_BONE_ID ((DWORD) 37)
 
 inline const float FovRange = 10.0f;
-inline DWORD ProcessId, ClientAddress, ClientSize, EngineAddress, EngineSize, CMDAddress, IClientMode;
+inline DWORD ProcessId, ClientAddress, ClientSize, EngineAddress, EngineSize, CMDAddress;
+inline DWORD** IClientMode;
 inline KeInterface Driver = NULL;
 
 // Store the config values here.

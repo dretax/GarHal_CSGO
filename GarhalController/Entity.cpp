@@ -125,6 +125,10 @@ Vector3 Entity::getHeadPosition()
 	Vector3 Origin = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecOrigin, sizeof(Vector3));
 	Vector3 ViewOffset = Driver.ReadVirtualMemory<Vector3>(ProcessId, EntityAddress + m_vecViewOffset, sizeof(Vector3));
 	Vector3 LocalEyeOrigin = Origin + ViewOffset;
+	if (this->IsCrouching())
+	{
+		LocalEyeOrigin(1) = LocalEyeOrigin(1) - 1.5f;
+	}
 
 	return LocalEyeOrigin;
 }
