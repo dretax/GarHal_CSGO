@@ -65,7 +65,7 @@ Open up CMD as admin mode:
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ADj12ykKq-o/0.jpg)](https://www.youtube.com/watch?v=ADj12ykKq-o)
 
 ## Credits
-* @Life45 for explaining me the basic work, pushing me to do this.
+* [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
 * @ZeroMemory for providing videos for basic stuff.
 * @hrt for a (not so much working) aimbot structure.
 * @drew79
