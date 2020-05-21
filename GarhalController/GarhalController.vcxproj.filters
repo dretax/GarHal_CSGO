@@ -98,6 +98,12 @@
     <ClInclude Include="ClientMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CUserCmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="garhal.cfg">

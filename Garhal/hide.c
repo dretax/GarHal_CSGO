@@ -3,8 +3,6 @@
 #include "hide.h"
 #include <stdio.h>
 
-
-
 PCHAR HideProcess(UINT32 pid)
 {
 	LPSTR result = ExAllocatePool(NonPagedPool, sizeof(ULONG) + 20);;

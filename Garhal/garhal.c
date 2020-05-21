@@ -6,13 +6,11 @@
  */
 
 #include "garhal.h"
-#include <ntddk.h>
-#include <ntdef.h>
-#include "communication.h"
-#include "ntos.h"
 #include "data.h"
-#include "events.h"
 #include "messages.h"
+#include "communication.h"
+#include "events.h"
+
 
 
 NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
@@ -25,10 +23,16 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 	IoDeleteDevice(pDriverObject->DeviceObject);
 
 	// Delete the processnotify routine
-	if (EnableProcessNotifyCallbackEx == 1) 
+	PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, TRUE);
+
+	vector_free(&CSRSSList);
+
+	if (OBRegisterHandle)
 	{
-		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, TRUE);
+		ObUnRegisterCallbacks(OBRegisterHandle);
+		OBRegisterHandle = NULL;
 	}
+	
 	return STATUS_SUCCESS;
 }
 
@@ -40,7 +44,6 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	DebugMessageNormal("Starting...\n");
 
 	PsSetLoadImageNotifyRoutine(ImageLoadCallback);
-
 
 	RtlInitUnicodeString(&dev, L"\\Device\\garhalop");
 	RtlInitUnicodeString(&dos, L"\\DosDevices\\garhalop");
@@ -56,12 +59,24 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	pDeviceObject->Flags |= DO_DIRECT_IO;
 	pDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-	// Set up the CreateProcess routine. Change in data.h to enable.
-	if (EnableProcessNotifyCallbackEx == 1) 
+	NTSTATUS reg = RegisterOBCallback();
+	if (reg == STATUS_SUCCESS)
+	{
+		DebugMessageNormal("ObRegisterCallbacks Succeeded.\n");
+	}
+	else
+	{
+		DebugMessageNormal("ObRegisterCallbacks Failed!\n");
+	}
+
+	// Set up the CreateProcess routine.
+	PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, FALSE);
+
+	// Change in data.h to enable.
+	if (EnableProcessHiding == 1)
 	{
 		DebugMessageNormal("Process hiding feature is enabled.\n");
 		DebugMessageNormal("You may get BSOD if you have the Windows PatchGuard running. (Very frequently.)\n");
-		PsSetCreateProcessNotifyRoutineEx(ProcessNotifyCallbackEx, FALSE);
 	}
 	else
 	{
@@ -90,4 +105,38 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	}
 
 	return STATUS_SUCCESS;
+}
+
+NTSTATUS RegisterOBCallback()
+{
+	OB_OPERATION_REGISTRATION OBOperationRegistration;
+	OB_CALLBACK_REGISTRATION OBOCallbackRegistration;
+	REG_CONTEXT regContext;
+	UNICODE_STRING usAltitude;
+	memset(&OBOperationRegistration, 0, sizeof(OB_OPERATION_REGISTRATION));
+	memset(&OBOCallbackRegistration, 0, sizeof(OB_CALLBACK_REGISTRATION));
+	memset(&regContext, 0, sizeof(REG_CONTEXT));
+	regContext.ulIndex = 1;
+	regContext.Version = 120;
+	RtlInitUnicodeString(&usAltitude, L"666");
+
+	NTSTATUS Status = STATUS_UNSUCCESSFUL;
+
+	if ((USHORT)ObGetFilterVersion() == OB_FLT_REGISTRATION_VERSION)
+	{
+		OBOperationRegistration.ObjectType = PsProcessType; // Use To Strip Handle Permissions For Threads PsThreadType
+		OBOperationRegistration.Operations = OB_OPERATION_HANDLE_CREATE | OB_OPERATION_HANDLE_DUPLICATE;
+		OBOperationRegistration.PostOperation = NULL;
+		OBOperationRegistration.PreOperation = OBRegisterCallback;
+
+		OBOCallbackRegistration.Altitude = usAltitude;
+		OBOCallbackRegistration.OperationRegistration = &OBOperationRegistration;
+		OBOCallbackRegistration.RegistrationContext = &regContext;
+		OBOCallbackRegistration.Version = OB_FLT_REGISTRATION_VERSION;
+		OBOCallbackRegistration.OperationRegistrationCount = (USHORT)1;
+
+		Status = ObRegisterCallbacks(&OBOCallbackRegistration, &OBRegisterHandle); // Register The CallBack
+	}
+
+	return Status;
 }

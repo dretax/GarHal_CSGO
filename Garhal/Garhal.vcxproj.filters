@@ -48,6 +48,9 @@
     <ClInclude Include="messages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="garhal.c">
@@ -63,6 +66,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hide.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vector.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
