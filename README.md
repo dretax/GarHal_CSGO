@@ -32,6 +32,7 @@ It's just harder without a driver, and hence they haven't really done this since
 Here is some information from 2013, and 2016:
 * [Analysis from 2013 by forcon](https://www.unknowncheats.me/wiki/Valve_Anti-Cheat:VAC_external_tool_detection_(and_more))
 * [Write up from Mambda](https://guidedhacking.com/threads/how-to-bypass-vac-valve-anti-cheat-info.8125/post-42854)
+
 Both sources talk about that VAC opens handle to processes and searches all volumes with FindFirstVolumeW, FindNextVolumeW and closes handles with FindVolumeClose.
 
 It opens every handle running with Query_Information, and VM_READ.
