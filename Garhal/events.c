@@ -121,14 +121,14 @@ OB_PREOP_CALLBACK_STATUS OBRegisterCallback(PVOID RegistrationContext, POB_PRE_O
 		{
 			if ((OperationInformation->Parameters->CreateHandleInformation.OriginalDesiredAccess & ~PROCESS_VM_READ) == PROCESS_VM_READ)
 			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_CREATE PROCESS_VM_READ denied.");
+				DebugMessageNormal("OB_OPERATION_HANDLE_CREATE PROCESS_VM_READ denied.\n");
 				OperationInformation->Parameters->CreateHandleInformation.DesiredAccess &= ~PROCESS_VM_READ;
 			}
 
 			// Is this valid? •`_´•
 			if ((OperationInformation->Parameters->CreateHandleInformation.OriginalDesiredAccess & ~PROCESS_QUERY_LIMITED_INFORMATION) == PROCESS_QUERY_LIMITED_INFORMATION)
 			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_CREATE PROCESS_QUERY_LIMITED_INFORMATION denied.");
+				DebugMessageNormal("OB_OPERATION_HANDLE_CREATE PROCESS_QUERY_LIMITED_INFORMATION denied.\n");
 				OperationInformation->Parameters->CreateHandleInformation.DesiredAccess &= ~PROCESS_QUERY_LIMITED_INFORMATION;
 			}
 		}
@@ -136,13 +136,13 @@ OB_PREOP_CALLBACK_STATUS OBRegisterCallback(PVOID RegistrationContext, POB_PRE_O
 		{
 			if ((OperationInformation->Parameters->DuplicateHandleInformation.OriginalDesiredAccess & ~PROCESS_VM_READ) == PROCESS_VM_READ)
 			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE PROCESS_VM_READ denied.");
+				DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE PROCESS_VM_READ denied.\n");
 				OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess &= ~PROCESS_VM_READ;
 			}
 
 			if ((OperationInformation->Parameters->DuplicateHandleInformation.OriginalDesiredAccess & ~PROCESS_QUERY_LIMITED_INFORMATION) == PROCESS_QUERY_LIMITED_INFORMATION)
 			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE PROCESS_QUERY_LIMITED_INFORMATION denied.");
+				DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE PROCESS_QUERY_LIMITED_INFORMATION denied.\n");
 				OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess &= ~PROCESS_QUERY_LIMITED_INFORMATION;
 			}
 
