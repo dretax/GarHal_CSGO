@@ -1,7 +1,10 @@
 #pragma once
-#include "communication.h"
-#include "memory.h"
+#include <ntifs.h>
+
+PVOID OBRegisterHandle = NULL;
 
 NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject);
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath);
+
+NTSTATUS RegisterOBCallback();

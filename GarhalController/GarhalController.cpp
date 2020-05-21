@@ -13,6 +13,7 @@
 #include "config.hpp"
 #include "Engine.hpp"
 #include "Entity.hpp"
+#include <windows.h>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ Entity CreateEntity(int Address)
 	return dummy;
 }
 
+// TODO: Implement https://guidedhacking.com/threads/external-silent-aim-proof-of-concept-no-shellcode.13595/
 
 int main(int argc, char* argv[], char* envp[])
 {
@@ -90,6 +92,7 @@ int main(int argc, char* argv[], char* envp[])
 	Aimbot aim = Aimbot(&bspParser);
 	AntiAim antiaim = AntiAim();
 
+	// Do not use this until drop handle usage.
 	if (AntiAimS)
 	{
 		ClientMode* clientMode;
@@ -100,8 +103,6 @@ int main(int argc, char* argv[], char* envp[])
 		antiaim.HookCreateMove();
 		std::cout << "~AntiAim Create Move hooked!" << std::endl;
 	}
-
-	//std::cout << "IClientMode: " << IClientMode << std::endl;
 
 	while (true)
 	{

@@ -1,14 +1,29 @@
 #pragma once
 #include <ntifs.h>
+#include "vector.h"
 
-// We store every value here.
 // Thanks Zeromem for the tuts, and Life45 for explaining.
 
-ULONG csgoId, ClientAddress, EngineAddress, ClientSize, EngineSize;
+// We store every value here.
+ULONG csgoId, ClientAddress, EngineAddress, ClientSize, EngineSize, ControllerID;
 PDEVICE_OBJECT pDeviceObject;
 UNICODE_STRING dev, dos;
 PDEVICE_OBJECT DeviceObject;
+vector CSRSSList;
+
 
 // Constants
-#define EnableProcessNotifyCallbackEx 0 // Used to hide our process.
+#define EnableProcessHiding 0 // Used to hide our process.
 #define EnableDriverHiding 0 // Used to hide our driver.
+
+#define PROCESS_QUERY_LIMITED_INFORMATION 0x1000
+#define PROCESS_VM_OPERATION 0x0008
+#define PROCESS_VM_READ 0x0010
+#define PROCESS_VM_WRITE 0x0020
+
+typedef struct _OB_REG_CONTEXT {
+	USHORT Version;
+	UNICODE_STRING Altitude;
+	USHORT ulIndex;
+	OB_OPERATION_REGISTRATION* OperationRegistration;
+} REG_CONTEXT, * PREG_CONTEXT;

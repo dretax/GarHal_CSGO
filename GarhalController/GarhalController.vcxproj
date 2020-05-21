@@ -166,6 +166,7 @@
     <ClInclude Include="BSPFlags.hpp" />
     <ClInclude Include="BSPParser.hpp" />
     <ClInclude Include="BSPStructure.hpp" />
+    <ClInclude Include="CInput.h" />
     <ClInclude Include="ClientMode.h" />
     <ClInclude Include="communications.hpp" />
     <ClInclude Include="config.hpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="offsets.hpp" />
     <ClInclude Include="sdk.hpp" />
     <ClInclude Include="TraceRay.hpp" />
+    <ClInclude Include="CUserCmd.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="garhal.cfg" />
