@@ -6,6 +6,7 @@ I tend to hook DirectX, and implement Kernel-level drawing into this project. Th
 Side note: 
 No, this project has nothing to do with csgo's released source code or whatever.
 This project probably has mistakes. Feel free to correct me through PRs.
+
 Project discussion: https://guidedhacking.com/threads/csgo-kernel-driver-multihack.15130/
 
 ## Note
