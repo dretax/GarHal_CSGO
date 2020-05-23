@@ -17,6 +17,7 @@ The project is for research purposes only and is not suitable for production env
 * Process Hiding (Kill Patchguard before use) @landhb
 * Simple glow Wallhack
 * Highlights defuser
+* No flash
 * Aimbot
 * Smooth aimbot
 * Anti-Aimbot (TODO: Fix up ugly code, test, use VirtualAlloc, and OpenHandle from Kernel Sphere)
