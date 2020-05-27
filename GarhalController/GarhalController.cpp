@@ -33,7 +33,26 @@ Entity CreateEntity(int Address)
 	return dummy;
 }
 
+vector<string> Split(string s, string delimiter)
+{
+	size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+	string token;
+	vector<string> res;
+
+	while ((pos_end = s.find(delimiter, pos_start)) != string::npos) 
+	{
+		token = s.substr(pos_start, pos_end - pos_start);
+		pos_start = pos_end + delim_len;
+		res.push_back(token);
+	}
+
+	res.push_back(s.substr(pos_start));
+	return res;
+}
+
+
 // TODO: Implement https://guidedhacking.com/threads/external-silent-aim-proof-of-concept-no-shellcode.13595/
+// https://www.unknowncheats.me/forum/counterstrike-global-offensive/144597-matchmaking-colors.html
 
 int main(int argc, char* argv[], char* envp[])
 {
@@ -65,6 +84,20 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotBullets = config.pInt("AimbotBullets");
 	Bhop = config.pBool("Bhop");
 	AntiAimS = config.pBool("AntiAim");
+	Wallhack = config.pBool("Wallhack");
+	NoFlash = config.pBool("NoFlash");
+	TriggerBot = config.pBool("TriggerBot");
+	TriggerBotKey = config.pHex("TriggerBotKey");
+	Radar = config.pBool("Radar");
+
+	std::string weapons = config.pString("TriggerBotAllowed");
+	vector<string> dweapons = Split(weapons, ",");
+	for (string w : dweapons)
+	{
+		char cstr[10];
+		strcpy_s(cstr, w.c_str());
+		WeaponIDs.push_back(atoi(cstr));
+	}
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
@@ -86,8 +119,13 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "AimbotKey: " << unsigned(AimbotKey) << std::endl;
 	std::cout << "AimbotTarget: " << unsigned(AimbotTarget) << std::endl;
 	std::cout << "AimbotBullets: " << unsigned(AimbotBullets) << std::endl;
-	std::cout << "AntiAim: " << AntiAimS << std::endl;
-	std::cout << "Bhop: " << Bhop << std::endl;
+	std::cout << "AntiAim: " << std::boolalpha << AntiAimS << std::endl;
+	std::cout << "Bhop: " << std::boolalpha << Bhop << std::endl;
+	std::cout << "Wallhack: " << std::boolalpha << Wallhack << std::endl;
+	std::cout << "NoFlash: " << std::boolalpha << NoFlash << std::endl;
+	std::cout << "TriggerBot: " << std::boolalpha << TriggerBot << std::endl;
+	std::cout << "TriggerBotKey: " << unsigned(TriggerBotKey) << std::endl;
+	std::cout << "Radar: " << std::boolalpha << Radar << std::endl;
 
 	Aimbot aim = Aimbot(&bspParser);
 	AntiAim antiaim = AntiAim();
@@ -112,7 +150,7 @@ int main(int argc, char* argv[], char* envp[])
 			continue;
 		}
 
-		if (GlowObject == 0)
+		if (Wallhack && GlowObject == 0)
 		{
 			GlowObject = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(uint32_t));
 		}
@@ -124,7 +162,10 @@ int main(int argc, char* argv[], char* envp[])
 		aim.localPlayer = LocalPlayerEnt;
 		
 		uint8_t OurTeam = LocalPlayerEnt.getTeam();
-		LocalPlayerEnt.SetFlashAlpha(0.0f);
+		if (NoFlash) 
+		{
+			LocalPlayerEnt.SetFlashAlpha(0.0f);
+		}
 
 		for (short int i = 0; i < 64; i++)
 		{
@@ -134,14 +175,22 @@ int main(int argc, char* argv[], char* envp[])
 			{
 				continue;
 			}
-
-			Entity ent = CreateEntity(EntityAddr);
-			if (ent.isValidPlayer())
+			
+			if (Wallhack)
 			{
-				if (!ent.IsDormant())
+				Entity ent = CreateEntity(EntityAddr);
+				if (ent.isValidPlayer())
 				{
-					ent.SetCorrectGlowStruct(OurTeam, GlowObject);
+					if (!ent.IsDormant())
+					{
+						ent.SetCorrectGlowStruct(OurTeam, GlowObject);
+					}
 				}
+			}
+			
+			if (Radar)
+			{
+				Driver.WriteVirtualMemory<bool>(ProcessId, EntityAddr + m_bSpotted, true, sizeof(bool));
 			}
 		}
 
@@ -165,7 +214,28 @@ int main(int argc, char* argv[], char* envp[])
 			antiaim.DoAntiAim();
 		}
 
-		
+		if (TriggerBot)
+		{
+			if (TriggerBotKey == 0 || (GetAsyncKeyState(TriggerBotKey) & KEY_DOWN)) 
+			{
+				bool usable = false;
+				uint16_t weaponid = LocalPlayerEnt.GetCurrentWeaponID();
+				for (uint16_t wep : WeaponIDs)
+				{
+					if (wep == 0 || (weaponid > 0 && wep == weaponid))
+					{
+						usable = true;
+						break;
+					}
+				}
+				
+				if (usable) 
+				{
+					aim.TriggerBot();
+				}
+			}
+		}
+
 		if (AimbotS == 1) 
 		{
 			if (GetAsyncKeyState(AimbotKey) & KEY_DOWN)

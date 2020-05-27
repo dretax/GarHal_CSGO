@@ -238,6 +238,51 @@ void Aimbot::resetSensitivity()
     setSensitivity(defaultSensitivity);
 }
 
+bool Aimbot::EnemyIsInCrossHair()
+{
+    if (!localPlayer.isValidPlayer()) 
+    {
+        return false;
+    }
+
+    uint32_t localPlayerTeam = localPlayer.getTeam();
+    uint16_t CrosshairID = localPlayer.getCrosshairId();
+    if (CrosshairID <= 0 || CrosshairID > 65)
+    {
+        return false;
+    }
+
+    CrosshairID -= 1;
+    uint32_t crosshairentity = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + 0x10 * CrosshairID, sizeof(uint32_t));
+	if (crosshairentity == NULL)
+	{
+        return false;
+	}
+	
+    Entity target(crosshairentity);
+
+    if (!target.isValidPlayer()) 
+    {
+        return false;
+    }
+
+    bool isEnemy = target.getTeam() != localPlayerTeam;
+
+    return isEnemy;
+}
+
+void Aimbot::TriggerBot()
+{
+    if (EnemyIsInCrossHair()) 
+    {
+        localPlayer.shoot();
+    }
+    else 
+    {
+        localPlayer.setForceAttack(4);
+    }
+}
+
 bool Aimbot::aimAssist()
 {
     const char* gameDirectory = getGameDirectory();
@@ -407,18 +452,6 @@ void Aimbot::aimBot()
 
     //std::cout << aimAngles(0) << "-" << aimAngles(1) << "-" << aimAngles(2) << std::endl;
     setViewAngles(aimAngles);
-}
-
-void Aimbot::inCrossTriggerBot()
-{
-    if (enemyIsInCrossHair()) 
-    {
-        localPlayer.shoot();
-    }
-    else 
-    {
-        localPlayer.setForceAttack(4);
-    }
 }
 
 void Aimbot::walkBot()

@@ -38,7 +38,20 @@ bool Engine::IsInGame()
 {
     uint32_t ClientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
     uint32_t Second = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientState + dwClientState_State, sizeof(uint32_t));
-    return Second == 6;
+    return GetGameState(Second) == InGame;
+}
+
+GameState Engine::GetGameState(uint8_t State)
+{
+	switch (State)
+    {
+		case 0: return Lobby;
+        case 1: return Loading;
+        case 2: return Connecting;
+        case 5: return Connected;
+        case 6: return InGame;
+    }
+    return UnknownG;
 }
 
 Vector3 Engine::getViewAngles()

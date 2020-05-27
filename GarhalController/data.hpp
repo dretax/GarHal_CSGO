@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <windows.h>
 #include "Matrix.hpp"
 #include "kernelinterface.hpp"
@@ -19,6 +20,16 @@ struct GlowStruct
 	bool fullBloom;
 	BYTE buffer1[5];
 	int glowStyle;
+};
+
+enum GameState
+{
+	Lobby = 0,
+	Loading = 1,
+	Connecting = 2,
+	Connected = 5,
+	InGame = 6,
+	UnknownG = -1,
 };
 
 struct UserCMD_ShellCode
@@ -154,8 +165,14 @@ inline KeInterface Driver = NULL;
 
 // Store the config values here.
 inline uint8_t AimbotS = 0;
-inline uint16_t AimbotKey = 0;
 inline uint8_t AimbotTarget = 0;
 inline uint8_t AimbotBullets = 0;
+inline uint16_t AimbotKey = 0;
+inline uint16_t TriggerBotKey = 0;
 inline bool Bhop = false;
 inline bool AntiAimS = false;
+inline bool Wallhack = false;
+inline bool NoFlash = false;
+inline bool TriggerBot = false;
+inline bool Radar = false;
+inline std::vector<uint16_t> WeaponIDs;
