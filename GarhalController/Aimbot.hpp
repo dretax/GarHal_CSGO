@@ -22,11 +22,12 @@ private:
     const char* getGameDirectory();
 public:
     Entity localPlayer;
-    bool aimAssist();  // legit aimbot - if low then aim chest
-    void aimBot();     // blatant aimbot
-    void inCrossTriggerBot();
-    void walkBot();                         // can be used with aimAssist to make a deathmatch bot
+    bool aimAssist();
+    void aimBot();
+    void walkBot();
     void resetSensitivity();
+    void TriggerBot();
+    bool EnemyIsInCrossHair();
     Aimbot(hazedumper::BSPParser* bspParser);
     Aimbot();
     ~Aimbot();

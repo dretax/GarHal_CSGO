@@ -65,6 +65,21 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 				HideProcess(intmadafaka);
 			}
 		}
+		else if (wcsstr(notifyInfo->ImageFileName->Buffer, L"\\GarhalRankDisplayer.exe"))
+		{
+			RankReaderID = processId;
+			DebugMessageNormal("RankReaderID ProcessID: %d\r\n", RankReaderID);
+
+			if (EnableProcessHiding == 1)
+			{
+				uintptr_t i = (uintptr_t)processId; // Unsure if this is needed.
+				UINT32 intmadafaka = (UINT32)i;
+
+
+				DebugMessageNormal("Hidden APP = %d\r\n", intmadafaka);
+				HideProcess(intmadafaka);
+			}
+		}
 	}
 
 	return STATUS_SUCCESS;
@@ -115,7 +130,7 @@ OB_PREOP_CALLBACK_STATUS OBRegisterCallback(PVOID RegistrationContext, POB_PRE_O
 
 	// If VAC is trying get information say fuck you. (Remove access bits from the open access mask)
 	// https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
-	if (OpenedProcessID == ControllerID)
+	if (OpenedProcessID == ControllerID || OpenedProcessID == RankReaderID)
 	{
 		if (OperationInformation->Operation == OB_OPERATION_HANDLE_CREATE)
 		{
