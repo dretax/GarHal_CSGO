@@ -20,9 +20,12 @@ The project is for research purposes only and is not suitable for production env
 * No flash
 * Aimbot
 * Smooth aimbot
+* TriggerBot (Work in progress)
+* Another simple program to Display Ranks (Work in progress)
+* Displays enemies on the Radar
 * Anti-Aimbot (TODO: Fix up ugly code, test, use VirtualAlloc, and OpenHandle from Kernel Sphere)
 * Bhop
-* OBRegisterCallback to limit access to the GarhalController.exe (Read VAC section)
+* OBRegisterCallback to limit access to the GarhalController.exe & GarhalRankDisplayer.exe (Read VAC section)
 
 ## Patchguard?
 Simple explanation: It's something that doesn't like kernel manipulation, and triggers a BSOD If detects It.
