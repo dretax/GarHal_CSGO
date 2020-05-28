@@ -20,6 +20,7 @@ vector CSRSSList;
 #define PROCESS_VM_OPERATION 0x0008
 #define PROCESS_VM_READ 0x0010
 #define PROCESS_VM_WRITE 0x0020
+#define PROCESS_TERMINATE 0x0001
 
 typedef struct _OB_REG_CONTEXT {
 	USHORT Version;
