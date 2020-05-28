@@ -33,8 +33,9 @@ int main()
 		return 0;
 	}
 
-	uintptr_t clientState = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(uintptr_t));
-	uintptr_t infotable = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, clientState + hazedumper::signatures::dwClientState_PlayerInfo, sizeof(uintptr_t));
+	std::cout << "Starting..." << std::endl;
+	uintptr_t clientState = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, EngineAddress + dwClientState, sizeof(uintptr_t));
+	uintptr_t infotable = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, clientState + dwClientState_PlayerInfo, sizeof(uintptr_t));
 	uintptr_t items = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, (infotable + 0x40) + 0xC, sizeof(uintptr_t));
 
 	uint32_t PlayerResource = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwPlayerResource, sizeof(uint32_t));
@@ -63,7 +64,7 @@ int main()
 		const char* RankName = Ranks[Rank];
 
 		std::cout << "===Player===" << std::endl;
-		//std::cout << player_name << std::endl;
+		std::cout << player_name << std::endl;
 		std::cout << RankName << std::endl;
 		std::cout << Wins << std::endl;
 		std::cout << std::endl;

@@ -54,6 +54,54 @@ vector<string> Split(string s, string delimiter)
 // TODO: Implement https://guidedhacking.com/threads/external-silent-aim-proof-of-concept-no-shellcode.13595/
 // https://www.unknowncheats.me/forum/counterstrike-global-offensive/144597-matchmaking-colors.html
 
+// TODO: On close free all global values from the memory.
+inline Engine engine;
+inline Aimbot aim = NULL;
+
+void TriggerBotThread()
+{
+	while (true)
+	{
+		if (!engine.IsInGame())
+		{
+			Sleep(500);
+			continue;
+		}
+
+		if (!aim.localPlayer.isValidPlayer())
+		{
+			continue;
+		}
+
+		if (TriggerBot)
+		{
+			//uint32_t LocalPlayer = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(uint32_t));
+			Entity LocalPlayerEnt = aim.localPlayer;
+			
+			if (TriggerBotKey == 0 || (GetAsyncKeyState(TriggerBotKey) & KEY_DOWN))
+			{
+				bool usable = false;
+				uint16_t weaponid = LocalPlayerEnt.GetCurrentWeaponID();
+				for (uint16_t wep : WeaponIDs)
+				{
+					if (wep == 0 || (weaponid > 0 && wep == weaponid))
+					{
+						usable = true;
+						break;
+					}
+				}
+
+				if (usable)
+				{
+					aim.TriggerBot();
+				}
+			}
+		}
+
+		Sleep(2);
+	}
+}
+
 int main(int argc, char* argv[], char* envp[])
 {
 	Driver = KeInterface("\\\\.\\garhalop");
@@ -73,7 +121,6 @@ int main(int argc, char* argv[], char* envp[])
 		return 0;
 	}
 
-	Engine engine;
 	hazedumper::BSPParser bspParser;
 
 	// Read config values.
@@ -107,7 +154,7 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "EngineAddress: " << EngineAddress << std::endl;
 	std::cout << "ClientSize: " << ClientSize << std::endl;
 
-	// Get address of localplayer
+	// Store address of localplayer
 	uint32_t LocalPlayer = 0;
 
 	uint32_t GlowObject = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(uint32_t));
@@ -127,10 +174,10 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "TriggerBotKey: " << unsigned(TriggerBotKey) << std::endl;
 	std::cout << "Radar: " << std::boolalpha << Radar << std::endl;
 
-	Aimbot aim = Aimbot(&bspParser);
+	aim = Aimbot(&bspParser);
 	AntiAim antiaim = AntiAim();
 
-	// Do not use this until drop handle usage.
+	// Do not use this until I drop handle usage.
 	if (AntiAimS)
 	{
 		ClientMode* clientMode;
@@ -142,6 +189,8 @@ int main(int argc, char* argv[], char* envp[])
 		std::cout << "~AntiAim Create Move hooked!" << std::endl;
 	}
 
+	std::thread TriggerBotT(TriggerBotThread);
+
 	while (true)
 	{
 		if (!engine.IsInGame())
@@ -150,16 +199,18 @@ int main(int argc, char* argv[], char* envp[])
 			continue;
 		}
 
-		if (Wallhack && GlowObject == 0)
+		if (Wallhack)
 		{
 			GlowObject = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwGlowObjectManager, sizeof(uint32_t));
 		}
 
-
 		LocalPlayer = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(uint32_t));
 		Entity LocalPlayerEnt = Entity(LocalPlayer);
 
-		aim.localPlayer = LocalPlayerEnt;
+		if (aim.localPlayer.GetEntityAddress() != LocalPlayerEnt.GetEntityAddress())
+		{
+			aim.localPlayer = LocalPlayerEnt;
+		}
 		
 		uint8_t OurTeam = LocalPlayerEnt.getTeam();
 		if (NoFlash) 
@@ -179,18 +230,19 @@ int main(int argc, char* argv[], char* envp[])
 			if (Wallhack)
 			{
 				Entity ent = CreateEntity(EntityAddr);
-				if (ent.isValidPlayer())
+				if (ent.isValidPlayer() && !ent.IsDormant())
 				{
-					if (!ent.IsDormant())
-					{
-						ent.SetCorrectGlowStruct(OurTeam, GlowObject);
-					}
+					ent.SetCorrectGlowStruct(OurTeam, GlowObject);
 				}
 			}
 			
 			if (Radar)
 			{
-				Driver.WriteVirtualMemory<bool>(ProcessId, EntityAddr + m_bSpotted, true, sizeof(bool));
+				Entity ent = CreateEntity(EntityAddr);
+				if (ent.isValidPlayer() && !ent.IsDormant()) 
+				{
+					Driver.WriteVirtualMemory<bool>(ProcessId, EntityAddr + m_bSpotted, true, sizeof(bool));
+				}
 			}
 		}
 
@@ -212,28 +264,6 @@ int main(int argc, char* argv[], char* envp[])
 		if (AntiAimS)
 		{
 			antiaim.DoAntiAim();
-		}
-
-		if (TriggerBot)
-		{
-			if (TriggerBotKey == 0 || (GetAsyncKeyState(TriggerBotKey) & KEY_DOWN)) 
-			{
-				bool usable = false;
-				uint16_t weaponid = LocalPlayerEnt.GetCurrentWeaponID();
-				for (uint16_t wep : WeaponIDs)
-				{
-					if (wep == 0 || (weaponid > 0 && wep == weaponid))
-					{
-						usable = true;
-						break;
-					}
-				}
-				
-				if (usable) 
-				{
-					aim.TriggerBot();
-				}
-			}
 		}
 
 		if (AimbotS == 1) 

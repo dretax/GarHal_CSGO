@@ -155,10 +155,10 @@ void Entity::setForceAttack2(uint8_t value)
 
 void Entity::shoot()
 {
-	//mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-	//Sleep(1);
-	//mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-	uint8_t forceAttack = getForceAttack();
+	mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+	Sleep(1);
+	mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+	/*uint8_t forceAttack = getForceAttack();
 	if (forceAttack == 4) 
 	{
 		setForceAttack(5);
@@ -166,7 +166,7 @@ void Entity::shoot()
 	else 
 	{
 		setForceAttack(4);
-	}
+	}*/
 }
 
 uint16_t Entity::getShotsFired()
