@@ -53,8 +53,9 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
 3. Place the default config where GarhalController.exe is.
 4. Modify config to your needs.
 5. Start GarhalController.exe.
-6. Play the game.
-7. Beware of Overwatch.
+6. Optional: If you are playing ranked, use GarhalRankDisplayer.exe to view ranks.
+7. Play the game.
+8. Beware of Overwatch.
 
 ## Starting Driver
 Open up CMD as admin mode:
