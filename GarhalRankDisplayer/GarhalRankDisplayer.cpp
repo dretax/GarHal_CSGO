@@ -34,9 +34,9 @@ int main()
 	}
 
 	std::cout << "Starting..." << std::endl;
-	uintptr_t clientState = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, EngineAddress + dwClientState, sizeof(uintptr_t));
-	uintptr_t infotable = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, clientState + dwClientState_PlayerInfo, sizeof(uintptr_t));
-	uintptr_t items = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, (infotable + 0x40) + 0xC, sizeof(uintptr_t));
+	uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
+	uint32_t infotable = Driver.ReadVirtualMemory<uint32_t>(ProcessId, clientState + dwClientState_PlayerInfo, sizeof(uint32_t));
+	uint32_t items = Driver.ReadVirtualMemory<uint32_t>(ProcessId, (infotable + 0x40) + 0xC, sizeof(uint32_t));
 
 	uint32_t PlayerResource = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwPlayerResource, sizeof(uint32_t));
 	for (short int i = 0; i < 10; i++)
@@ -55,18 +55,18 @@ int main()
 
 		//wchar_t cName = Driver.ReadVirtualMemory<wchar_t>(ProcessId, Radar + 0x300 + (0x174 * (i - 1)), 32);
 
-		uintptr_t asd = Driver.ReadVirtualMemory<uintptr_t>(ProcessId, items + 0x28 + i * 0x34, sizeof(DWORD));
-		player_info playerinfo = Driver.ReadVirtualMemory<player_info>(ProcessId, asd, sizeof(uintptr_t));
+		uint32_t asd = Driver.ReadVirtualMemory<uint32_t>(ProcessId, items + 0x28 + i * 0x34, sizeof(uint32_t));
+		player_info playerinfo = Driver.ReadVirtualMemory<player_info>(ProcessId, asd, sizeof(player_info));
 
 		
 		char* player_name = playerinfo.name;
 		
 		const char* RankName = Ranks[Rank];
 
-		std::cout << "===Player===" << std::endl;
+		std::cout << "===Player[" << i << "]===" << std::endl;
 		std::cout << player_name << std::endl;
 		std::cout << RankName << std::endl;
-		std::cout << Wins << std::endl;
+		std::cout << "Wins: " << Wins << std::endl;
 		std::cout << std::endl;
 	}
 
