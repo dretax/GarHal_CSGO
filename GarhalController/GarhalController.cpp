@@ -73,28 +73,25 @@ void TriggerBotThread()
 			continue;
 		}
 
-		if (TriggerBot)
-		{
-			//uint32_t LocalPlayer = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(uint32_t));
-			Entity LocalPlayerEnt = aim.localPlayer;
+		//uint32_t LocalPlayer = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + dwLocalPlayer, sizeof(uint32_t));
+		Entity LocalPlayerEnt = aim.localPlayer;
 			
-			if (TriggerBotKey == 0 || (GetAsyncKeyState(TriggerBotKey) & KEY_DOWN))
+		if (TriggerBotKey == 0 || (GetAsyncKeyState(TriggerBotKey) & KEY_DOWN))
+		{
+			bool usable = false;
+			uint16_t weaponid = LocalPlayerEnt.GetCurrentWeaponID();
+			for (uint16_t wep : WeaponIDs)
 			{
-				bool usable = false;
-				uint16_t weaponid = LocalPlayerEnt.GetCurrentWeaponID();
-				for (uint16_t wep : WeaponIDs)
+				if (wep == 0 || (weaponid > 0 && wep == weaponid))
 				{
-					if (wep == 0 || (weaponid > 0 && wep == weaponid))
-					{
-						usable = true;
-						break;
-					}
+					usable = true;
+					break;
 				}
+			}
 
-				if (usable)
-				{
-					aim.TriggerBot();
-				}
+			if (usable)
+			{
+				aim.TriggerBot();
 			}
 		}
 
@@ -189,7 +186,10 @@ int main(int argc, char* argv[], char* envp[])
 		std::cout << "~AntiAim Create Move hooked!" << std::endl;
 	}
 
-	std::thread TriggerBotT(TriggerBotThread);
+	if (TriggerBot) 
+	{
+		std::thread TriggerBotT(TriggerBotThread);
+	}
 
 	while (true)
 	{
