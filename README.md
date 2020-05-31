@@ -45,7 +45,7 @@ It opens every handle running with Query_Information, and VM_READ.
 Denying access with ObRegisterCallbacks to protect the controller would be more than enough to get rid of this scan.
 
 ## Compilation
-You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit.
+You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
 ## Usage
 1. Start the Driver.
