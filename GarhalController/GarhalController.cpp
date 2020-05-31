@@ -60,7 +60,7 @@ inline Aimbot aim = NULL;
 
 void TriggerBotThread()
 {
-	while (true)
+	while (TriggerBot)
 	{
 		if (!engine.IsInGame())
 		{
@@ -186,10 +186,7 @@ int main(int argc, char* argv[], char* envp[])
 		std::cout << "~AntiAim Create Move hooked!" << std::endl;
 	}
 
-	if (TriggerBot) 
-	{
-		std::thread TriggerBotT(TriggerBotThread);
-	}
+	std::thread TriggerBotT(TriggerBotThread);
 
 	while (true)
 	{
