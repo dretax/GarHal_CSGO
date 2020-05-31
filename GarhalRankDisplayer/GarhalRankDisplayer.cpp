@@ -14,6 +14,15 @@ public:
 	char name[32];
 };
 
+typedef struct player_info_s
+{
+	char _pad1[0x10];
+	char name[80];//80
+	char _pad2[0x64];
+	char _pad3[0x17B];
+
+} player_info_t;
+
 int main()
 {
 	Driver = KeInterface("\\\\.\\garhalop");
@@ -56,7 +65,7 @@ int main()
 		//wchar_t cName = Driver.ReadVirtualMemory<wchar_t>(ProcessId, Radar + 0x300 + (0x174 * (i - 1)), 32);
 
 		uint32_t asd = Driver.ReadVirtualMemory<uint32_t>(ProcessId, items + 0x28 + i * 0x34, sizeof(uint32_t));
-		player_info playerinfo = Driver.ReadVirtualMemory<player_info>(ProcessId, asd, sizeof(player_info));
+		player_info_t playerinfo = Driver.ReadVirtualMemory<player_info_t>(ProcessId, asd, sizeof(player_info_t));
 
 		
 		char* player_name = playerinfo.name;

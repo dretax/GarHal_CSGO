@@ -29,7 +29,7 @@ NTSTATUS KeWriteVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID Targ
 	return STATUS_ACCESS_DENIED;
 }
 
-NTSTATUS FindProcessByName(CHAR* process_name, vector* list)
+NTSTATUS FindProcessByName(CHAR* process_name, vector* ls)
 {
 	PEPROCESS sys_process = PsInitialSystemProcess;
 	PEPROCESS cur_entry = sys_process;
@@ -48,7 +48,7 @@ NTSTATUS FindProcessByName(CHAR* process_name, vector* list)
 			{
 				// Get PREPROCESS's ID.
 				//ULONG procid = (ULONG) PsGetProcessId(cur_entry);
-				vector_add(list, cur_entry);
+				vector_add(ls, cur_entry);
 			}
 		}
 
