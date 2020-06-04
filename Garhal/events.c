@@ -12,7 +12,7 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 	//DbgPrintEx(0, 0, "We received a load from: %ls \n", FullImageName->Buffer);
 
 	// Compare our string to input
-	if (wcsstr(FullImageName->Buffer, L"\\csgo\\bin\\client_panorama.dll")) 
+	if (wcsstr(FullImageName->Buffer, L"\\csgo\\bin\\client.dll")) 
 	{
 		DebugMessageNormal("CSGO client_panorama.dll found!\n");
 		DebugMessageNormal("Loaded Name: %ls \n", FullImageName->Buffer);
