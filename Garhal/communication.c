@@ -79,7 +79,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = csgoId;
 
-		DebugMessageNormal("A UserMode Application requested the ProcessID: %#010x", csgoId);
+		DebugMessageNormal("A UserMode Application requested the ProcessID: %#010x \n", csgoId);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
@@ -88,7 +88,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = ClientAddress;
 
-		DebugMessageNormal("A UserMode Application requested the ClientAddress: %#010x", ClientAddress);
+		DebugMessageNormal("A UserMode Application requested the ClientAddress: %#010x \n", ClientAddress);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
@@ -97,7 +97,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = EngineAddress;
 
-		DebugMessageNormal("A UserMode Application requested the EngineAddress: %#010x", EngineAddress);
+		DebugMessageNormal("A UserMode Application requested the EngineAddress: %#010x \n", EngineAddress);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
@@ -106,7 +106,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = ClientSize;
 
-		DebugMessageNormal("A UserMode Application requested the size of Client: %#010x", ClientSize);
+		DebugMessageNormal("A UserMode Application requested the size of Client: %#010x \n", ClientSize);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
@@ -115,7 +115,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
 		*OutPut = EngineSize;
 
-		DebugMessageNormal("A UserMode Application requested the size of Engine: %#010x", EngineSize);
+		DebugMessageNormal("A UserMode Application requested the size of Engine: %#010x \n", EngineSize);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
