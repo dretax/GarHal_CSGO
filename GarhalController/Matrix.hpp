@@ -13,6 +13,7 @@
 
 #include <array>
 #include <string>
+#include <ostream>
 
 template < typename T, size_t T_Rows, size_t T_Cols >
 class Matrix
