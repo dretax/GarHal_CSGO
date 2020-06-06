@@ -48,9 +48,11 @@ Denying access with ObRegisterCallbacks to protect the controller would be more 
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
 ## Supported Windows Versions
-* 1903
-* 1909
-* 2004
+If you don't need the csrss.exe check just remove It, or update the offsets manually
+for different windows versions. The link has been provided in the memory.c file.
+* Windows 10 1903
+* Windows 10 1909
+* Windows 10 2004
 
 ## Usage
 1. Start the Driver.
