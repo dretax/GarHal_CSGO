@@ -7,10 +7,15 @@ Side note:
 No, this project has nothing to do with csgo's released source code or whatever.
 This project probably has mistakes. Feel free to correct me through PRs.
 
-Project discussion: https://guidedhacking.com/threads/csgo-kernel-driver-multihack.15130/
+#### Project discussion: https://guidedhacking.com/threads/csgo-kernel-driver-multihack.15130/
 
-## Note
-The project is for research purposes only and is not suitable for production environments, misusage, or commercial use.
+#### **WARNING: The project is for research purposes only and is not suitable for production environments, misusage, or commercial use. See [License](https://github.com/dretax/GarHal_CSGO/blob/master/LICENSE.md) **
+
+## Credits & Thanks
+* [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
+* @ZeroMemory for providing videos for basic stuff.
+* @hrt for a (not so much working) aimbot structure.
+* @drew79
 
 ## Features
 * Driver Hiding (Kill Patchguard before use) @JKornev
@@ -78,9 +83,3 @@ Open up CMD as admin mode:
 
 ## Preview
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ADj12ykKq-o/0.jpg)](https://www.youtube.com/watch?v=ADj12ykKq-o)
-
-## Credits
-* [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
-* @ZeroMemory for providing videos for basic stuff.
-* @hrt for a (not so much working) aimbot structure.
-* @drew79
