@@ -53,8 +53,8 @@ Denying access with ObRegisterCallbacks to protect the controller would be more 
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
 ## Supported Windows Versions
-If you don't need the csrss.exe check just remove It, or update the offsets manually
-for different windows versions. The link has been provided in the memory.c file.
+If you don't need the csrss.exe check just remove It (memory.c, but not recommended), or update the offsets manually
+for different windows versions. Click [Here](https://www.vergiliusproject.com/kernels/x64/Windows%2010%20%7C%202016/1909%2019H2%20(November%202019%20Update)/_EPROCESS) to view the EPROCESS offsets.
 Click [Here](https://docs.microsoft.com/en-us/windows/release-information/) to view the release information site.
 * Windows 10 1903
 * Windows 10 1909
