@@ -33,7 +33,7 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 		OBRegisterHandle = NULL;
 	}
 
-	DebugMessageNormal("Attempting to free used memory.\n");
+	/*DebugMessageNormal("Attempting to free used memory.\n");
 	NTSTATUS status = FreeAllocatedMemory();
 	if (status == STATUS_SUCCESS)
 	{
@@ -42,7 +42,7 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 	else
 	{
 		DebugMessageNormal("FreeMemory Failed!\n");
-	}
+	}*/
 
 	DebugMessageNormal("Shutdown Complete!\n");
 	
