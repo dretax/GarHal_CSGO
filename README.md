@@ -9,7 +9,7 @@ This project probably has mistakes. Feel free to correct me through PRs.
 
 #### Project discussion: https://guidedhacking.com/threads/csgo-kernel-driver-multihack.15130/
 
-### WARNING: The project is for research purposes only and is not suitable for production environments, misusage, or commercial use. See [License](https://github.com/dretax/GarHal_CSGO/blob/master/LICENSE.md)
+### WARNING: The project is for research purposes only and is not suitable for production environments, misusage, or commercial use. See [License](https://github.com/dretax/GarHal_CSGO/blob/master/LICENSE.md).
 
 ## Credits & Thanks
 * [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
