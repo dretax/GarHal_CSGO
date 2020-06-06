@@ -50,6 +50,7 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
 ## Supported Windows Versions
 If you don't need the csrss.exe check just remove It, or update the offsets manually
 for different windows versions. The link has been provided in the memory.c file.
+Click [Here](https://docs.microsoft.com/en-us/windows/release-information/) to view the release information site.
 * Windows 10 1903
 * Windows 10 1909
 * Windows 10 2004
