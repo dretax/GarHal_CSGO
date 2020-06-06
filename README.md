@@ -47,6 +47,11 @@ Denying access with ObRegisterCallbacks to protect the controller would be more 
 ## Compilation
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
+## Supported Windows Versions
+* 1903
+* 1909
+* 2004
+
 ## Usage
 1. Start the Driver.
 2. Start CSGO.
