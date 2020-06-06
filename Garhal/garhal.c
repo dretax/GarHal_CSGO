@@ -32,6 +32,19 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 		ObUnRegisterCallbacks(OBRegisterHandle);
 		OBRegisterHandle = NULL;
 	}
+
+	DebugMessageNormal("Attempting to free used memory.\n");
+	NTSTATUS status = FreeAllocatedMemory();
+	if (status == STATUS_SUCCESS)
+	{
+		DebugMessageNormal("FreeMemory Succeeded.\n");
+	}
+	else
+	{
+		DebugMessageNormal("FreeMemory Failed!\n");
+	}
+
+	DebugMessageNormal("Shutdown Complete!\n");
 	
 	return STATUS_SUCCESS;
 }
@@ -104,6 +117,8 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 		DebugMessageNormal("Driver hiding feature is disabled.\n");
 	}
 
+	DebugMessageNormal("Successfully started!\n");
+
 	return STATUS_SUCCESS;
 }
 
@@ -139,4 +154,63 @@ NTSTATUS RegisterOBCallback()
 	}
 
 	return Status;
+}
+
+// Todo: Continue.
+NTSTATUS FreeAllocatedMemory()
+{
+	try 
+	{
+		if (csgoId)
+		{
+			MmFreeNonCachedMemory(csgoId, sizeof(ULONG));
+		}
+
+		if (ClientAddress)
+		{
+			MmFreeNonCachedMemory(ClientAddress, sizeof(ULONG));
+		}
+
+		if (EngineAddress)
+		{
+			MmFreeNonCachedMemory(EngineAddress, sizeof(ULONG));
+		}
+
+		if (ClientSize)
+		{
+			MmFreeNonCachedMemory(ClientSize, sizeof(ULONG));
+		}
+
+		if (EngineSize)
+		{
+			MmFreeNonCachedMemory(EngineSize, sizeof(ULONG));
+		}
+
+		if (ControllerID)
+		{
+			MmFreeNonCachedMemory(ControllerID, sizeof(ULONG));
+		}
+
+		if (RankReaderID)
+		{
+			MmFreeNonCachedMemory(RankReaderID, sizeof(ULONG));
+		}
+
+		if (pDeviceObject)
+		{
+			MmFreeNonCachedMemory(pDeviceObject, sizeof(PDEVICE_OBJECT));
+		}
+
+		if (DeviceObject)
+		{
+			MmFreeNonCachedMemory(DeviceObject, sizeof(PDEVICE_OBJECT));
+		}
+	}
+	except(EXCEPTION_EXECUTE_HANDLER)
+	{
+		return STATUS_UNSUCCESSFUL;
+	}
+	
+	
+	return STATUS_SUCCESS;
 }
