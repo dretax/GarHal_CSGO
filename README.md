@@ -57,7 +57,6 @@ If you don't need the csrss.exe check just remove It (memory.c, but not recommen
 for different windows versions. 
 
 Click [Here](https://www.vergiliusproject.com/kernels/x64/Windows%2010%20%7C%202016/1909%2019H2%20(November%202019%20Update)/_EPROCESS) to view the EPROCESS offsets.
-
 Click [Here](https://docs.microsoft.com/en-us/windows/release-information/) to view the release information site.
 * Windows 10 1903
 * Windows 10 1909
