@@ -49,6 +49,15 @@ Both sources talk about that VAC opens handle to processes and searches all volu
 It opens every handle running with Query_Information, and VM_READ.
 Denying access with ObRegisterCallbacks to protect the controller would be more than enough to get rid of this scan.
 
+--
+After some emails I have decided to clear some things up. The project doesn't open a handle, and obviously doesn't use usermode RPM/WPM. Therefore the only detectable parts should be memory writing It self, and by VAC searching for the driver / usermode application.
+As stated above you can grant yourself "invisibility" (from VAC) atleast by using the implemented driver / process hiding.
+The driver also protects the usermode application from VAC's process scanning. (Stated in the VAC section)
+The project files could be flagged, and can get you banned If VAC detects you are running this certain program (Checking for name / hash, but It's a really bad approach from any anti-cheat)
+```C
+if (EnumDeviceDrivers(drivers, sizeof(drivers), &cbNeeded) && cbNeeded < sizeof(drivers))
+```
+
 ## Compilation
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
