@@ -25,7 +25,7 @@ This project probably has mistakes. Feel free to correct me through PRs.
 * No flash
 * Aimbot
 * Smooth aimbot
-* TriggerBot (Work in progress)
+* TriggerBot
 * Another simple program to Display Ranks (Work in progress)
 * Displays enemies on the Radar
 * Anti-Aimbot (TODO: Fix up ugly code, test, use VirtualAlloc, and OpenHandle from Kernel Sphere)
