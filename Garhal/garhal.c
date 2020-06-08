@@ -45,7 +45,7 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 	}*/
 
 	DebugMessageNormal("Shutdown Complete!\n");
-	
+
 	return STATUS_SUCCESS;
 }
 
@@ -159,7 +159,7 @@ NTSTATUS RegisterOBCallback()
 // Todo: Continue.
 NTSTATUS FreeAllocatedMemory()
 {
-	try 
+	try
 	{
 		if (csgoId)
 		{
@@ -210,7 +210,7 @@ NTSTATUS FreeAllocatedMemory()
 	{
 		return STATUS_UNSUCCESSFUL;
 	}
-	
-	
+
+
 	return STATUS_SUCCESS;
 }

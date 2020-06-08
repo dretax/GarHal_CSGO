@@ -12,7 +12,7 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 	//DbgPrintEx(0, 0, "We received a load from: %ls \n", FullImageName->Buffer);
 
 	// Compare our string to input
-	if (wcsstr(FullImageName->Buffer, L"\\csgo\\bin\\client.dll")) 
+	if (wcsstr(FullImageName->Buffer, L"\\csgo\\bin\\client.dll"))
 	{
 		DebugMessageNormal("CSGO client.dll found!\n");
 		DebugMessageNormal("Loaded Name: %ls \n", FullImageName->Buffer);
@@ -45,7 +45,7 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDLE processId, PPS_CREATE_NOTIFY_INFO notifyInfo)
 {
 	// if we dont use this statement, we will get a bsod if notifyInfo is empty
-	if (notifyInfo) 
+	if (notifyInfo)
 	{
 		//DbgPrintEx(0, 0, "PID = %d\r\n", processId);
 		//DbgPrintEx(0, 0, "Process Full Path: %ls \n", notifyInfo->ImageFileName->Buffer);
@@ -55,7 +55,7 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 			ControllerID = processId;
 			DebugMessageNormal("Controller ProcessID: %d\r\n", ControllerID);
 
-			if (EnableProcessHiding == 1) 
+			if (EnableProcessHiding == 1)
 			{
 				uintptr_t i = (uintptr_t)processId; // Unsure if this is needed.
 				UINT32 intmadafaka = (UINT32)i;
@@ -101,14 +101,14 @@ OB_PREOP_CALLBACK_STATUS OBRegisterCallback(PVOID RegistrationContext, POB_PRE_O
 		return OB_PREOP_SUCCESS;
 	}
 
-	PEPROCESS OpenedProcess = (PEPROCESS) OperationInformation->Object;
-	ULONG OpenedProcessID = (ULONG) PsGetProcessId(OpenedProcess);
+	PEPROCESS OpenedProcess = (PEPROCESS)OperationInformation->Object;
+	ULONG OpenedProcessID = (ULONG)PsGetProcessId(OpenedProcess);
 	PEPROCESS CurrentProcess = PsGetCurrentProcess();
 
 	// Make sure not to strip csrss's Handle, will cause BSOD
 	for (int i = 0; i < vector_total(&CSRSSList); i++)
 	{
-		PEPROCESS CSRSS = (PEPROCESS) vector_get(&CSRSSList, i);
+		PEPROCESS CSRSS = (PEPROCESS)vector_get(&CSRSSList, i);
 		ULONG procid = (ULONG)PsGetProcessId(CSRSS);
 		if (procid == OpenedProcessID)
 		{

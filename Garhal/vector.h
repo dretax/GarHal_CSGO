@@ -14,9 +14,9 @@
 #define VECTOR_FREE(vec) vector_free(&vec)
 
 typedef struct vector {
-    void** items;
-    int capacity;
-    int total;
+	void** items;
+	int capacity;
+	int total;
 } vector;
 
 void vector_init(vector*);
