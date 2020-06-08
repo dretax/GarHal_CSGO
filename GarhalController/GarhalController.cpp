@@ -132,6 +132,7 @@ int main(int argc, char* argv[], char* envp[])
 	NoFlash = config.pBool("NoFlash");
 	TriggerBot = config.pBool("TriggerBot");
 	TriggerBotKey = config.pHex("TriggerBotKey");
+	TriggerBotDelay = config.pBool("TriggerBotDelay");
 	Radar = config.pBool("Radar");
 
 	std::string weapons = config.pString("TriggerBotAllowed");
@@ -141,6 +142,22 @@ int main(int argc, char* argv[], char* envp[])
 		char cstr[10];
 		strcpy_s(cstr, w.c_str());
 		WeaponIDs.push_back(atoi(cstr));
+	}
+
+	std::string delays = config.pString("TriggerBotDelayNum");
+	vector<string> ddelays = Split(delays, ",");
+	for (uint8_t rand = 0; rand < ddelays.size() ; rand++)
+	{
+		char cstr[10];
+		strcpy_s(cstr, ddelays.at(rand).c_str());
+		if (rand == 0)
+		{
+			TriggerBotDelayMin = atoi(cstr);
+		}
+		else
+		{
+			TriggerBotDelayMax = atoi(cstr);
+		}
 	}
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
@@ -169,6 +186,7 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "NoFlash: " << std::boolalpha << NoFlash << std::endl;
 	std::cout << "TriggerBot: " << std::boolalpha << TriggerBot << std::endl;
 	std::cout << "TriggerBotKey: " << unsigned(TriggerBotKey) << std::endl;
+	std::cout << "TriggerBotDelay: " << std::boolalpha << TriggerBotDelay << std::endl;
 	std::cout << "Radar: " << std::boolalpha << Radar << std::endl;
 
 	aim = Aimbot(&bspParser);
