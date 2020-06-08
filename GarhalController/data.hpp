@@ -167,6 +167,8 @@ inline KeInterface Driver = NULL;
 inline uint8_t AimbotS = 0;
 inline uint8_t AimbotTarget = 0;
 inline uint8_t AimbotBullets = 0;
+inline uint8_t TriggerBotDelayMin = 0;
+inline uint8_t TriggerBotDelayMax = 0;
 inline uint16_t AimbotKey = 0;
 inline uint16_t TriggerBotKey = 0;
 inline bool Bhop = false;
@@ -175,4 +177,29 @@ inline bool Wallhack = false;
 inline bool NoFlash = false;
 inline bool TriggerBot = false;
 inline bool Radar = false;
+inline bool TriggerBotDelay = false;
 inline std::vector<uint16_t> WeaponIDs;
+
+inline void FreeMemory()
+{
+	free(&AimbotS);
+	free(&AimbotTarget);
+	free(&AimbotBullets);
+	free(&TriggerBotDelayMin);
+	free(&TriggerBotDelayMax);
+	free(&TriggerBotKey);
+	free(&Bhop);
+	free(&Wallhack);
+	free(&NoFlash);
+	free(&TriggerBot);
+	free(&AntiAimS);
+	free(&Radar);
+	free(&WeaponIDs);
+
+	free(&Driver);
+	free(&ProcessId);
+	free(&ClientAddress);
+	free(&ClientSize);
+	free(&EngineAddress);
+	free(&EngineSize);
+}

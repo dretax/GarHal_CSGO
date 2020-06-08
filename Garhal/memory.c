@@ -61,7 +61,7 @@ NTSTATUS KeReadVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID Targe
 {
 	PSIZE_T Bytes;
 	if (NT_SUCCESS(MmCopyVirtualMemory(Process, SourceAddress, PsGetCurrentProcess(),
-		TargetAddress, Size, KernelMode, &Bytes))) 
+		TargetAddress, Size, KernelMode, &Bytes)))
 	{
 		return STATUS_SUCCESS;
 	}
@@ -72,7 +72,7 @@ NTSTATUS KeWriteVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID Targ
 {
 	PSIZE_T Bytes;
 	if (NT_SUCCESS(MmCopyVirtualMemory(PsGetCurrentProcess(), SourceAddress, Process,
-		TargetAddress, Size, KernelMode, &Bytes))) 
+		TargetAddress, Size, KernelMode, &Bytes)))
 	{
 		return STATUS_SUCCESS;
 	}

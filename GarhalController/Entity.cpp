@@ -1,6 +1,9 @@
 #pragma warning (disable : 26451)
 
 #include "Entity.hpp"
+
+#include <iostream>
+#include <time.h>
 #include "offsets.hpp"
 #include "sdk.hpp"
 
@@ -155,6 +158,13 @@ void Entity::setForceAttack2(uint8_t value)
 
 void Entity::shoot()
 {
+	if (TriggerBot && TriggerBotDelay)
+	{
+		srand(time(NULL));
+		uint16_t rnd = rand() % (TriggerBotDelayMax - TriggerBotDelayMin + 1) + TriggerBotDelayMin;
+		Sleep(rnd);
+	}
+	
 	mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 	Sleep(1);
 	mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
