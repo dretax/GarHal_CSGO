@@ -5,6 +5,7 @@
 #include <ntstatus.h>
 #include <ntdef.h>
 #include <stdlib.h>
+#include "messages.h"
 #include "ntos.h"
 
 ULONG GetWindowsBuildNumber()
@@ -85,24 +86,35 @@ NTSTATUS FindProcessByName(CHAR* process_name, vector* ls)
 	PEPROCESS sys_process = PsInitialSystemProcess;
 	PEPROCESS cur_entry = sys_process;
 
+	int ImageFileNameOffset = GetCorrectOffset("ImageFileName", BuildNumber);
+	int ActiveThreadsOffset = GetCorrectOffset("ActiveThreads", BuildNumber);
+	int ActiveProcessLinksOffset = GetCorrectOffset("ActiveProcessLinks", BuildNumber);
+
+	// Verify atleast one variable so we don't cause BSOD for unsupported builds.
+	if (ImageFileNameOffset == 0)
+	{
+		DebugMessageNormal("Warning: Unsupported Windows build. Update EPROCESS offsets. See README.md.\n");
+		return STATUS_UNSUCCESSFUL;
+	}
+
 	CHAR image_name[15];
 
 	do
 	{
-		RtlCopyMemory((PVOID)(&image_name), (PVOID)((uintptr_t)cur_entry + GetCorrectOffset("ImageFileName", BuildNumber)) /*EPROCESS->ImageFileName*/, sizeof(image_name));
+		RtlCopyMemory((PVOID)(&image_name), (PVOID)((uintptr_t)cur_entry + ImageFileNameOffset) /*EPROCESS->ImageFileName*/, sizeof(image_name));
 
 		if (strstr(image_name, process_name))
 		{
 			DWORD active_threads;
-			RtlCopyMemory((PVOID)&active_threads, (PVOID)((uintptr_t)cur_entry + GetCorrectOffset("ActiveThreads", BuildNumber)) /*EPROCESS->ActiveThreads*/, sizeof(active_threads));
+			RtlCopyMemory((PVOID)&active_threads, (PVOID)((uintptr_t)cur_entry + ActiveThreadsOffset) /*EPROCESS->ActiveThreads*/, sizeof(active_threads));
 			if (active_threads)
 			{
 				vector_add(ls, cur_entry);
 			}
 		}
 
-		PLIST_ENTRY list = (PLIST_ENTRY)((uintptr_t)(cur_entry)+GetCorrectOffset("ActiveProcessLinks", BuildNumber)) /*EPROCESS->ActiveProcessLinks*/;
-		cur_entry = (PEPROCESS)((uintptr_t)list->Flink - GetCorrectOffset("ActiveProcessLinks", BuildNumber));
+		PLIST_ENTRY list = (PLIST_ENTRY)((uintptr_t)(cur_entry) + ActiveProcessLinksOffset) /*EPROCESS->ActiveProcessLinks*/;
+		cur_entry = (PEPROCESS)((uintptr_t)list->Flink - ActiveProcessLinksOffset);
 
 	} while (cur_entry != sys_process);
 
