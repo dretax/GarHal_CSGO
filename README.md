@@ -1,7 +1,7 @@
 # GarHal_CSGO
 A project that demonstrates how to screw with CSGO from Kernel Space.
 Project comes with updated offsets, my aim was to create a project with more features achieved using a driver.
-I tend to hook DirectX, and implement Kernel-level drawing into this project. This has been done by a couple of people already, I mainly wanted to do one myself from "scratch" because I haven't seen completed Driver hacks for CSGO out there. It was something that helped me understand more of how Kernels work in particular, make a clean project for myself, and go forward. 
+I tend to hook DirectX, and implement Kernel-level drawing into this project. This has been done by a couple of people already, I mainly wanted to do one myself. The project has a UserMode application which uses IOCTL to control the Kernel Driver. It was something that helped me understand more of how Kernel Drivers work in particular, make a clean project for myself, and go forward. 
 
 Side note: 
 No, this project has nothing to do with csgo's released source code or whatever.
