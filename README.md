@@ -94,3 +94,4 @@ Open up CMD as admin mode:
 
 ## Preview
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ADj12ykKq-o/0.jpg)](https://www.youtube.com/watch?v=ADj12ykKq-o)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/lEE0W2o7WDA/0.jpg)](https://youtu.be/lEE0W2o7WDA)
