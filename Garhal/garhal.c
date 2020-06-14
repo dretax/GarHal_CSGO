@@ -163,47 +163,42 @@ NTSTATUS FreeAllocatedMemory()
 	{
 		if (csgoId)
 		{
-			MmFreeNonCachedMemory(csgoId, sizeof(ULONG));
+			MmFreeNonCachedMemory(csgoId, sizeof(csgoId));
 		}
 
 		if (ClientAddress)
 		{
-			MmFreeNonCachedMemory(ClientAddress, sizeof(ULONG));
+			MmFreeNonCachedMemory(ClientAddress, sizeof(ClientAddress));
 		}
 
 		if (EngineAddress)
 		{
-			MmFreeNonCachedMemory(EngineAddress, sizeof(ULONG));
+			MmFreeNonCachedMemory(EngineAddress, sizeof(EngineAddress));
 		}
 
 		if (ClientSize)
 		{
-			MmFreeNonCachedMemory(ClientSize, sizeof(ULONG));
+			MmFreeNonCachedMemory(ClientSize, sizeof(ClientSize));
 		}
 
 		if (EngineSize)
 		{
-			MmFreeNonCachedMemory(EngineSize, sizeof(ULONG));
+			MmFreeNonCachedMemory(EngineSize, sizeof(EngineSize));
 		}
 
 		if (ControllerID)
 		{
-			MmFreeNonCachedMemory(ControllerID, sizeof(ULONG));
+			MmFreeNonCachedMemory(ControllerID, sizeof(ControllerID));
 		}
 
 		if (RankReaderID)
 		{
-			MmFreeNonCachedMemory(RankReaderID, sizeof(ULONG));
+			MmFreeNonCachedMemory(RankReaderID, sizeof(RankReaderID));
 		}
 
 		if (pDeviceObject)
 		{
-			MmFreeNonCachedMemory(pDeviceObject, sizeof(PDEVICE_OBJECT));
-		}
-
-		if (DeviceObject)
-		{
-			MmFreeNonCachedMemory(DeviceObject, sizeof(PDEVICE_OBJECT));
+			MmFreeNonCachedMemory(pDeviceObject, sizeof(pDeviceObject));
 		}
 	}
 	except(EXCEPTION_EXECUTE_HANDLER)

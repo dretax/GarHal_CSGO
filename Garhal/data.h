@@ -8,7 +8,6 @@
 ULONG csgoId, ClientAddress, EngineAddress, ClientSize, EngineSize, ControllerID, RankReaderID;
 PDEVICE_OBJECT pDeviceObject;
 UNICODE_STRING dev, dos;
-PDEVICE_OBJECT DeviceObject;
 vector CSRSSList;
 
 
