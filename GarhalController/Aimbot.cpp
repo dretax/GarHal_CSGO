@@ -214,8 +214,7 @@ const char* Aimbot::getMapDirectory()
 
 const char* Aimbot::getGameDirectory()
 {
-    uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(uint32_t));
-    static std::array<char, 0x120> gameDirectory = Driver.ReadVirtualMemory<std::array<char, 0x120>>(ProcessId, clientState + hazedumper::signatures::dwGameDir, sizeof(std::array<char, 0x120>));
+    static std::array<char, 0x120> gameDirectory = Driver.ReadVirtualMemory<std::array<char, 0x120>>(ProcessId, EngineAddress + hazedumper::signatures::dwGameDir, sizeof(std::array<char, 0x120>));
     return gameDirectory.data();
 }
 
