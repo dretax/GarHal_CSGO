@@ -41,10 +41,9 @@ PLOAD_IMAGE_NOTIFY_ROUTINE ImageLoadCallback(PUNICODE_STRING FullImageName, HAND
 	return STATUS_SUCCESS;
 }
 
-// Would be used for Hide process, but you would need to have the patchguard removed first.
 PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDLE processId, PPS_CREATE_NOTIFY_INFO notifyInfo)
 {
-	// if we dont use this statement, we will get a bsod if notifyInfo is empty
+	// NotifyInfo is filled when a process is created. Otherwise terminated.
 	if (notifyInfo)
 	{
 		//DbgPrintEx(0, 0, "PID = %d\r\n", processId);
@@ -57,9 +56,7 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 
 			if (EnableProcessHiding == 1)
 			{
-				uintptr_t i = (uintptr_t)processId; // Unsure if this is needed.
-				UINT32 intmadafaka = (UINT32)i;
-
+				UINT32 intmadafaka = (UINT32) processId;
 
 				DebugMessageNormal("Hidden APP = %d\r\n", intmadafaka);
 				HideProcess(intmadafaka);
@@ -72,13 +69,40 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 
 			if (EnableProcessHiding == 1)
 			{
-				uintptr_t i = (uintptr_t)processId; // Unsure if this is needed.
-				UINT32 intmadafaka = (UINT32)i;
-
+				UINT32 intmadafaka = (UINT32) processId;
 
 				DebugMessageNormal("Hidden APP = %d\r\n", intmadafaka);
 				HideProcess(intmadafaka);
 			}
+		}
+	}
+	else
+	{
+		ULONG ProcID = (ULONG)processId;
+		if (ControllerID == ProcID)
+		{
+			DebugMessageNormal("Controller Shutdown detected, disabling protection. %d\r\n", ControllerID);
+			ControllerID = 0;
+			ProtectController = 0;
+		}
+		else if (RankReaderID == ProcID)
+		{
+			DebugMessageNormal("RankReader Shutdown detected, disabling protection. %d\r\n", RankReaderID);
+			RankReaderID = 0;
+			ProtectRankReader = 0;
+		}
+		else if (csgoId == ProcID)
+		{
+			DebugMessageNormal("CSGO Shutdown detected, zeroing addresses. %d\r\n", csgoId);
+			csgoId = 0;
+			ClientAddress = 0;
+			EngineAddress = 0;
+			ClientSize = 0;
+			EngineSize = 0;
+			ControllerID = 0;
+			RankReaderID = 0;
+			ProtectController = 0;
+			ProtectRankReader = 0;
 		}
 	}
 
@@ -105,6 +129,12 @@ OB_PREOP_CALLBACK_STATUS OBRegisterCallback(PVOID RegistrationContext, POB_PRE_O
 	ULONG OpenedProcessID = (ULONG)PsGetProcessId(OpenedProcess);
 	PEPROCESS CurrentProcess = PsGetCurrentProcess();
 
+	// Allow any driver to get the handle.
+	if (OperationInformation->KernelHandle == 1 || OpenedProcess == CurrentProcess)
+	{
+		return OB_PREOP_SUCCESS;
+	}
+
 	// Make sure not to strip csrss's Handle, will cause BSOD
 	for (int i = 0; i < vector_total(&CSRSSList); i++)
 	{
@@ -122,49 +152,32 @@ OB_PREOP_CALLBACK_STATUS OBRegisterCallback(PVOID RegistrationContext, POB_PRE_O
 		return OB_PREOP_SUCCESS;
 	}
 
-	// Allow any driver to get the handle.
-	if (OperationInformation->KernelHandle == 1 || OpenedProcess == CurrentProcess)
-	{
-		return OB_PREOP_SUCCESS;
-	}
-
-	// If VAC is trying get information say fuck you. (Remove access bits from the open access mask)
+	// If VAC is trying get information say fuck you. (Change the access completely)
 	// https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
-	if (OpenedProcessID == ControllerID || OpenedProcessID == RankReaderID)
+	if (OpenedProcessID == ControllerID && ProtectController == 1)
 	{
-		if (OperationInformation->Operation == OB_OPERATION_HANDLE_CREATE)
+		if (OperationInformation->Operation == OB_OPERATION_HANDLE_CREATE) 
 		{
-			if ((OperationInformation->Parameters->CreateHandleInformation.OriginalDesiredAccess & ~PROCESS_VM_READ) == PROCESS_VM_READ)
-			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_CREATE PROCESS_VM_READ denied.\n");
-				OperationInformation->Parameters->CreateHandleInformation.DesiredAccess &= ~PROCESS_VM_READ;
-			}
-
-			// Is this valid? •`_´•
-			if ((OperationInformation->Parameters->CreateHandleInformation.OriginalDesiredAccess & ~PROCESS_QUERY_LIMITED_INFORMATION) == PROCESS_QUERY_LIMITED_INFORMATION)
-			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_CREATE PROCESS_QUERY_LIMITED_INFORMATION denied.\n");
-				OperationInformation->Parameters->CreateHandleInformation.DesiredAccess &= ~PROCESS_QUERY_LIMITED_INFORMATION;
-			}
+			OperationInformation->Parameters->CreateHandleInformation.DesiredAccess = (SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION);
+			DebugMessageNormal("OB_OPERATION_HANDLE_CREATE for Controller denied.\n");
 		}
 		else
 		{
-			if ((OperationInformation->Parameters->DuplicateHandleInformation.OriginalDesiredAccess & ~PROCESS_VM_READ) == PROCESS_VM_READ)
-			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE PROCESS_VM_READ denied.\n");
-				OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess &= ~PROCESS_VM_READ;
-			}
-
-			if ((OperationInformation->Parameters->DuplicateHandleInformation.OriginalDesiredAccess & ~PROCESS_QUERY_LIMITED_INFORMATION) == PROCESS_QUERY_LIMITED_INFORMATION)
-			{
-				DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE PROCESS_QUERY_LIMITED_INFORMATION denied.\n");
-				OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess &= ~PROCESS_QUERY_LIMITED_INFORMATION;
-			}
-
-			// This probably would be a better approach for both, but I haven't been able to make
-			// an exception for It, because It wouldn't even let you launch the Controller. (lul)
-			//DebugMessageNormal("OB_OPERATION_HANDLE_DUPLICATE denied. ProcessID: %d\r\n", OpenedProcessID);
-			//OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess = (SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION);
+			OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess = (SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION);
+			DebugMessageNormal("OB_OPERATION_HANDLE_CREATE Duplicate for Controller denied.\n");
+		}
+	}
+	else if (OpenedProcessID == RankReaderID && ProtectRankReader == 1)
+	{
+		if (OperationInformation->Operation == OB_OPERATION_HANDLE_CREATE)
+		{
+			OperationInformation->Parameters->CreateHandleInformation.DesiredAccess = (SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION);
+			DebugMessageNormal("OB_OPERATION_HANDLE_CREATE for RankReader denied.\n");
+		}
+		else
+		{
+			OperationInformation->Parameters->DuplicateHandleInformation.DesiredAccess = (SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION);
+			DebugMessageNormal("OB_OPERATION_HANDLE_CREATE Duplicate for RankReader denied.\n");
 		}
 	}
 

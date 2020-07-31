@@ -16,7 +16,8 @@
 // Request to retrieve the base address of engine.dll in csgo.exe from kernel space
 #define IO_GET_ENGINE_MODULE_REQUEST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0670 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
-
+// Order driver to apply full protection on RankReader
+#define IO_PROTECT_RANKREADER CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0674 /* Our Custom Code */, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
 
 typedef struct _KERNEL_READ_REQUEST
 {

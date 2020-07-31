@@ -111,12 +111,25 @@ int main(int argc, char* argv[], char* envp[])
 	ClientSize = Driver.GetClientModuleSize();
 	EngineSize = Driver.GetEngineModuleSize();
 
-	if (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
+	bool PrintOnce = false;
+
+	while (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0 || ClientSize == 0 || EngineSize == 0)
 	{
-		std::cout << "Addresses are 0. Start driver & Start CSGO & restart. " << ProcessId << std::endl;
-		system("pause");
-		return 0;
+		if (!PrintOnce) 
+		{
+			std::cout << "Addresses are 0x0. Waiting for CSGO... " << std::endl;
+			PrintOnce = true;
+		}
+		
+		Sleep(1000);
+		ProcessId = Driver.GetTargetPid();
+		ClientAddress = Driver.GetClientModule();
+		EngineAddress = Driver.GetEngineModule();
+		ClientSize = Driver.GetClientModuleSize();
+		EngineSize = Driver.GetEngineModuleSize();
 	}
+
+	std::cout << "Addresses look good. Starting..." << std::endl;
 
 	hazedumper::BSPParser bspParser;
 
@@ -164,9 +177,9 @@ int main(int argc, char* argv[], char* envp[])
 
 	std::cout << "==== Memory Addresses ====" << std::endl;
 	std::cout << "ProcessID: " << ProcessId << std::endl;
-	std::cout << "ClientAddress: " << ClientAddress << std::endl;
-	std::cout << "EngineAddress: " << EngineAddress << std::endl;
-	std::cout << "ClientSize: " << ClientSize << std::endl;
+	std::cout << "ClientAddress: " << std::hex << ClientAddress << std::endl;
+	std::cout << "EngineAddress: " << std::hex << EngineAddress << std::endl;
+	std::cout << "ClientSize: " << std::hex << ClientSize << std::endl;
 
 	// Store address of localplayer
 	uint32_t LocalPlayer = 0;
@@ -205,6 +218,8 @@ int main(int argc, char* argv[], char* envp[])
 	}
 
 	std::thread TriggerBotT(TriggerBotThread);
+
+	Driver.RequestProtection();
 
 	while (true)
 	{

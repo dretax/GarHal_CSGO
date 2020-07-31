@@ -1,6 +1,5 @@
 #pragma warning( disable : 4100 4047 4024 4022 4201 4311 4057 4213 4189 4081 4189 4706 4214 4459 4273)
 
-#include <ntdef.h>
 #include "data.h"
 #include "messages.h"
 #include "communication.h"
@@ -119,11 +118,22 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
+	else if (ControlCode == IO_PROTECT_CONTROLLER)
+	{
+		ProtectController = 1;
+		DebugMessageNormal("IO_PROTECT_CONTROLLER received. Controller is marked ready, and fully protected. \n");
+		Status = STATUS_SUCCESS;
+	}
+	else if (ControlCode == IO_PROTECT_RANKREADER)
+	{
+		ProtectRankReader = 1;
+		DebugMessageNormal("IO_PROTECT_RANKREADER received. RankReader is marked ready, and fully protected. \n");
+		Status = STATUS_SUCCESS;
+	}
 	else
 	{
 		// if the code is unknown
 		Status = STATUS_INVALID_PARAMETER;
-		BytesIO = 0;
 	}
 
 	// Complete the request
