@@ -99,10 +99,6 @@ PCREATE_PROCESS_NOTIFY_ROUTINE_EX ProcessNotifyCallbackEx(HANDLE parentId, HANDL
 			EngineAddress = 0;
 			ClientSize = 0;
 			EngineSize = 0;
-			ControllerID = 0;
-			RankReaderID = 0;
-			ProtectController = 0;
-			ProtectRankReader = 0;
 		}
 	}
 
