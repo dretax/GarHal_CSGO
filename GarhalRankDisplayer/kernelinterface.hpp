@@ -92,4 +92,12 @@ public:
 		}
 		return false;
 	}
+
+	bool RequestProtectionRank()
+	{
+		if (hDriver == INVALID_HANDLE_VALUE)
+			return false;
+
+		return DeviceIoControl(hDriver, IO_PROTECT_RANKREADER, 0, 0, 0, 0, 0, 0);
+	}
 };

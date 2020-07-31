@@ -25,6 +25,12 @@
 // Request size of Engine.dll
 #define IO_GET_ENGINE_MODULE_REQUEST_LENGTH CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0672 /* Our Custom Code */, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
+// Order driver to apply full protection on Controller
+#define IO_PROTECT_CONTROLLER CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0673 /* Our Custom Code */, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
+
+// Order driver to apply full protection on RankReader
+#define IO_PROTECT_RANKREADER CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0674 /* Our Custom Code */, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
+
 
 typedef struct _KERNEL_READ_REQUEST
 {

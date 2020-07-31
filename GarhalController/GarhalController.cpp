@@ -111,12 +111,25 @@ int main(int argc, char* argv[], char* envp[])
 	ClientSize = Driver.GetClientModuleSize();
 	EngineSize = Driver.GetEngineModuleSize();
 
-	if (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
+	bool PrintOnce = false;
+
+	while (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0 || ClientSize == 0 || EngineSize == 0)
 	{
-		std::cout << "Addresses are 0. Start driver & Start CSGO & restart. " << ProcessId << std::endl;
-		system("pause");
-		return 0;
+		if (!PrintOnce) 
+		{
+			std::cout << "Addresses are 0x0. Waiting for CSGO... " << std::endl;
+			PrintOnce = true;
+		}
+		
+		Sleep(1000);
+		ProcessId = Driver.GetTargetPid();
+		ClientAddress = Driver.GetClientModule();
+		EngineAddress = Driver.GetEngineModule();
+		ClientSize = Driver.GetClientModuleSize();
+		EngineSize = Driver.GetEngineModuleSize();
 	}
+
+	std::cout << "Addresses look good. Starting..." << std::endl;
 
 	hazedumper::BSPParser bspParser;
 
@@ -127,7 +140,6 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotTarget = config.pInt("AimbotTarget");
 	AimbotBullets = config.pInt("AimbotBullets");
 	Bhop = config.pBool("Bhop");
-	AntiAimS = config.pBool("AntiAim");
 	Wallhack = config.pBool("Wallhack");
 	NoFlash = config.pBool("NoFlash");
 	TriggerBot = config.pBool("TriggerBot");
@@ -164,9 +176,9 @@ int main(int argc, char* argv[], char* envp[])
 
 	std::cout << "==== Memory Addresses ====" << std::endl;
 	std::cout << "ProcessID: " << ProcessId << std::endl;
-	std::cout << "ClientAddress: " << ClientAddress << std::endl;
-	std::cout << "EngineAddress: " << EngineAddress << std::endl;
-	std::cout << "ClientSize: " << ClientSize << std::endl;
+	std::cout << "ClientAddress: " << std::hex << ClientAddress << std::endl;
+	std::cout << "EngineAddress: " << std::hex << EngineAddress << std::endl;
+	std::cout << "ClientSize: " << std::hex << ClientSize << std::endl;
 
 	// Store address of localplayer
 	uint32_t LocalPlayer = 0;
@@ -180,7 +192,6 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "AimbotKey: " << unsigned(AimbotKey) << std::endl;
 	std::cout << "AimbotTarget: " << unsigned(AimbotTarget) << std::endl;
 	std::cout << "AimbotBullets: " << unsigned(AimbotBullets) << std::endl;
-	std::cout << "AntiAim: " << std::boolalpha << AntiAimS << std::endl;
 	std::cout << "Bhop: " << std::boolalpha << Bhop << std::endl;
 	std::cout << "Wallhack: " << std::boolalpha << Wallhack << std::endl;
 	std::cout << "NoFlash: " << std::boolalpha << NoFlash << std::endl;
@@ -190,21 +201,10 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "Radar: " << std::boolalpha << Radar << std::endl;
 
 	aim = Aimbot(&bspParser);
-	AntiAim antiaim = AntiAim();
-
-	// Do not use this until I drop handle usage.
-	if (AntiAimS)
-	{
-		ClientMode* clientMode;
-		clientMode = **(ClientMode***)((*(uintptr_t**)ClientAddress)[10] + 0x5);
-		IClientMode = (DWORD**)clientMode;
-		
-		antiaim.Enable();
-		antiaim.HookCreateMove();
-		std::cout << "~AntiAim Create Move hooked!" << std::endl;
-	}
 
 	std::thread TriggerBotT(TriggerBotThread);
+
+	Driver.RequestProtection();
 
 	while (true)
 	{
@@ -274,11 +274,6 @@ int main(int argc, char* argv[], char* envp[])
 					}
 				}
 			}
-		}
-
-		if (AntiAimS)
-		{
-			antiaim.DoAntiAim();
 		}
 
 		if (AimbotS == 1) 

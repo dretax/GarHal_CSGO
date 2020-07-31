@@ -83,6 +83,14 @@ public:
 		return (DeviceIoControl(hDriver, IO_READ_REQUEST, &ReadRequest, sizeof(ReadRequest), &ReadRequest, sizeof(ReadRequest), 0, 0) == TRUE);
 	}
 
+	bool RequestProtection()
+	{
+		if (hDriver == INVALID_HANDLE_VALUE)
+			return false;
+
+		return DeviceIoControl(hDriver, IO_PROTECT_CONTROLLER, 0, 0, 0, 0, 0, 0);
+	}
+
 	DWORD GetTargetPid()
 	{
 		if (hDriver == INVALID_HANDLE_VALUE)
