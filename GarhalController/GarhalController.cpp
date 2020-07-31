@@ -140,7 +140,6 @@ int main(int argc, char* argv[], char* envp[])
 	AimbotTarget = config.pInt("AimbotTarget");
 	AimbotBullets = config.pInt("AimbotBullets");
 	Bhop = config.pBool("Bhop");
-	AntiAimS = config.pBool("AntiAim");
 	Wallhack = config.pBool("Wallhack");
 	NoFlash = config.pBool("NoFlash");
 	TriggerBot = config.pBool("TriggerBot");
@@ -193,7 +192,6 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "AimbotKey: " << unsigned(AimbotKey) << std::endl;
 	std::cout << "AimbotTarget: " << unsigned(AimbotTarget) << std::endl;
 	std::cout << "AimbotBullets: " << unsigned(AimbotBullets) << std::endl;
-	std::cout << "AntiAim: " << std::boolalpha << AntiAimS << std::endl;
 	std::cout << "Bhop: " << std::boolalpha << Bhop << std::endl;
 	std::cout << "Wallhack: " << std::boolalpha << Wallhack << std::endl;
 	std::cout << "NoFlash: " << std::boolalpha << NoFlash << std::endl;
@@ -203,19 +201,6 @@ int main(int argc, char* argv[], char* envp[])
 	std::cout << "Radar: " << std::boolalpha << Radar << std::endl;
 
 	aim = Aimbot(&bspParser);
-	AntiAim antiaim = AntiAim();
-
-	// Do not use this until I drop handle usage.
-	if (AntiAimS)
-	{
-		ClientMode* clientMode;
-		clientMode = **(ClientMode***)((*(uintptr_t**)ClientAddress)[10] + 0x5);
-		IClientMode = (DWORD**)clientMode;
-		
-		antiaim.Enable();
-		antiaim.HookCreateMove();
-		std::cout << "~AntiAim Create Move hooked!" << std::endl;
-	}
 
 	std::thread TriggerBotT(TriggerBotThread);
 
@@ -289,11 +274,6 @@ int main(int argc, char* argv[], char* envp[])
 					}
 				}
 			}
-		}
-
-		if (AntiAimS)
-		{
-			antiaim.DoAntiAim();
 		}
 
 		if (AimbotS == 1) 

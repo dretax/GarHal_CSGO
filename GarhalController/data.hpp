@@ -172,7 +172,6 @@ inline uint8_t TriggerBotDelayMax = 0;
 inline uint16_t AimbotKey = 0;
 inline uint16_t TriggerBotKey = 0;
 inline bool Bhop = false;
-inline bool AntiAimS = false;
 inline bool Wallhack = false;
 inline bool NoFlash = false;
 inline bool TriggerBot = false;
@@ -192,7 +191,6 @@ inline void FreeMemory()
 	free(&Wallhack);
 	free(&NoFlash);
 	free(&TriggerBot);
-	free(&AntiAimS);
 	free(&Radar);
 	free(&WeaponIDs);
 
