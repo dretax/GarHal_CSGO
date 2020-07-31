@@ -16,7 +16,6 @@ This project probably has mistakes. Feel free to correct me through PRs.
 * [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
 * @ZeroMemory for providing videos for basic stuff.
 * @hrt for a (not so much working) aimbot structure.
-* @drew79
 
 ## Features
 * Driver Hiding (Kill Patchguard before use) @JKornev
@@ -29,9 +28,11 @@ This project probably has mistakes. Feel free to correct me through PRs.
 * TriggerBot - Supports randomized delay.
 * Another simple program to Display Ranks (Work in progress)
 * Displays enemies on the Radar
-* Anti-Aimbot (TODO: Fix up ugly code, test, use VirtualAlloc)
 * Bhop
 * OBRegisterCallback to limit access to the GarhalController.exe & GarhalRankDisplayer.exe (Read VAC section)
+
+## Changelog
+* Changes on 2020.07.31: The driver now detects process termination. Should have coded It more faster than being lazy. The controller, and rankreader sends an IOCTL code to the driver once they have been launched, and loaded. If we would do this sooner, the applications would not start up. We are now completely re-writing the access flags, and the usermode applications should be untouchable by VAC for now. The usermode applications now wait until the addresses are not zero at startup. The plan to make an anti-aimbot was dropped. A kernel driver should be all about being non-straightforward, and used carefully to draw less attention. Please continue testing, and let me know if there are any issues.
 
 ## Patchguard?
 Simple explanation: It's something that doesn't like kernel manipulation, and triggers a BSOD If detects It.
