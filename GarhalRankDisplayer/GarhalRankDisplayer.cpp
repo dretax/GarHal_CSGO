@@ -35,11 +35,20 @@ int main()
 
 	std::cout << "GarHal made by DreTaX" << std::endl;
 
-	if (ProcessId == 0 || ClientAddress == 0)
+	bool PrintOnce = false;
+
+	while (ProcessId == 0 || ClientAddress == 0 || EngineAddress == 0)
 	{
-		std::cout << "Addresses are 0. Start driver & Start CSGO & restart. " << ProcessId << std::endl;
-		system("pause");
-		return 0;
+		if (!PrintOnce)
+		{
+			std::cout << "Addresses are 0x0. Waiting for CSGO... " << std::endl;
+			PrintOnce = true;
+		}
+
+		Sleep(1000);
+		ProcessId = Driver.GetTargetPid();
+		ClientAddress = Driver.GetClientModule();
+		EngineAddress = Driver.GetEngineModule();
 	}
 
 	std::cout << "Starting..." << std::endl;
