@@ -98,8 +98,8 @@ Open up CMD as admin mode:
 1. Uncomment the DriverInitialize function in garhal.c
 2. Rename the current one to DriverInitialize
 3. Compile the driver with /GS- (Disable the security check)
-4. Use kdmapper or something else to load up your driver
 [![IMAGE ALT TEXT HERE](https://i.imgur.com/iASLlHG.png)](https://i.imgur.com/iASLlHG.png)
+4. Use kdmapper or something else to load up your driver
 5. Optional: Clear the MmUnloadedDrivers and PIBCache yourself, don't use CreateDriver
 6. Reboot your PC to clear out the driver entirely from the memory if you want to play different games
 
