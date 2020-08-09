@@ -95,7 +95,7 @@ Open up CMD as admin mode:
 ```
 
 ## Manual mapping the driver instead of testmode
-1. Uncomment the DriverInitialize function in garhal.c
+1. Uncomment the commented DriverEntry function in garhal.c
 2. Rename the current one to DriverInitialize
 3. Compile the driver with /GS- (Disable the security check)
 [![IMAGE ALT TEXT HERE](https://i.imgur.com/iASLlHG.png)](https://i.imgur.com/iASLlHG.png)
