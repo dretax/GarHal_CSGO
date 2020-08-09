@@ -10,7 +10,7 @@
 #include "messages.h"
 #include "communication.h"
 #include "events.h"
-
+#include "ntos.h"
 
 
 NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
@@ -121,6 +121,36 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 
 	return STATUS_SUCCESS;
 }
+
+/* Rename the current entry point to DriverInitialize to use this, and remove the unload call registration.
+NTSTATUS DriverEntry(
+	_In_  struct _DRIVER_OBJECT* DriverObject,
+	_In_  PUNICODE_STRING RegistryPath
+	)
+{
+	// These parameters are invalid due to nonstandard way of loading and should not be used.
+	UNREFERENCED_PARAMETER(DriverObject);
+	UNREFERENCED_PARAMETER(RegistryPath);
+
+	DebugMessageNormal("Garhal is swimming as a manual mapped driver, system range start is %p, code mapped at %p\n", MmSystemRangeStart, DriverEntry);
+
+
+	// This isn't a standard way against better anticheats such as BE, and EAC.
+	// Could give you a good example though.
+	UNICODE_STRING  drvName;
+	NTSTATUS status;
+
+	RtlInitUnicodeString(&drvName, L"\\Driver\\Garhal");
+	status = IoCreateDriver(&drvName, &DriverInitialize);
+
+	if (NT_SUCCESS(status))
+	{
+		DebugMessageNormal("Created driver.\n");
+	}
+
+	return STATUS_SUCCESS;
+}
+*/
 
 NTSTATUS RegisterOBCallback()
 {
