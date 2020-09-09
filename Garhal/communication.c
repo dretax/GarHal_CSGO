@@ -92,6 +92,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 				ClientAddress = GetProcessModule(proc, L"client.dll");
 				EngineAddress = GetProcessModule(proc, L"engine.dll");
 			}
+			vector_free(&processes);
 		}
 		
 		*OutPut = csgoId;

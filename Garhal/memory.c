@@ -144,6 +144,7 @@ ULONG GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 
 			if (wcscmp((PWCH) pentry->BaseDllName.Buffer, ModuleName) == 0)
 			{
+				// TODO: Make a struct, get the size and return that.
 				return pentry->DllBase;
 			}
 		}
