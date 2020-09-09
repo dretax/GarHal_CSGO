@@ -1,5 +1,6 @@
 #pragma once
 #include <ntifs.h>
+#include <windef.h>
 #include "vector.h"
 
 // Thanks Zeromem for the tuts, and Life45 for explaining.
@@ -9,6 +10,7 @@ ULONG csgoId, ClientAddress, EngineAddress, ClientSize, EngineSize, ControllerID
 PDEVICE_OBJECT pDeviceObject;
 UNICODE_STRING dev, dos;
 vector CSRSSList;
+BOOLEAN IsManualMapped;
 
 
 // Constants

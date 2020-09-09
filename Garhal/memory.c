@@ -120,3 +120,42 @@ NTSTATUS FindProcessByName(CHAR* process_name, vector* ls)
 
 	return STATUS_SUCCESS;
 }
+
+MODULEENTRY GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
+{
+	KAPC_STATE KAPC = { 0 };
+	MODULEENTRY ret = {0, 0};
+
+	KeStackAttachProcess(Process, &KAPC);
+	__try
+	{
+		PPEB32 peb32 = (PPEB32) PsGetProcessWow64Process(Process);
+		if (!peb32 || !peb32->Ldr)
+		{
+			KeUnstackDetachProcess(&KAPC);
+			return ret;
+		}
+
+		for (PLIST_ENTRY32 plist_entry = (PLIST_ENTRY32)((PPEB_LDR_DATA32)peb32->Ldr)->InLoadOrderModuleList.Flink;
+			plist_entry != &((PPEB_LDR_DATA32)peb32->Ldr)->InLoadOrderModuleList;
+			plist_entry = (PLIST_ENTRY32)plist_entry->Flink)
+		{
+			PLDR_DATA_TABLE_ENTRY32 pentry = CONTAINING_RECORD(plist_entry, LDR_DATA_TABLE_ENTRY32, InLoadOrderLinks);
+
+			if (wcscmp((PWCH) pentry->BaseDllName.Buffer, ModuleName) == 0)
+			{
+				ret.Address = pentry->DllBase;
+				ret.Size = pentry->SizeOfImage;
+				break;
+			}
+		}
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER)
+	{
+		DebugMessageNormal("%s: Exception, Code: 0x%X\n", __FUNCTION__, GetExceptionCode());
+	}
+
+	KeUnstackDetachProcess(&KAPC);
+
+	return ret;
+}

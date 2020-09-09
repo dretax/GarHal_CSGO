@@ -171,6 +171,7 @@
     <ClInclude Include="data.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="garhal.h" />
+    <ClInclude Include="gstructs.h" />
     <ClInclude Include="hide.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="messages.h" />

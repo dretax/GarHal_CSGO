@@ -1,6 +1,5 @@
 #pragma once
 #include <ntifs.h>
-#include <windef.h>
 #include <ntdef.h>
 
 // Request to read virtual user memory (memory of a program) from kernel space
@@ -58,37 +57,3 @@ typedef struct _KERNEL_WRITE_REQUEST
 	ULONG Size;
 
 } KERNEL_WRITE_REQUEST, * PKERNEL_WRITE_REQUEST;
-
-typedef struct _LDR_DATA_TABLE_ENTRY
-{
-	LIST_ENTRY InLoadOrderLinks;
-	LIST_ENTRY InMemoryOrderLinks;
-	LIST_ENTRY InInitializationOrderLinks;
-	PVOID DllBase;
-	PVOID EntryPoint;
-	ULONG SizeOfImage;
-	UNICODE_STRING FullDllName;
-	UNICODE_STRING BaseDllName;
-	ULONG Flags;
-	WORD LoadCount;
-	WORD TlsIndex;
-	union
-	{
-		LIST_ENTRY HashLinks;
-		struct
-		{
-			PVOID SectionPointer;
-			ULONG CheckSum;
-		};
-	};
-	union
-	{
-		ULONG TimeDateStamp;
-		PVOID LoadedImports;
-	};
-	struct _ACTIVATION_CONTEXT* EntryPointActivationContext;
-	PVOID PatchInformation;
-	LIST_ENTRY ForwarderLinks;
-	LIST_ENTRY ServiceTagLinks;
-	LIST_ENTRY StaticLinks;
-} LDR_DATA_TABLE_ENTRY, * PLDR_DATA_TABLE_ENTRY;
