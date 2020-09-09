@@ -127,12 +127,12 @@ MODULEENTRY GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 	MODULEENTRY ret = {0, 0};
 
 	KeStackAttachProcess(Process, &KAPC);
-
 	__try
 	{
 		PPEB32 peb32 = (PPEB32) PsGetProcessWow64Process(Process);
 		if (!peb32 || !peb32->Ldr)
 		{
+			KeUnstackDetachProcess(&KAPC);
 			return ret;
 		}
 
@@ -146,7 +146,7 @@ MODULEENTRY GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 			{
 				ret.Address = pentry->DllBase;
 				ret.Size = pentry->SizeOfImage;
-				return ret;
+				break;
 			}
 		}
 	}
