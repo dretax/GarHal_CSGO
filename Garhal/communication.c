@@ -75,6 +75,25 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 	else if (ControlCode == IO_GET_ID_REQUEST)
 	{
 		PULONG OutPut = (PULONG)Irp->AssociatedIrp.SystemBuffer;
+
+		if (IsManualMapped)
+		{
+			vector processes;
+			vector_init(&processes);
+			FindProcessByName("csgo.exe", &processes);
+
+			// Did we find csgo?
+			if (vector_total(&processes) > 0)
+			{
+				// First should be good.
+				PEPROCESS proc = (PEPROCESS) vector_get(&processes, 0);
+				csgoId = (ULONG) PsGetProcessId(proc);
+
+				ClientAddress = GetProcessModule(proc, L"client.dll");
+				EngineAddress = GetProcessModule(proc, L"engine.dll");
+			}
+		}
+		
 		*OutPut = csgoId;
 
 		DebugMessageNormal("A UserMode Application requested the ProcessID: %#010x \n", csgoId);

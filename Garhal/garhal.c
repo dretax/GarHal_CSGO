@@ -11,14 +11,19 @@
 #include "communication.h"
 #include "events.h"
 #include "ntos.h"
-
+#include "gstructs.h"
 
 NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 {
 	DebugMessageNormal("======================================\n");
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
 	DebugMessageNormal("Shutting down...\n");
-	PsRemoveLoadImageNotifyRoutine(ImageLoadCallback);
+
+	if (!IsManualMapped) 
+	{
+		PsRemoveLoadImageNotifyRoutine(ImageLoadCallback);
+	}
+	
 	IoDeleteSymbolicLink(&dos);
 	IoDeleteDevice(pDriverObject->DeviceObject);
 
@@ -56,7 +61,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
 	DebugMessageNormal("Starting...\n");
 
-	PsSetLoadImageNotifyRoutine(ImageLoadCallback);
+	if (!IsManualMapped) 
+	{
+		PsSetLoadImageNotifyRoutine(ImageLoadCallback);
+	}
 
 	RtlInitUnicodeString(&dev, L"\\Device\\garhalop");
 	RtlInitUnicodeString(&dos, L"\\DosDevices\\garhalop");
@@ -131,6 +139,8 @@ NTSTATUS DriverEntry(
 	// These parameters are invalid due to nonstandard way of loading and should not be used.
 	UNREFERENCED_PARAMETER(DriverObject);
 	UNREFERENCED_PARAMETER(RegistryPath);
+
+	IsManualMapped = TRUE;
 
 	DebugMessageNormal("Garhal is swimming as a manual mapped driver, system range start is %p, code mapped at %p\n", MmSystemRangeStart, DriverEntry);
 
