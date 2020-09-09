@@ -1,5 +1,6 @@
 #pragma once
 #include <ntifs.h>
+#include "gstructs.h"
 #include "vector.h"
 
 ULONG GetWindowsBuildNumber();
@@ -12,4 +13,4 @@ NTSTATUS KeWriteVirtualMemory(PEPROCESS Process, PVOID SourceAddress, PVOID Targ
 
 NTSTATUS FindProcessByName(CHAR* process_name, vector* list);
 
-ULONG GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName);
+MODULEENTRY GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName);

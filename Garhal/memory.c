@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include "messages.h"
 #include "ntos.h"
-#include "gstructs.h"
 
 ULONG GetWindowsBuildNumber()
 {
@@ -122,9 +121,10 @@ NTSTATUS FindProcessByName(CHAR* process_name, vector* ls)
 	return STATUS_SUCCESS;
 }
 
-ULONG GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
+MODULEENTRY GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 {
 	KAPC_STATE KAPC = { 0 };
+	MODULEENTRY ret = {0, 0};
 
 	KeStackAttachProcess(Process, &KAPC);
 
@@ -133,7 +133,7 @@ ULONG GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 		PPEB32 peb32 = (PPEB32) PsGetProcessWow64Process(Process);
 		if (!peb32 || !peb32->Ldr)
 		{
-			return 0;
+			return ret;
 		}
 
 		for (PLIST_ENTRY32 plist_entry = (PLIST_ENTRY32)((PPEB_LDR_DATA32)peb32->Ldr)->InLoadOrderModuleList.Flink;
@@ -144,8 +144,9 @@ ULONG GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 
 			if (wcscmp((PWCH) pentry->BaseDllName.Buffer, ModuleName) == 0)
 			{
-				// TODO: Make a struct, get the size and return that.
-				return pentry->DllBase;
+				ret.Address = pentry->DllBase;
+				ret.Size = pentry->SizeOfImage;
+				return ret;
 			}
 		}
 	}
@@ -156,5 +157,5 @@ ULONG GetProcessModule(PEPROCESS Process, LPCWSTR ModuleName)
 
 	KeUnstackDetachProcess(&KAPC);
 
-	return 0;
+	return ret;
 }

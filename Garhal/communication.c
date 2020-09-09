@@ -88,9 +88,14 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 				// First should be good.
 				PEPROCESS proc = (PEPROCESS) vector_get(&processes, 0);
 				csgoId = (ULONG) PsGetProcessId(proc);
+				
+				MODULEENTRY ClientEntry = GetProcessModule(proc, L"client.dll");
+				MODULEENTRY EngineEntry = GetProcessModule(proc, L"engine.dll");
 
-				ClientAddress = GetProcessModule(proc, L"client.dll");
-				EngineAddress = GetProcessModule(proc, L"engine.dll");
+				ClientAddress = ClientEntry.Address;
+				EngineAddress = EngineEntry.Address;
+				ClientSize = ClientEntry.Size;
+				EngineSize = EngineEntry.Size;
 			}
 			vector_free(&processes);
 		}

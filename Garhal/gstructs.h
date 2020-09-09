@@ -91,3 +91,9 @@ typedef struct _PEB32
 	ULONG AtlThunkSListPtr32;
 	ULONG ApiSetMap;
 } PEB32, * PPEB32;
+
+typedef struct _MODULEENTRY
+{
+	ULONG Address;
+	ULONG Size;
+} MODULEENTRY, * PMODULEENTRY;
