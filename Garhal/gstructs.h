@@ -69,3 +69,25 @@ typedef struct _PEB_LDR_DATA {
 	PVOID      Reserved2[3];
 	LIST_ENTRY InMemoryOrderModuleList;
 } PEB_LDR_DATA, * PPEB_LDR_DATA;
+
+typedef struct _PEB32
+{
+	UCHAR InheritedAddressSpace;
+	UCHAR ReadImageFileExecOptions;
+	UCHAR BeingDebugged;
+	UCHAR BitField;
+	ULONG Mutant;
+	ULONG ImageBaseAddress;
+	ULONG Ldr;
+	ULONG ProcessParameters;
+	ULONG SubSystemData;
+	ULONG ProcessHeap;
+	ULONG FastPebLock;
+	ULONG AtlThunkSListPtr;
+	ULONG IFEOKey;
+	ULONG CrossProcessFlags;
+	ULONG UserSharedInfoPtr;
+	ULONG SystemReserved;
+	ULONG AtlThunkSListPtr32;
+	ULONG ApiSetMap;
+} PEB32, * PPEB32;
