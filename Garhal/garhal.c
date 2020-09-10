@@ -158,7 +158,7 @@ NTSTATUS DriverEntry(
 		DebugMessageNormal("Created driver.\n");
 	}
 
-	return STATUS_SUCCESS;
+	return status;
 }
 */
 
