@@ -92,6 +92,9 @@ Open up CMD as admin mode:
   # Create service and start it.
   sc create garhal type= kernel binpath="C:\Users...\Desktop\garhal.sys"
   sc start garhal
+  
+  # Stopping the service, bohoho...
+  sc stop garhal
 ```
 
 ## Manual mapping the driver instead of testmode
