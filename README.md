@@ -95,6 +95,9 @@ Open up CMD as admin mode:
   
   # Stopping the service, bohoho...
   sc stop garhal
+  
+  # Disabling testmode...
+  bcdedit /set testsigning off
 ```
 
 ## Manual mapping the driver instead of testmode
