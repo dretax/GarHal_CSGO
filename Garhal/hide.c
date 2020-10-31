@@ -70,7 +70,6 @@ PCHAR HideProcess(UINT32 pid)
 
 void RemoveLinks(PLIST_ENTRY Current)
 {
-
 	PLIST_ENTRY Previous, Next;
 
 	Previous = (Current->Blink);
@@ -87,8 +86,6 @@ void RemoveLinks(PLIST_ENTRY Current)
 
 ULONG FindPIDOffset()
 {
-
-
 	ULONG pid_ofs = 0; // The offset we're looking for
 	int idx = 0;                // Index 
 	ULONG pids[3];				// List of PIDs for our 3 processes
