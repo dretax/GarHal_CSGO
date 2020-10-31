@@ -55,7 +55,7 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 }
 
 // Driver Entrypoint
-NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
+NTSTATUS DriverInitialize(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
 {
 	DebugMessageNormal("======================================\n");
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
@@ -130,7 +130,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	return STATUS_SUCCESS;
 }
 
-/* Rename the current entry point to DriverInitialize to use this, and remove the unload call registration.
+// Rename the current entry point to DriverInitialize to use this, and remove the unload call registration.
 NTSTATUS DriverEntry(
 	_In_  struct _DRIVER_OBJECT* DriverObject,
 	_In_  PUNICODE_STRING RegistryPath
@@ -160,7 +160,7 @@ NTSTATUS DriverEntry(
 
 	return status;
 }
-*/
+
 
 NTSTATUS RegisterOBCallback()
 {
@@ -201,9 +201,9 @@ NTSTATUS FreeAllocatedMemory()
 {
 	try
 	{
-		if (csgoId)
+		if (CsgoID)
 		{
-			MmFreeNonCachedMemory(csgoId, sizeof(csgoId));
+			MmFreeNonCachedMemory(CsgoID, sizeof(CsgoID));
 		}
 
 		if (ClientAddress)

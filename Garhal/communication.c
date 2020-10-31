@@ -87,7 +87,7 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 			{
 				// First should be good.
 				PEPROCESS proc = (PEPROCESS) vector_get(&processes, 0);
-				csgoId = (ULONG) PsGetProcessId(proc);
+				CsgoID = (ULONG) PsGetProcessId(proc);
 				
 				MODULEENTRY ClientEntry = GetProcessModule(proc, L"client.dll");
 				MODULEENTRY EngineEntry = GetProcessModule(proc, L"engine.dll");
@@ -100,9 +100,9 @@ NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 			vector_free(&processes);
 		}
 		
-		*OutPut = csgoId;
+		*OutPut = CsgoID;
 
-		DebugMessageNormal("A UserMode Application requested the ProcessID: %#010x \n", csgoId);
+		DebugMessageNormal("A UserMode Application requested the ProcessID: %#010x \n", CsgoID);
 		Status = STATUS_SUCCESS;
 		BytesIO = sizeof(*OutPut);
 	}
