@@ -60,8 +60,15 @@ The project files could be flagged, and can get you banned If VAC detects you ar
 if (EnumDeviceDrivers(drivers, sizeof(drivers), &cbNeeded) && cbNeeded < sizeof(drivers))
 ```
 
+## A little Analysis of OverWatch
+I have purchased CSGO around April-May on a separate account, which you see in the sample videos.
+For 80+ hours I have been cheating on that account, for about a month or so. Revisited the game in August last time. I have used wallhack, triggerbot, aimbot without holding back and received countless reports from competetive matches. At this time being the account is still not banned for CSGO.
+
 ## Compilation
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
+
+## Updating offsets
+Visit [hazedumper](https://github.com/frk1/hazedumper) for easy usage.
 
 ## Supported Windows Versions
 If you don't need the csrss.exe check just remove It (memory.c, but not recommended), or update the offsets manually
