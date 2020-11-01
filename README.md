@@ -67,7 +67,7 @@ For 80+ hours I have been cheating on that account, for about a month or so. Rev
 ## Compilation
 You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
-## Updating offsets
+## Updating offsets after a game update
 Visit [hazedumper](https://github.com/frk1/hazedumper) for easy usage.
 
 ## Supported Windows Versions
