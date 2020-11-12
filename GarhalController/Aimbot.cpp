@@ -116,7 +116,7 @@ Entity Aimbot::findClosestEnemyToFOV()
 
     Vector3 localPosition = localPlayer.getAbsolutePosition();
 
-    float closest = 999999999.f;
+    float closest = FLT_MAX;
     for (int i = 0; i < 64; i++)
     {
         uint32_t EntityAddr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwEntityList + i * 0x10, sizeof(uint32_t));
