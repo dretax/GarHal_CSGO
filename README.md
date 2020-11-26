@@ -69,7 +69,9 @@ You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't 
 
 ## Updating offsets after a game update
 Don't be a loser, dump with [GH Dumper](https://guidedhacking.com/resources/guided-hacking-offset-dumper-gh-offset-dumper.51/)
-Use -insecure, and dump afterwards.
+
+Use -insecure, and dump after.
+
 ~~Visit [hazedumper](https://github.com/frk1/hazedumper) for easy usage.~~
 
 ## Supported Windows Versions
