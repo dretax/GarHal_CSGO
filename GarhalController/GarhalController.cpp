@@ -33,6 +33,25 @@ Entity CreateEntity(int Address)
 	return dummy;
 }
 
+std::string GenerateStr(const int len)
+{
+	std::string str;
+	static const char alphanum[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+
+	srand((unsigned)time(NULL) * _getpid());
+
+	for (int i = 0; i < len; ++i) 
+	{
+		str += alphanum[rand() % (sizeof(alphanum) - 1)];
+	}
+
+
+	return str;
+}
+
 vector<string> Split(string s, string delimiter)
 {
 	size_t pos_start = 0, pos_end, delim_len = delimiter.length();
@@ -102,7 +121,10 @@ void TriggerBotThread()
 int main(int argc, char* argv[], char* envp[])
 {
 	Driver = KeInterface("\\\\.\\garhalop");
-	SetConsoleTitle(L"GarHal is the best fish ever, by DreTaX");
+	std::string random = GenerateStr(20);
+	std::wstring stemp = std::wstring(random.begin(), random.end());
+	LPCWSTR sw = stemp.c_str();
+	SetConsoleTitle(sw);
 	
 	// Get address of client.dll, engine.dll, and PID.
 	ProcessId = Driver.GetTargetPid();

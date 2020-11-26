@@ -38,24 +38,13 @@ NTSTATUS UnloadDriver(PDRIVER_OBJECT pDriverObject)
 		OBRegisterHandle = NULL;
 	}
 
-	/*DebugMessageNormal("Attempting to free used memory.\n");
-	NTSTATUS status = FreeAllocatedMemory();
-	if (status == STATUS_SUCCESS)
-	{
-		DebugMessageNormal("FreeMemory Succeeded.\n");
-	}
-	else
-	{
-		DebugMessageNormal("FreeMemory Failed!\n");
-	}*/
-
 	DebugMessageNormal("Shutdown Complete!\n");
 
 	return STATUS_SUCCESS;
 }
 
 // Driver Entrypoint
-NTSTATUS DriverInitialize(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
+NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath)
 {
 	DebugMessageNormal("======================================\n");
 	DebugMessageNormal("Garhal CSGO External hack By DreTaX\n");
@@ -131,7 +120,7 @@ NTSTATUS DriverInitialize(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistr
 }
 
 // Rename the current entry point to DriverInitialize to use this, and remove the unload call registration.
-NTSTATUS DriverEntry(
+/*NTSTATUS DriverEntry(
 	_In_  struct _DRIVER_OBJECT* DriverObject,
 	_In_  PUNICODE_STRING RegistryPath
 	)
@@ -159,7 +148,7 @@ NTSTATUS DriverEntry(
 	}
 
 	return status;
-}
+}*/
 
 
 NTSTATUS RegisterOBCallback()
@@ -194,58 +183,4 @@ NTSTATUS RegisterOBCallback()
 	}
 
 	return Status;
-}
-
-// Todo: Continue.
-NTSTATUS FreeAllocatedMemory()
-{
-	try
-	{
-		if (CsgoID)
-		{
-			MmFreeNonCachedMemory(CsgoID, sizeof(CsgoID));
-		}
-
-		if (ClientAddress)
-		{
-			MmFreeNonCachedMemory(ClientAddress, sizeof(ClientAddress));
-		}
-
-		if (EngineAddress)
-		{
-			MmFreeNonCachedMemory(EngineAddress, sizeof(EngineAddress));
-		}
-
-		if (ClientSize)
-		{
-			MmFreeNonCachedMemory(ClientSize, sizeof(ClientSize));
-		}
-
-		if (EngineSize)
-		{
-			MmFreeNonCachedMemory(EngineSize, sizeof(EngineSize));
-		}
-
-		if (ControllerID)
-		{
-			MmFreeNonCachedMemory(ControllerID, sizeof(ControllerID));
-		}
-
-		if (RankReaderID)
-		{
-			MmFreeNonCachedMemory(RankReaderID, sizeof(RankReaderID));
-		}
-
-		if (pDeviceObject)
-		{
-			MmFreeNonCachedMemory(pDeviceObject, sizeof(pDeviceObject));
-		}
-	}
-	except(EXCEPTION_EXECUTE_HANDLER)
-	{
-		return STATUS_UNSUCCESSFUL;
-	}
-
-
-	return STATUS_SUCCESS;
 }
