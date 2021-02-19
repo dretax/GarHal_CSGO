@@ -3,7 +3,7 @@
 #define IOCTL_DRIVER_DEVICE FILE_DEVICE_UNKNOWN
 
 // Function code, identifies the function to be performed by the driver (values of less than 0x800 are reserved for Microsoft).
-#define IOCTL_FIRST_INDEX (0x800)
+#define IOCTL_FIRST_INDEX 0x800
 
 // Request to read virtual user memory (memory of a program) from kernel space
 #define IO_READ_REQUEST CTL_CODE(IOCTL_DRIVER_DEVICE, (IOCTL_FIRST_INDEX + 0x1), METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
