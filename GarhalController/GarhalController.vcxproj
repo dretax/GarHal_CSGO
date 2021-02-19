@@ -23,7 +23,6 @@
     <ProjectGuid>{D6B514C9-9BC2-409C-82C6-594AECF81411}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GarhalController</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
