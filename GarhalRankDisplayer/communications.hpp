@@ -1,16 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "../Garhal/ioctlcodes.h"
+#include "../Garhal/ioctldatastructs.h"
 
-typedef struct _KERNEL_READ_REQUEST
-{
-	ULONG ProcessId;
-
-	ULONG Address;
-	PVOID pBuff;
-	ULONG Size;
-
-} KERNEL_READ_REQUEST, * PKERNEL_READ_REQUEST;
 
 typedef struct _RTL_PROCESS_MODULE_INFORMATION
 {

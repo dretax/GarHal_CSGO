@@ -119,6 +119,7 @@
     <ClInclude Include="gstructs.h" />
     <ClInclude Include="hide.h" />
     <ClInclude Include="ioctlcodes.h" />
+    <ClInclude Include="ioctldatastructs.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="messages.h" />
     <ClInclude Include="ntos.h" />
