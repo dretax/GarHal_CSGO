@@ -118,7 +118,7 @@ Open up CMD as admin mode:
 3. Compile the driver with /GS- (Disable the security check).
 [![IMAGE ALT TEXT HERE](https://i.imgur.com/iASLlHG.png)](https://i.imgur.com/iASLlHG.png)
 4. Use kdmapper or something else to load up your driver.
-5. **Optional (and recommended if you are interested in kernel, rather than being a crappy user):** Clear the MmUnloadedDrivers and PIBCache yourself, get the signature of these using WinDbg for example, don't use CreateDriver, hook an IOCTL function with a trick, or do some other type of communication. I'm not releasing practices for this for now, there is plenty available. If you manage to do these tricks you are free to attack any realistic anti-cheats with a bit of more work.
+5. **Optional (and recommended if you are interested in kernel, rather than being a crappy user):** Clear the MmUnloadedDrivers and PIBCache yourself, get the signature of these using WinDbg for example, don't use CreateDriver, hook an IOCTL function with a trick, or do some other type of communication. I'm not releasing practices for this for now, there is plenty available. If you manage to do these tricks you are free to attack any realistic anti-cheats with more work (BY REVERSING).
 6. Reboot your PC to clear out the driver entirely from the memory if you want to play different games.
 
 ## Preview
