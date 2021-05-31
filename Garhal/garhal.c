@@ -69,6 +69,11 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pDriverObject, PUNICODE_STRING pRegistryPath
 	pDeviceObject->Flags |= DO_DIRECT_IO;
 	pDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
+	// 4B4DB4B3: Bypass MmVerifyRegisterCallbacksFlags
+	// Fix STATUS_ACCESS_DENIED
+	PKLDR_DATA_TABLE_ENTRY ldr = (PKLDR_DATA_TABLE_ENTRY)pDriverObject->DriverSection;
+	ldr->Flags |= 0x20; // LDRP_VALID_SECTION
+
 	NTSTATUS reg = RegisterOBCallback();
 	if (reg == STATUS_SUCCESS)
 	{
