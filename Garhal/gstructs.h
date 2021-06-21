@@ -3,28 +3,6 @@
 #include <ntifs.h>
 #include <minwindef.h>
 
-// 4b4db4b3
-typedef struct _KLDR_DATA_TABLE_ENTRY {
-	LIST_ENTRY InLoadOrderLinks;
-	PVOID ExceptionTable;
-	ULONG ExceptionTableSize;
-	PVOID GpValue;
-	PVOID NonPagedDebugInfo;
-	PVOID DllBase;
-	PVOID EntryPoint;
-	ULONG SizeOfImage;
-	UNICODE_STRING FullDllName;
-	UNICODE_STRING BaseDllName;
-	ULONG Flags;
-	USHORT LoadCount;
-	USHORT __Unused5;
-	PVOID SectionPointer;
-	ULONG CheckSum;
-	PVOID LoadedImports;
-	PVOID PatchInformation;
-} KLDR_DATA_TABLE_ENTRY, * PKLDR_DATA_TABLE_ENTRY;
-// 4b4db4b3
-
 typedef struct _LDR_DATA_TABLE_ENTRY
 {
 	LIST_ENTRY InLoadOrderLinks;
