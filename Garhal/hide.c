@@ -5,7 +5,7 @@
 
 PCHAR HideProcess(UINT32 pid)
 {
-	LPSTR result = ExAllocatePool(NonPagedPool, sizeof(ULONG) + 20);;
+	LPSTR result = ExAllocatePool(NonPagedPool, sizeof(ULONG) + 20);
 
 	// Get PID offset nt!_EPROCESS.UniqueProcessId
 	ULONG PID_OFFSET = FindPIDOffset();
