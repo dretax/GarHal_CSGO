@@ -221,7 +221,7 @@ void Entity::SetCorrectGlowStruct(uint8_t OurTeam, uint32_t GlowObject)
 	bool Defusing = this->IsDefusing();
 	
 	GlowStruct EGlow;
-	EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (this->GetGlowIndex() * 0x38), sizeof(GlowStruct));
+	EGlow = Driver.ReadVirtualMemory<GlowStruct>(ProcessId, GlowObject + (this->GetGlowIndex() * 0x38) + 0x4, sizeof(GlowStruct));
 	EGlow.alpha = 0.5f;
 	EGlow.renderWhenOccluded = true;
 	EGlow.renderWhenUnOccluded = false;
@@ -249,7 +249,7 @@ void Entity::SetCorrectGlowStruct(uint8_t OurTeam, uint32_t GlowObject)
 		}
 	}
 
-	Driver.WriteVirtualMemory(ProcessId, GlowObject + (this->GetGlowIndex() * 0x38), EGlow, sizeof(EGlow));
+	Driver.WriteVirtualMemory(ProcessId, GlowObject + (this->GetGlowIndex() * 0x38) + 0x4, EGlow, sizeof(EGlow));
 }
 
 
