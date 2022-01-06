@@ -195,7 +195,7 @@ Vector3 Aimbot::getViewAngles()
 
 float Aimbot::getSensitivity()
 {
-    uint32_t sensitivityPtr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivityPtr, sizeof(uint32_t));
+    uint32_t sensitivityPtr = ClientAddress + hazedumper::signatures::dwSensitivityPtr;
     uint32_t sensitivity = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivity, sizeof(uint32_t));
 
     sensitivity ^= sensitivityPtr;
@@ -226,7 +226,7 @@ void Aimbot::setViewAngles(Vector3& viewAngles)
 
 void Aimbot::setSensitivity(float sens)
 {
-    uint32_t sensitivityPtr = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivityPtr, sizeof(uint32_t));
+    uint32_t sensitivityPtr = ClientAddress + hazedumper::signatures::dwSensitivityPtr;
     uint32_t sensitivity = *reinterpret_cast<uint32_t*>(&sens) ^ sensitivityPtr;
 
     Driver.WriteVirtualMemory(ProcessId, ClientAddress + hazedumper::signatures::dwSensitivity, sensitivity, sizeof(sensitivity));
