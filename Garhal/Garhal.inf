@@ -4,8 +4,10 @@
 
 [Version]
 Signature="$WINDOWS NT$"
-Class=Sample ; TODO: edit Class
-ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+; Class and Guid is now required to be set on the latest WDK (since a time, garhal was just updated later)
+;https://docs.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors
+Class=Processor ; TODO: edit Class
+ClassGuid={50127dc3-0f36-415e-a6cc-4cb3be910b65} ; TODO: edit ClassGuid
 Provider=%ManufacturerName%
 CatalogFile=Garhal.cat
 DriverVer= ; TODO: set DriverVer in stampinf property pages
@@ -16,8 +18,8 @@ Garhal_Device_CoInstaller_CopyFiles = 11
 
 ; ================= Class section =====================
 
-[ClassInstall32]
-Addreg=SampleClassReg
+;[ClassInstall32]
+;Addreg=SampleClassReg
 
 [SampleClassReg]
 HKR,,,0,%ClassName%
