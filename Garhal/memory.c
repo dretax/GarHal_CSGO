@@ -38,8 +38,8 @@ int GetCorrectOffset(CHAR* Name, ULONG BuildNumber)
 			return 0x2F0;
 		}
 	}
-	// 2004 & 2009 & 2104
-	else if (BuildNumber == 19041 || BuildNumber == 19042 || BuildNumber == 19043)
+	// 2004 & 2009 & 2104 & 2110
+	else if (BuildNumber == 19041 || BuildNumber == 19042 || BuildNumber == 19043 || BuildNumber == 19044)
 	{
 		if (strcmp(Name, "ImageFileName") == 0)
 		{
