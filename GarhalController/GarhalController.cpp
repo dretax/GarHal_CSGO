@@ -122,9 +122,7 @@ int main(int argc, char* argv[], char* envp[])
 {
 	Driver = KeInterface("\\\\.\\garhalop");
 	std::string random = GenerateStr(20);
-	std::wstring stemp = std::wstring(random.begin(), random.end());
-	LPCWSTR sw = stemp.c_str();
-	SetConsoleTitle(sw);
+	SetConsoleTitleA(random.c_str());
 	
 	// Get address of client.dll, engine.dll, and PID.
 	ProcessId = Driver.GetTargetPid();

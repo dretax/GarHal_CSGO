@@ -28,28 +28,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -92,6 +92,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+	  <AdditionalIncludeDirectories>$(SolutionDir)Libraries\imgui;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +125,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries\imgui;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,6 +152,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+	<ClCompile Include="..\Libraries\imgui\imgui.cpp" />
+    <ClCompile Include="..\Libraries\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\Libraries\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\Libraries\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\Libraries\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\Libraries\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Aimbot.cpp" />
     <ClCompile Include="BSPFile.cpp" />
     <ClCompile Include="BSPParser.cpp" />
@@ -160,6 +168,15 @@
     <ClCompile Include="TraceRay.cpp" />
   </ItemGroup>
   <ItemGroup>
+	<ClInclude Include="..\Libraries\imgui\imconfig.h" />
+    <ClInclude Include="..\Libraries\imgui\imgui.h" />
+    <ClInclude Include="..\Libraries\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="..\Libraries\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\Libraries\imgui\imgui_internal.h" />
+    <ClInclude Include="..\Libraries\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\Libraries\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\Libraries\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\Libraries\imgui\InputSystem.h" />
     <ClInclude Include="Aimbot.hpp" />
     <ClInclude Include="BSPFile.hpp" />
     <ClInclude Include="BSPFlags.hpp" />
