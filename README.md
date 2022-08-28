@@ -1,4 +1,4 @@
-# The project is under wore-work to become an IMGUI project due to the latest changes in CSGO. If you wish to get a working state of the project see [here](https://github.com/dretax/GarHal_CSGO/tree/7e5cec2aa6b2e3fd5e9d161c89784ae0a0803761). Commits may happen from time to time to this repo as my time allows.
+# The project is under re-work to become an IMGUI project due to the latest changes in CSGO. If you wish to get a working state of the project see [here](https://github.com/dretax/GarHal_CSGO/tree/7e5cec2aa6b2e3fd5e9d161c89784ae0a0803761). Commits may happen from time to time to this repo as my time allows.
 
 [![IMAGE ALT TEXT HERE](https://i.imgur.com/RCDePZO.png)](https://i.imgur.com/RCDePZO.png)
 # GarHal_CSGO
