@@ -16,7 +16,7 @@
     <Filter Include="BSP">
       <UniqueIdentifier>{f752107a-2764-49b0-93eb-bfb5ca68dc23}</UniqueIdentifier>
     </Filter>
-	<Filter Include="Resource Files\imgui">
+    <Filter Include="Resource Files\imgui">
       <UniqueIdentifier>{72bcf62a-d85f-49f4-a1ea-af2cb4d4334b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -27,47 +27,51 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
+    <ClCompile Include="engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Aimbot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BSPFile.cpp">
-      <Filter>BSP</Filter>
-    </ClCompile>
-    <ClCompile Include="BSPParser.cpp">
-      <Filter>BSP</Filter>
-    </ClCompile>
-    <ClCompile Include="TraceRay.cpp">
-      <Filter>BSP</Filter>
-    </ClCompile>
-    <ClCompile Include="config.cpp">
+    <ClCompile Include="..\Libraries\common\bsp\BSPFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="..\imgui\imgui.cpp">
+    <ClCompile Include="..\Libraries\common\bsp\BSPParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\common\bsp\TraceRay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo_settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\Libraries\imgui\imgui.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_custom_key.cpp">
+    <ClCompile Include="..\Libraries\imgui\imgui_draw.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_draw.cpp">
+    <ClCompile Include="..\Libraries\imgui\imgui_extensions.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_extensions.cpp">
+    <ClCompile Include="..\Libraries\imgui\imgui_impl_dx11.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_impl_dx11.cpp">
+    <ClCompile Include="..\Libraries\imgui\imgui_impl_win32.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_impl_win32.cpp">
+    <ClCompile Include="..\Libraries\imgui\imgui_tables.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_tables.cpp">
+    <ClCompile Include="..\Libraries\imgui\imgui_widgets.cpp">
       <Filter>Resource Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui_widgets.cpp">
-      <Filter>Resource Files\imgui</Filter>
+    <ClCompile Include="icons.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,85 +87,86 @@
     <ClInclude Include="data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.hpp">
+    <ClInclude Include="engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Aimbot.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BSPFile.hpp">
-      <Filter>BSP</Filter>
-    </ClInclude>
-    <ClInclude Include="BSPFlags.hpp">
-      <Filter>BSP</Filter>
-    </ClInclude>
-    <ClInclude Include="BSPParser.hpp">
-      <Filter>BSP</Filter>
-    </ClInclude>
-    <ClInclude Include="BSPStructure.hpp">
-      <Filter>BSP</Filter>
-    </ClInclude>
-    <ClInclude Include="TraceRay.hpp">
-      <Filter>BSP</Filter>
-    </ClInclude>
-    <ClInclude Include="config.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sdk.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ClientMode.h">
+    <ClInclude Include="..\Libraries\common\fifo_map.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CInput.h">
+    <ClInclude Include="..\Libraries\imgui\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CUserCmd.h">
+    <ClInclude Include="..\Libraries\imgui\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="..\imgui\imconfig.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imgui_extensions.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imgui_impl_dx11.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui_custom_key.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imgui_impl_win32.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui_extensions.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imgui_internal.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui_impl_dx11.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imstb_rectpack.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui_impl_win32.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imstb_textedit.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui_internal.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imstb_rectpack.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\imgui\InputSystem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imstb_textedit.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\common\json.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imstb_truetype.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\common\bsp\BSPFile.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\InputSystem.h">
-      <Filter>Resource Files\imgui</Filter>
+    <ClInclude Include="..\Libraries\common\bsp\BSPFlags.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="garhal.cfg">
+    <ClInclude Include="..\Libraries\common\bsp\BSPParser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\common\bsp\BSPStructure.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\common\bsp\Matrix.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\common\bsp\TraceRay.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo_menu.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo_settings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="overlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="icons.h">
       <Filter>Resource Files</Filter>
-    </None>
+    </ClInclude>
   </ItemGroup>
 </Project>

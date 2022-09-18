@@ -1,5 +1,5 @@
 #pragma once
-#include "BSPParser.hpp"
+#include "..\common\bsp\BSPParser.hpp"
 #include "data.hpp"
 #include "Entity.hpp"
 

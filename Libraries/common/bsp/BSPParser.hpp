@@ -9,12 +9,12 @@
 #include "BSPFile.hpp"
 #include <shared_mutex>
 
-namespace hazedumper {
-
+namespace hazedumper
+{
     class BSPParser
     {
     public:
-        BSPParser( void ) = default;
+        BSPParser(void) = default;
 
         /**
          * @brief      Parse a bsp file.
@@ -25,7 +25,7 @@ namespace hazedumper {
          * @return     True if the bsp file got parsed or is currently cached,
          *             False if BSPFile::parse() fails.
          */
-        bool parse_map( const std::string& bsp_directory, const std::string& bsp_file );
+        bool parse_map(const std::string& bsp_directory, const std::string& bsp_file);
 
         /**
          * @brief      Determines if visible.
@@ -35,18 +35,18 @@ namespace hazedumper {
          *
          * @return     True if visible, False otherwise.
          */
-        bool is_visible( const Vector3& origin, const Vector3& final );
+        bool is_visible(const Vector3& origin, const Vector3& final);
 
         /**
          * @brief      Gets the bsp file.
          *
          * @return     The bsp file.
          */
-        BSPFile get_bsp( void ) const;
+        BSPFile get_bsp(void) const;
 
     private:
-        BSPFile                 m_BSPFile;
-        std::string             m_LastMap;
+        BSPFile m_BSPFile;
+        std::string m_LastMap;
         std::shared_timed_mutex m_mutex;
     };
 }

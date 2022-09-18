@@ -1,14 +1,11 @@
 #pragma once
 #include "data.hpp"
 
-class Engine
+namespace engine
 {
-public:
     bool worldToScreen(const Vector3& from, Vector3& to);
     bool IsInGame();
     GameState GetGameState(uint8_t State);
     Vector3 getViewAngles();
     void setViewAngles(Vector3& viewAngles);
-    Engine();
-    ~Engine();
-};
+}

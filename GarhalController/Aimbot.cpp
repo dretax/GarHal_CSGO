@@ -4,6 +4,8 @@
 #include <chrono>
 #include <cstddef>
 #include <iostream>
+
+#include "csgo_settings.hpp"
 #include "data.hpp"
 #include "offsets.hpp"
 
@@ -43,7 +45,7 @@ Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity)
     Vector3 viewAngles = getViewAngles();
     Vector3 pos;
 
-    if (AimbotTarget == 3)
+    if (csgo_settings::AimbotTarget == 3)
     {
         if (entity.getHealth() <= 50)
         {
@@ -54,7 +56,7 @@ Vector3 Aimbot::angleDifferenceToEntity(Entity& localPlayer, Entity& entity)
             pos = entity.getHeadPosition();//target.getBonePosition(boneId);
         }
     }
-    else if (AimbotTarget == 2)
+    else if (csgo_settings::AimbotTarget == 2)
     {
         pos = entity.GetBonePosition(CHEST_BONE_ID);
     }
@@ -140,7 +142,7 @@ Entity Aimbot::findClosestEnemyToFOV()
 
         Vector3 entityPosition;
 
-        if (AimbotTarget == 3)
+        if (csgo_settings::AimbotTarget == 3)
         {
             if (entity.getHealth() <= 50)
             {
@@ -151,7 +153,7 @@ Entity Aimbot::findClosestEnemyToFOV()
                 entityPosition = entity.getHeadPosition();
             }
         }
-        else if (AimbotTarget == 2)
+        else if (csgo_settings::AimbotTarget == 2)
         {
             entityPosition = entity.GetBonePosition(CHEST_BONE_ID);
         }
@@ -188,7 +190,7 @@ Entity Aimbot::findClosestEnemyToFOV()
 
 Vector3 Aimbot::getViewAngles()
 {
-    int clientState = Driver.ReadVirtualMemory<int>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(int));
+    uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + hazedumper::signatures::dwClientState, sizeof(uint32_t));
 	return Driver.ReadVirtualMemory<Vector3>(ProcessId, clientState + hazedumper::signatures::dwClientState_ViewAngles, sizeof(Vector3));
 }
 
@@ -301,7 +303,7 @@ bool Aimbot::aimAssist()
 	}
 
     // Enable AimAssist after Nth bullet except pistols & snipers.
-    if (localPlayer.getShotsFired() < AimbotBullets && !IsWeaponPistol(WeaponID) && !IsWeaponSniper(WeaponID))
+    if (localPlayer.getShotsFired() < csgo_settings::AimbotBullets && !IsWeaponPistol(WeaponID) && !IsWeaponSniper(WeaponID))
     {
         return false;
     }
@@ -317,7 +319,7 @@ bool Aimbot::aimAssist()
         lastPosition = new Vector3();
 
 
-        if (AimbotTarget == 3) 
+        if (csgo_settings::AimbotTarget == 3) 
         {
             if (target.getHealth() <= 50)
             {
@@ -328,7 +330,7 @@ bool Aimbot::aimAssist()
                 *lastPosition = target.getHeadPosition();//target.getBonePosition(boneId);
             }
         }
-        else if (AimbotTarget == 2)
+        else if (csgo_settings::AimbotTarget == 2)
         {
             *lastPosition = target.GetBonePosition(CHEST_BONE_ID);
         }
@@ -423,7 +425,7 @@ void Aimbot::aimBot()
 
     Vector3 pos;
 
-    if (AimbotTarget == 3)
+    if (csgo_settings::AimbotTarget == 3)
     {
         if (target.getHealth() <= 50)
         {
@@ -434,7 +436,7 @@ void Aimbot::aimBot()
             pos = target.getHeadPosition();//target.getBonePosition(boneId);
         }
     }
-    else if (AimbotTarget == 2)
+    else if (csgo_settings::AimbotTarget == 2)
     {
         pos = target.GetBonePosition(CHEST_BONE_ID);
     }

@@ -8,9 +8,10 @@ class KeInterface
 {
 	
 public:
-	HANDLE hDriver; // Handle to driver
+	// Handle to driver
+	HANDLE hDriver;
 
-					// Initializer
+	// Initializer
 	KeInterface(LPCSTR RegistryPath)
 	{
 		hDriver = CreateFileA(RegistryPath, GENERIC_READ | GENERIC_WRITE,

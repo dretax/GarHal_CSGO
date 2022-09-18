@@ -5,7 +5,7 @@
 using namespace hazedumper::netvars;
 using namespace hazedumper::signatures;
 
-bool Engine::worldToScreen(const Vector3& from, Vector3& to)
+bool engine::worldToScreen(const Vector3& from, Vector3& to)
 {
     WorldToScreenMatrix matrix = Driver.ReadVirtualMemory<WorldToScreenMatrix>(ProcessId, ClientAddress + dwViewMatrix, sizeof(WorldToScreenMatrix));
 
@@ -34,14 +34,14 @@ bool Engine::worldToScreen(const Vector3& from, Vector3& to)
     return true;
 }
 
-bool Engine::IsInGame()
+bool engine::IsInGame()
 {
     uint32_t ClientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
     uint32_t Second = Driver.ReadVirtualMemory<uint32_t>(ProcessId, ClientState + dwClientState_State, sizeof(uint32_t));
     return GetGameState(Second) == InGame;
 }
 
-GameState Engine::GetGameState(uint8_t State)
+GameState engine::GetGameState(uint8_t State)
 {
 	switch (State)
     {
@@ -54,25 +54,14 @@ GameState Engine::GetGameState(uint8_t State)
     return UnknownG;
 }
 
-Vector3 Engine::getViewAngles()
+Vector3 engine::getViewAngles()
 {
     uint32_t ClientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
     return Driver.ReadVirtualMemory<Vector3>(ProcessId, ClientState + dwClientState_ViewAngles, sizeof(Vector3));
 }
 
-void Engine::setViewAngles(Vector3& viewAngles)
+void engine::setViewAngles(Vector3& viewAngles)
 {
     uint32_t clientState = Driver.ReadVirtualMemory<uint32_t>(ProcessId, EngineAddress + dwClientState, sizeof(uint32_t));
     Driver.WriteVirtualMemory<Vector3>(ProcessId, clientState + dwClientState_ViewAngles, viewAngles, sizeof(viewAngles));
-}
-
-
-Engine::Engine()
-{
-    
-}
-
-
-Engine::~Engine()
-{
 }

@@ -41,13 +41,13 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
         <ConfigurationType>Application</ConfigurationType>
         <UseDebugLibraries>true</UseDebugLibraries>
-        <PlatformToolset>v142</PlatformToolset>
+        <PlatformToolset>v143</PlatformToolset>
         <CharacterSet>MultiByte</CharacterSet>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
         <ConfigurationType>Application</ConfigurationType>
         <UseDebugLibraries>false</UseDebugLibraries>
-        <PlatformToolset>v142</PlatformToolset>
+        <PlatformToolset>v143</PlatformToolset>
         <WholeProgramOptimization>true</WholeProgramOptimization>
         <CharacterSet>MultiByte</CharacterSet>
     </PropertyGroup>
@@ -71,12 +71,16 @@
     <PropertyGroup Label="UserMacros"/>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
         <LinkIncremental>false</LinkIncremental>
+        <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+        <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
         <LinkIncremental>true</LinkIncremental>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
         <LinkIncremental>true</LinkIncremental>
+        <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+        <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
         <LinkIncremental>false</LinkIncremental>
@@ -91,8 +95,8 @@
             <SDLCheck>true</SDLCheck>
             <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <ConformanceMode>true</ConformanceMode>
-            <LanguageStandard>stdcpp17</LanguageStandard>
-            <AdditionalIncludeDirectories>$(SolutionDir)Libraries\imgui;</AdditionalIncludeDirectories>
+            <LanguageStandard>stdcpp20</LanguageStandard>
+            <AdditionalIncludeDirectories>$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\common</AdditionalIncludeDirectories>
         </ClCompile>
         <Link>
             <SubSystem>Console</SubSystem>
@@ -124,8 +128,8 @@
             <SDLCheck>true</SDLCheck>
             <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <ConformanceMode>true</ConformanceMode>
-            <LanguageStandard>stdcpp17</LanguageStandard>
-            <AdditionalIncludeDirectories>$(SolutionDir)Libraries\imgui;</AdditionalIncludeDirectories>
+            <LanguageStandard>stdcpp20</LanguageStandard>
+            <AdditionalIncludeDirectories>$(SolutionDir)Libraries\imgui;$(SolutionDir)Libraries\common</AdditionalIncludeDirectories>
         </ClCompile>
         <Link>
             <SubSystem>Console</SubSystem>
@@ -153,23 +157,29 @@
     </ItemDefinitionGroup>
     <ItemGroup>
         <ClCompile Include="..\Libraries\imgui\imgui.cpp"/>
+        <ClCompile Include="..\Libraries\imgui\imgui_demo.cpp"/>
         <ClCompile Include="..\Libraries\imgui\imgui_draw.cpp"/>
+        <ClCompile Include="..\Libraries\imgui\imgui_extensions.cpp"/>
         <ClCompile Include="..\Libraries\imgui\imgui_impl_dx11.cpp"/>
         <ClCompile Include="..\Libraries\imgui\imgui_impl_win32.cpp"/>
         <ClCompile Include="..\Libraries\imgui\imgui_tables.cpp"/>
         <ClCompile Include="..\Libraries\imgui\imgui_widgets.cpp"/>
+        <ClCompile Include="..\Libraries\common\bsp\BSPFile.cpp"/>
+        <ClCompile Include="..\Libraries\common\bsp\BSPParser.cpp"/>
+        <ClCompile Include="..\Libraries\common\bsp\TraceRay.cpp"/>
         <ClCompile Include="Aimbot.cpp"/>
-        <ClCompile Include="BSPFile.cpp"/>
-        <ClCompile Include="BSPParser.cpp"/>
-        <ClCompile Include="config.cpp"/>
-        <ClCompile Include="Engine.cpp"/>
+        <ClCompile Include="csgo_settings.cpp"/>
+        <ClCompile Include="engine.cpp"/>
         <ClCompile Include="Entity.cpp"/>
         <ClCompile Include="GarhalController.cpp"/>
-        <ClCompile Include="TraceRay.cpp"/>
+        <ClCompile Include="icons.cpp"/>
+        <ClCompile Include="utils.cpp"/>
     </ItemGroup>
     <ItemGroup>
+        <ClInclude Include="..\Libraries\common\fifo_map.hpp"/>
         <ClInclude Include="..\Libraries\imgui\imconfig.h"/>
         <ClInclude Include="..\Libraries\imgui\imgui.h"/>
+        <ClInclude Include="..\Libraries\imgui\imgui_extensions.h"/>
         <ClInclude Include="..\Libraries\imgui\imgui_impl_dx11.h"/>
         <ClInclude Include="..\Libraries\imgui\imgui_impl_win32.h"/>
         <ClInclude Include="..\Libraries\imgui\imgui_internal.h"/>
@@ -177,27 +187,26 @@
         <ClInclude Include="..\Libraries\imgui\imstb_textedit.h"/>
         <ClInclude Include="..\Libraries\imgui\imstb_truetype.h"/>
         <ClInclude Include="..\Libraries\imgui\InputSystem.h"/>
+        <ClInclude Include="..\Libraries\common\json.hpp"/>
+        <ClInclude Include="..\Libraries\common\bsp\BSPFile.hpp"/>
+        <ClInclude Include="..\Libraries\common\bsp\BSPFlags.hpp"/>
+        <ClInclude Include="..\Libraries\common\bsp\BSPParser.hpp"/>
+        <ClInclude Include="..\Libraries\common\bsp\BSPStructure.hpp"/>
+        <ClInclude Include="..\Libraries\common\bsp\Matrix.hpp"/>
+        <ClInclude Include="..\Libraries\common\bsp\TraceRay.hpp"/>
         <ClInclude Include="Aimbot.hpp"/>
-        <ClInclude Include="BSPFile.hpp"/>
-        <ClInclude Include="BSPFlags.hpp"/>
-        <ClInclude Include="BSPParser.hpp"/>
-        <ClInclude Include="BSPStructure.hpp"/>
-        <ClInclude Include="CInput.h"/>
-        <ClInclude Include="ClientMode.h"/>
         <ClInclude Include="communications.hpp"/>
-        <ClInclude Include="config.hpp"/>
+        <ClInclude Include="csgo_menu.hpp"/>
+        <ClInclude Include="csgo_settings.hpp"/>
         <ClInclude Include="data.hpp"/>
-        <ClInclude Include="Engine.hpp"/>
+        <ClInclude Include="engine.hpp"/>
         <ClInclude Include="Entity.hpp"/>
+        <ClInclude Include="icons.h"/>
         <ClInclude Include="kernelinterface.hpp"/>
-        <ClInclude Include="Matrix.hpp"/>
         <ClInclude Include="offsets.hpp"/>
+        <ClInclude Include="overlay.h"/>
         <ClInclude Include="sdk.hpp"/>
-        <ClInclude Include="TraceRay.hpp"/>
-        <ClInclude Include="CUserCmd.h"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="garhal.cfg"/>
+        <ClInclude Include="utils.hpp"/>
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">
