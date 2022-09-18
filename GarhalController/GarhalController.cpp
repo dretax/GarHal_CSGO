@@ -175,7 +175,7 @@ int main(int argc, char* argv[], char* envp[])
         }
 
         // Ready to read, reserve a potentional amount in the memory.
-        renderDatas.reserve(128);
+        renderDatas.reserve(64);
 
         /* Old glow is now flagged.
         if (csgo_settings::Wallhack)
@@ -265,7 +265,6 @@ int main(int argc, char* argv[], char* envp[])
                 }
             }
         }
-
 
         // Render all
         csgoRender.PollSystem();

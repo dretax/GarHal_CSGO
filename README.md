@@ -16,8 +16,11 @@ This project probably has mistakes. Feel free to correct me through PRs.
 
 ## Credits & Thanks
 * [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
+* [ThePaimon](https://github.com/ThePaimon)
 * @ZeroMemory for providing videos for basic stuff.
 * @hrt for a (not so much working) aimbot structure.
+* Other fine members of NM team who will not be mentioned due to their requests
+* Great open-source imgui projects / csgo reversers
 
 ## Features
 * Driver Hiding (Kill Patchguard before use) @JKornev
@@ -67,7 +70,9 @@ I have purchased CSGO around April-May on a separate account, which you see in t
 For 80+ hours I have been cheating on that account, for about a month or so. Revisited the game in August last time. I have used wallhack, triggerbot, aimbot without holding back and received countless reports from competetive matches. At this time being the account is still not banned for CSGO. Still, do not use it on your main accounts.
 
 ## Compilation
-You will need Visual Studio 2017 atleast, and amongs that the WDK. If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
+* DirectX SDK ([DXSDK_Jun10.exe](https://www.microsoft.com/en-us/download/confirmation.aspx?id=6812))
+* You will need Visual Studio 2019 atleast, and amongs that the WDK. 
+If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
 ## Updating offsets after a game update
 Don't be a loser, dump with [GH Dumper](https://guidedhacking.com/resources/guided-hacking-offset-dumper-gh-offset-dumper.51/)

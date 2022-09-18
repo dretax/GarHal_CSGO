@@ -27,6 +27,7 @@ struct GlowStruct
 
 typedef struct _RenderData
 {
+	// TODO: Implement name for yourself
 	const char* name = "Garhal";
 	float x = 0, y = 0;
 	float inGameDistance = 0;
