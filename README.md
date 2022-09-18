@@ -1,5 +1,3 @@
-# The project is under re-work to become an IMGUI project due to the latest changes in CSGO. If you wish to get a working state of the project see [here](https://github.com/dretax/GarHal_CSGO/tree/7e5cec2aa6b2e3fd5e9d161c89784ae0a0803761). Commits may happen from time to time to this repo as my time allows.
-
 [![IMAGE ALT TEXT HERE](https://i.imgur.com/RCDePZO.png)](https://i.imgur.com/RCDePZO.png)
 # GarHal_CSGO
 A project that demonstrates how to screw with CSGO from Kernel Space.
@@ -16,7 +14,7 @@ This project probably has mistakes. Feel free to correct me through PRs.
 
 ## Credits & Thanks
 * [Life45](https://github.com/Life45) for explaining me the basic work, pushing me to do this. Best guy eva.
-* [ThePaimon](https://github.com/ThePaimon)
+* [ThePaimon](https://github.com/ThePaimon) for menu related design and other works
 * @ZeroMemory for providing videos for basic stuff.
 * @hrt for a (not so much working) aimbot structure.
 * Other fine members of NM team who will not be mentioned due to their requests
@@ -25,15 +23,15 @@ This project probably has mistakes. Feel free to correct me through PRs.
 ## Features
 * Driver Hiding (Kill Patchguard before use) @JKornev
 * Process Hiding (Kill Patchguard before use) @landhb
-* Simple glow Wallhack
-* Highlights defuser
-* No flash
+* Simple glow Wallhack (Flagged / Removed)
+* Highlights defuser (Not implemented to the rendering, but fairly easy to do)
+* No flash (Flagged)
 * Aimbot
 * Smooth aimbot
 * TriggerBot - Supports randomized delay.
-* Another simple program to Display Ranks (Work in progress)
-* Displays enemies on the Radar
-* Bhop
+* Another simple program to Display Ranks (Not implemented to the rendering, but fairly easy to do)
+* Displays enemies on the Radar (Flagged)
+* Bhop (Flagged)
 * OBRegisterCallback to limit access to the GarhalController.exe & GarhalRankDisplayer.exe (Read VAC section)
 
 ## Changelog
@@ -65,6 +63,8 @@ The project files could be flagged, and can get you banned If VAC detects you ar
 if (EnumDeviceDrivers(drivers, sizeof(drivers), &cbNeeded) && cbNeeded < sizeof(drivers))
 ```
 
+To read why Garhal was changed to become an imgui project [click here](https://github.com/dretax/GarHal_CSGO/issues/109#issue-1311492412)
+
 ## A little Analysis of OverWatch
 I have purchased CSGO around April-May on a separate account, which you see in the sample videos.
 For 80+ hours I have been cheating on that account, for about a month or so. Revisited the game in August last time. I have used wallhack, triggerbot, aimbot without holding back and received countless reports from competetive matches. At this time being the account is still not banned for CSGO. Still, do not use it on your main accounts.
@@ -75,7 +75,7 @@ For 80+ hours I have been cheating on that account, for about a month or so. Rev
 If you don't know how to compile a Kernel Driver, you will need to google a bit, or just [click here](https://guidedhacking.com/threads/windows-kernel-mode-driver-tutorial.15201/).
 
 ## Updating offsets after a game update
-Don't be a loser, dump with [GH Dumper](https://guidedhacking.com/resources/guided-hacking-offset-dumper-gh-offset-dumper.51/)
+Don't be a loser, dump with [GH Dumper](https://guidedhacking.com/resources/guided-hacking-offset-dumper-gh-offset-dumper.51/)(Totally not an advert)
 
 Use -insecure, and dump after.
 
@@ -129,6 +129,12 @@ Open up CMD as admin mode:
 4. Use kdmapper or something else to load up your driver.
 5. **Optional (and recommended if you are interested in kernel, rather than being a crappy user):** Clear the MmUnloadedDrivers and PIBCache yourself, get the signature of these using WinDbg for example, don't use CreateDriver, hook an IOCTL function with a trick, or do some other type of communication. I'm not releasing practices for this for now, there is plenty available. If you manage to do these tricks you are free to attack any realistic anti-cheats with more work (BY REVERSING).
 6. Reboot your PC to clear out the driver entirely from the memory if you want to play different games.
+
+## Various things you may work on
+There are various things you could be working on, It merely depends how far you want to go.
+For advanced anti-cheats you will need to research / figure out how to map, and fully hide your kernel driver so It's hidden in the best way possible.
+This also means ditching the IOCTL communication that this project has.
+You could also implement all sorts of rendering (such as radar) onto the current imgui setup, Xor the strings, hide the overlay window in a proper way, list goes on..
 
 ## Preview
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ADj12ykKq-o/0.jpg)](https://www.youtube.com/watch?v=ADj12ykKq-o)
