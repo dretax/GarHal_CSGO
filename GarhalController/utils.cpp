@@ -52,19 +52,6 @@ std::vector<std::string> utils::Split(std::string s, std::string delimiter)
     return res;
 }
 
-bool utils::AlignBonePairs(std::pair<Vector3, Vector3> pair, std::pair<ImVec2, ImVec2> &out)
-{
-    Vector3 result;
-    Vector3 result2;
-    if (engine::worldToScreen(pair.first, result) && engine::worldToScreen(pair.second, result2))
-    {
-        out = std::make_pair(ImVec2(result.at(0), result.at(1)), ImVec2(result2.at(0), result2.at(1)));
-        return true;
-    }
-
-    return false;
-} 
-
 bool utils::IsProcessElevated(HANDLE processHandle)
 {
     BOOL fIsElevated = FALSE;
