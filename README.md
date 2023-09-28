@@ -95,6 +95,7 @@ Click [Here](https://docs.microsoft.com/en-us/windows/release-health/release-inf
 * Windows 10 2009
 * Windows 10 2104
 * Windows 10 2110
+* Windows 10 2210
 
 ## Usage
 1. Start the Driver.
